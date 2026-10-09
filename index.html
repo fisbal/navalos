@@ -203,6 +203,8 @@ ol.pts li::before{content:counter(p);position:absolute;left:14px;top:9px;font-fa
   <nav class="tabs" role="tablist" id="tabs">
     <button role="tab" data-v="review" aria-selected="true"></button>
     <button role="tab" data-v="first"></button>
+    <button role="tab" data-v="insp"></button>
+    <button role="tab" data-v="rep"></button>
     <button role="tab" data-v="path"></button>
     <button role="tab" data-v="learn"></button>
     <button role="tab" data-v="table"></button>
@@ -211,6 +213,7 @@ ol.pts li::before{content:counter(p);position:absolute;left:14px;top:9px;font-fa
     <button role="tab" data-v="order"></button>
     <button role="tab" data-v="course"></button>
     <button role="tab" data-v="drill"></button>
+    <button role="tab" data-v="fit"></button>
     <button role="tab" data-v="other"></button>
     <button role="tab" data-v="navy"></button>
     <button role="tab" data-v="audio"></button>
@@ -644,9 +647,10 @@ const LESSONS={
 
 /* ============ STORAGE ============ */
 const KEY="navalos.v1";
-const APP_VERSION="2.7",CONTENT_DATE="2026-10-03";
+const APP_VERSION="2.8",CONTENT_DATE="2026-10-03";
 const ONLINE_URL="https://claude.ai/artifact/4F2zWfYVFgg7cK4XfHdmkA";
-const CHANGELOG=[["2.7","2026-10-09",["Onglet Parcours (du premier jour au métier, officiers, formation par métier, plan NavalOS par métier) ; onglet Drill avec commandements officiels et 16 vidéos de l'École navale ; départements du navire ; caractéristiques de la flotte et numéros de coque ; nouveaux métiers (MET, administration des soins de santé).","Career path tab (day one to trade, officers, training by trade, NavalOS plan per trade); Drill tab with official commands and 16 École navale videos; ship departments; fleet specifications and hull numbers; new trades (MET, health care administration)."]],
+const CHANGELOG=[["2.8","2026-10-09",["Onglet Inspection : auto-inspection en 12 points, déroulement, casier, trousse, politique sur la tenue (juin 2024 : cheveux, accessoires, cérémonie) et ordres de tenue n° 1 à 5. Onglet Rapports : rapport du senior, rapport personnel (pratique + écoute) et générateur de demande de congé. Onglet Forme : programmes de course 3 km et 5 km avec suivi, échauffement PSP. Parcours : 10 cours en ligne obligatoires à cocher. Pavillons numériques OTAN et code Morse avec son. 26 nouvelles cartes de révision.","Inspection tab: 12-point self-inspection, procedure, locker, kit, dress policy (June 2024: hair, accessories, ceremony) and Orders of Dress No. 1 to 5. Reports tab: senior report, personal report (practice + listen) and leave-request generator. Fitness tab: 3 km and 5 km running programs with tracking, PSP warm-up. Career path: 10 mandatory online courses checklist. NATO numeral flags and Morse code with sound. 26 new review cards."]],
+ ["2.7","2026-10-09",["Onglet Parcours (du premier jour au métier, officiers, formation par métier, plan NavalOS par métier) ; onglet Drill avec commandements officiels et 16 vidéos de l'École navale ; départements du navire ; caractéristiques de la flotte et numéros de coque ; nouveaux métiers (MET, administration des soins de santé).","Career path tab (day one to trade, officers, training by trade, NavalOS plan per trade); Drill tab with official commands and 16 École navale videos; ship departments; fleet specifications and hull numbers; new trades (MET, health care administration)."]],
  ["2.6","2026-10-03",["Guide « Premier jour » avec liste de départ et cartes ; tuteur IA (version en ligne).","“First day” guide with checklist and cards; AI tutor (online version)."]],
  ["2.5","2026-10-03",["Nouvel onglet Écoute : alphabet radio, dictée radio, chiffres, ordres de barre, cloche du navire, vocabulaire ; test du son et des voix.","New Listen tab: radio alphabet, radio dictation, numbers, helm orders, ship's bell, vocabulary; sound and voice test."]],
  ["2.4","2026-10-03",["Schéma interactif d'une frégate, 26 pavillons de signalisation, nœuds pas à pas, audio FR/EN, « Qui étaient-ils ? » ; nouvelles cartes de révision.","Interactive frigate diagram, 26 signal flags, step-by-step knots, FR/EN audio, “Who were they?”; new review cards."]],
@@ -680,7 +684,7 @@ const ab=r=>EN()?r.enA:r.frA;            // primary abbreviation
 const nameLine=r=>[`${r.fr} (${r.frA})`,`${r.en} (${r.enA})`];
 const army=r=>S.lang==="en"?`${r.arEn} (${r.arA})`:S.lang==="bi"?`${r.arFr} — ${r.arEn} (${r.arA})`:`${r.arFr} (${r.arA})`;
 const grpName={off:["Officiers","Officers"],ncm:["Militaires du rang","NCMs"],appt:["Nominations supérieures","Senior appointments"],music:["Musique","Music"]};
-const TABS={review:["Révision","Review"],first:["Premier jour","First day"],path:["Parcours","Career path"],drill:["Drill 🎬","Drill 🎬"],tutor:["Tuteur ✨","Tutor ✨"],learn:["Grades","Ranks"],table:["Équivalences","Equivalents"],flash:["Cartes","Flashcards"],quiz:["Quiz","Quiz"],order:["Classement","Ranking"],course:["Cours OREN","Course (PO/EO)"],other:["Autres éléments","Other elements"],navy:["La Marine","The Navy"],audio:["Écoute 🔊","Listen 🔊"],man:["Métiers","Trades"],src:["Sources","Sources"]};
+const TABS={review:["Révision","Review"],first:["Premier jour","First day"],insp:["Inspection","Inspection"],rep:["Rapports","Reports"],fit:["Forme 🏃","Fitness 🏃"],path:["Parcours","Career path"],drill:["Drill 🎬","Drill 🎬"],tutor:["Tuteur ✨","Tutor ✨"],learn:["Grades","Ranks"],table:["Équivalences","Equivalents"],flash:["Cartes","Flashcards"],quiz:["Quiz","Quiz"],order:["Classement","Ranking"],course:["Cours OREN","Course (PO/EO)"],other:["Autres éléments","Other elements"],navy:["La Marine","The Navy"],audio:["Écoute 🔊","Listen 🔊"],man:["Métiers","Trades"],src:["Sources","Sources"]};
 function applyLang(){
  document.documentElement.lang=S.lang==="en"?"en":"fr";
  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===S.lang));
@@ -811,7 +815,7 @@ function makeQ(){
    const k=Math.random()<.5;const q=k?{q:["À quel navire appartient cet insigne ?","Which ship does this badge belong to?"],svg:`<img src="${IMG["badge-"+s[0]]}" alt="" style="width:120px;height:120px">`,opts:all.map(x=>[`NCSM ${x[1]}`,`HMCS ${x[1]}`]),ans:all.indexOf(s),exp:[`NCSM ${s[1]}, FFH ${s[2]}, flotte de l'${COAST[s[3]][0]}.`,`HMCS ${s[1]}, FFH ${s[2]}, ${COAST[s[3]][1]} fleet.`],id:null}
     :{q:[`Le NCSM ${s[1]} appartient à quelle flotte ?`,`HMCS ${s[1]} belongs to which fleet?`],svg:`<img src="${IMG["badge-"+s[0]]}" alt="" style="width:90px;height:90px">`,opts:[COAST.a,COAST.p],ans:s[3]==="a"?0:1,exp:[`FFH ${s[2]} : ${COAST[s[3]][0]}.`,`FFH ${s[2]}: ${COAST[s[3]][1]}.`],id:null};
    const key=pair(q.q)[0];if(!QZ||!QZ.seen||!QZ.seen.has(key)){if(QZ&&QZ.seen)QZ.seen.add(key);return q}}
-  const q=src==="ranks"?makeRankQ():bankQ(src==="first"?FDQ[Math.floor(Math.random()*FDQ.length)]:src==="oren"?LESSON_Q[Math.floor(Math.random()*LESSON_Q.length)]:(a=>a[Math.floor(Math.random()*a.length)])(navyQ()));
+  const q=src==="ranks"?makeRankQ():bankQ(src==="rep"?REPQ[Math.floor(Math.random()*REPQ.length)]:src==="insp"?INSPQ[Math.floor(Math.random()*INSPQ.length)]:src==="first"?FDQ[Math.floor(Math.random()*FDQ.length)]:src==="oren"?LESSON_Q[Math.floor(Math.random()*LESSON_Q.length)]:(a=>a[Math.floor(Math.random()*a.length)])(navyQ()));
   const key=pair(q.q)[0]+"|"+(q.id||"");
   if(!QZ||!QZ.seen||!QZ.seen.has(key)||t===29){if(QZ&&QZ.seen)QZ.seen.add(key);return q}
  }
@@ -1302,6 +1306,7 @@ function viewSrc(){
   [["Canada.ca — Le Pavillon de la Marine canadienne ; Projet des navires de soutien interarmées ; Retrait des navires de classe Kingston (2025)","Canada.ca — The Canadian Naval Ensign; Joint Support Ship project; Kingston-class pay-off (2025)"],["Sources des onglets Coutumes et Flotte (vérifiées en octobre 2026).","Sources for the Customs and Fleet sections (checked October 2026)."]],
   [["Votre cahier OREN 001","Your PO 001 binder"],["École navale Québec, v1.0, juin 2024. La source officielle pour l'examen : en cas d'écart, c'est lui qui compte.","École navale Québec, v1.0, June 2024. The official source for the exam: if anything differs, the binder wins."]],
   [["Canada.ca — Grades et insignes de la MRC","Canada.ca — RCN ranks and insignia"],["Page officielle du Système d'identité militaire : la source des 29 images de cette app.","Official Military Identity System page: the source of this app's 29 images."]],
+  [["Tableaux d'affichage de l'unité (NCSM Montcalm / École navale)","Unit notice boards (HMCS Montcalm / Naval school)"],["Politique sur la tenue (juin 2024), CF Orders of Dress, rapport du senior et rapport personnel, modèle de demande de congé, pavillons ATP-01 et Morse, programmes « Énergiser les Forces » (PSP), liste des cours en ligne. Les ordres de ton unité ont préséance.","Dress policy (June 2024), CF Orders of Dress, senior and personal reports, leave-request template, ATP-01 flags and Morse, PSP “Energizing the Forces” programs, online course list. Your unit's orders take precedence."]],
   [["Instructions sur la tenue des FAC (A-AD-265-000/AG-001)","CAF Dress Instructions (A-AD-265-000/AG-001)"],["La référence qui dicte où et comment chaque insigne se porte.","The reference that governs where and how each insignia is worn."]],
   [["Servir avec honneur (2003/2009) et Digne de servir — L'éthos des FAC (2022)","Duty with Honour (2003/2009) and Trusted to Serve — CAF Ethos (2022)"],["Les textes de fond derrière OREN 001.01 à 001.03 : profession des armes, valeurs et autorité légale.","The foundational texts behind PO 001.01 to 001.03: the profession of arms, values and lawful authority."]],
   [["Gilbert N. Tucker, <i>The Naval Service of Canada</i> (1952)","Gilbert N. Tucker, <i>The Naval Service of Canada</i> (1952)"],["Histoire officielle des origines, 1910 à 1939.","The official history of the early years, 1910 to 1939."]],
@@ -1374,7 +1379,7 @@ function dueCards(){const t=today();return CARDS.filter(c=>S.srs[c.k]&&S.srs[c.k
 function newLeft(){const t=today();const used=S.newLog.d===t?S.newLog.n:0;return Math.max(0,S.newPerDay-used)}
 function newCards(n){
  // new cards in a sensible learning order: ranks first, then OREN lessons in order, then navy/trade/ships
- const order={first:-1,rank:0,oren:1,navy:2,trade:3,ship:4,flag:5};
+ const order={first:-1,insp:-.5,rep:-.4,rank:0,oren:1,navy:2,trade:3,ship:4,flag:5};
  return CARDS.filter(c=>!box(c.k)).sort((a,b)=>order[a.c]-order[b.c]||((a.eo||"")<(b.eo||"")?-1:1)).slice(0,n);
 }
 // overall mastery: each card worth its box (0..6) out of 6
@@ -1955,7 +1960,7 @@ const USE_PLAN={
  ops:[["Écoute 🔊 : alphabet radio, chiffres et dictée radio chaque jour","Listen 🔊: radio alphabet, numbers and radio dictation every day","audio"],["La Marine → La flotte : reconnaître les classes de navires et leurs caractéristiques","The Navy → The fleet: recognize ship classes and specs","navy"],["La Marine → Pavillons : les 26 pavillons et leur sens","The Navy → Flags: the 26 flags and meanings","navy"],["La Marine → Quarts et cloches : tu feras des quarts","The Navy → Watches & bells: you will stand watches","navy"]],
  tech:[["La Marine → Le navire : le schéma de la frégate et le vocabulaire","The Navy → The ship: the frigate diagram and vocabulary","navy"],["Métiers → Départements : ton département et ses liens avec les autres","Trades → Departments: your department and how it links to others","man"],["Premier jour + Cours OREN : sécurité, urgences (OCOM 007)","First day + PO course: safety, emergencies (EO 007)","course"],["Révision : 10 cartes par jour, thème Marine","Review: 10 cards a day, Navy topic","review"]],
  dive:[["Métiers → Matelotage : nœuds, amarrage, embarcations","Trades → Seamanship: knots, mooring, boats","man"],["La Marine → Pavillons : le pavillon A (plongeur en immersion)","The Navy → Flags: flag A (diver down)","navy"],["Exercice (drill) et Premier jour","Drill and First day","drill"],["Révision quotidienne","Daily review","review"]],
- sup:[["Premier jour : comment s'adresser aux gens, coutumes","First day: addressing people, customs","first"],["Métiers → Départements : le département de la logistique","Trades → Departments: the Logistics Department","man"],["La Marine → Coutumes : carré, mess, divisions","The Navy → Customs: wardroom, messes, divisions","navy"],["Grades et Équivalences : reconnaître chaque grade au premier coup d'œil","Ranks and Equivalents: recognize every rank at a glance","learn"]],
+ sup:[["Premier jour : comment s'adresser aux gens, coutumes","First day: addressing people, customs","first"],["Inspection : auto-inspection avant chaque soirée","Inspection: self-inspection before each parade night","insp"],["Métiers → Départements : le département de la logistique","Trades → Departments: the Logistics Department","man"],["La Marine → Coutumes : carré, mess, divisions","The Navy → Customs: wardroom, messes, divisions","navy"],["Grades et Équivalences : reconnaître chaque grade au premier coup d'œil","Ranks and Equivalents: recognize every rank at a glance","learn"]],
  off:[["Grades, Équivalences, Classement : connaître toute la chaîne","Ranks, Equivalents, Ranking: know the whole chain","learn"],["Métiers → Barre + Écoute : ordres de barre (futur officier de quart)","Trades → Helm + Listen: helm orders (future officer of the watch)","man"],["La Marine → Pavillons, Flotte, Coutumes","The Navy → Flags, Fleet, Customs","navy"],["Simulateur d'examen OREN","PO exam simulator","exam"]]};
 const USE_EXTRA={bosn:[["Métiers → Nœuds (pas à pas), Amarrage, Barre, Sifflet, Embarcations","Trades → Knots (step by step), Mooring, Helm, Call, Small boats","man"],["Écoute 🔊 : cloche du navire et ordres de barre","Listen 🔊: ship's bell and helm orders","audio"]],ncomm:[["La Marine → Pavillons : priorité absolue (signaux visuels)","The Navy → Flags: top priority (visual signals)","navy"]],nwo:[["La Marine → Le navire et Quarts : la base du chef de quart","The Navy → The ship and Watches: the basis of the officer of the watch","navy"]],sonar:[["Écoute 🔊 : entraîne ton oreille avec la dictée radio","Listen 🔊: train your ear with radio dictation","audio"]],martech:[["La Marine → Le navire : coque, quille, ligne de flottaison","The Navy → The ship: hull, keel, waterline","navy"]]};
 
@@ -2072,8 +2077,299 @@ const _td27=tutorDocs;tutorDocs=function(){const d=_td27();const add=(t,fr,en)=>
  DRILL.forEach(x=>add(x.n[0],x.n[0]+" — "+x.cmd[0]+" — "+x.pts[0],x.n[1]+" — "+x.cmd[1]+" — "+x.pts[1]));
  add("PEN",NEP_INFO[0],NEP_INFO[1]);return d};
 
+/* ============ INSPECTIONS — what is checked and how to prepare ============ */
+// Rules with (§) come from the CAF Dress Instructions (A-DH-265-000/AG-001), ch. 2; the rest is common practice: your unit's standard wins.
+const INSP_CHECK=[
+ {s:"uni",t:["Uniforme propre, repassé, sans faux plis","Uniform clean, pressed, no wrinkles"],r:["L'uniforme doit être « propre, repassé, sans plis et soigné ». (ch. 2, sect. 1, § 25)","The uniform shall be “clean, pressed, without wrinkles and tidy”. (ch. 2, sect. 1, para 25)"]},
+ {s:"uni",t:["Aucun fil qui dépasse, aucune peluche ni poussière","No loose threads, lint or dust"],r:["Coupe les fils avec des ciseaux, passe le rouleau anti-peluches juste avant.","Snip threads with scissors, use a lint roller just before."]},
+ {s:"uni",t:["Boutons attachés, poches plates et vides","Buttons done up, pockets flat and empty"],r:["Rien de gonflé dans les poches : ni téléphone, ni portefeuille épais.","Nothing bulging in pockets: no phone, no thick wallet."]},
+ {s:"uni",t:["Insignes de grade et écussons bien placés","Rank insignia and badges correctly placed"],r:["Compare avec l'onglet Grades et avec un modèle de ton unité.","Compare with the Ranks tab and a model from your unit."]},
+ {s:"uni",t:["Plaque d'identité droite : nom de famille seulement","Name tag straight: surname only"],r:["Marine : plaque noire et blanche, 6,3 × 1,2 cm, nom de famille seulement. (ch. 3, sect. 7, § 40)","Navy: black and white tag, 6.3 × 1.2 cm, surname only. (ch. 3, sect. 7, para 40)"]},
+ {s:"pied",t:["Chaussures ou bottes cirées, lacets propres","Shoes or boots polished, clean laces"],r:["Cire la veille, puis un dernier coup de chiffon le matin. Vérifie aussi les talons et les côtés.","Polish the night before, a final buff in the morning. Check heels and sides too."]},
+ {s:"tete",t:["Coiffure bien ajustée","Headdress properly worn"],r:["Casquette : droite, visière à la hauteur des sourcils. Béret : bande à 2,5 cm au-dessus des sourcils, insigne au-dessus de l'œil gauche, couronne tirée vers la droite. (ch. 2, sect. 2, § 16)","Service cap: square, peak in line with the eyebrows. Beret: band 2.5 cm above the eyebrows, badge over the left eye, crown pulled to the right. (ch. 2, sect. 2, para 16)"]},
+ {s:"soin",t:["Cheveux soignés, attachés s'ils dépassent le col","Hair neat, tied back if below the collar"],r:["Les cheveux ne doivent pas gêner le port de la coiffure. S'ils descendent sous le col, on les attache, loin du visage et du col, avec des accessoires de la couleur des cheveux. (ch. 2, sect. 2, § 5)","Hair must not prevent wearing the headdress. If below the collar, tie it back, away from the face and off the collar, with accessories matching hair colour. (ch. 2, sect. 2, para 5)"]},
+ {s:"soin",t:["Barbe, moustache, favoris : symétriques, 2,5 cm max.","Beard, moustache, sideburns: symmetrical, 2.5 cm max."],r:["Tous les styles sont permis s'ils sont symétriques et ne dépassent pas 2,5 cm. Le commandant peut les restreindre (ex. port du masque respiratoire). (ch. 2, sect. 2, § 6)","All styles allowed if symmetrical and no more than 2.5 cm. The CO may restrict them (e.g., respirator use). (ch. 2, sect. 2, para 6)"]},
+ {s:"soin",t:["Bijoux conformes, rien de visible au cou","Jewellery compliant, nothing visible at the neck"],r:["Pas de bijou par-dessus l'uniforme ni au cou visible ; pas de perçage au-dessus des épaules sauf aux oreilles ; boucles et écarteurs 2,5 cm max. (ch. 2, sect. 2, § 8)","No jewellery over the uniform or visible at the neck; no piercings above the shoulders except the ears; earrings and gauges 2.5 cm max. (ch. 2, sect. 2, para 8)"]},
+ {s:"soin",t:["Ongles propres","Clean nails"],r:["Vernis et faux ongles sont permis s'ils ne nuisent pas à la sécurité ou aux tâches. (ch. 2, sect. 2, § 9)","Nail polish and artificial nails are allowed if they don't affect safety or duties. (ch. 2, sect. 2, para 9)"]},
+ {s:"doc",t:["Carte d'identité militaire et documents demandés","Military ID and required documents"],r:["Sur toi, à l'endroit prévu par ton unité.","On you, where your unit wants it."]}];
+const INSP_SECS={uni:["Uniforme","Uniform"],pied:["Chaussures","Footwear"],tete:["Coiffure","Headdress"],soin:["Apparence personnelle","Personal appearance"],doc:["Documents","Documents"]};
+const INSP_DURING=[
+ ["Au garde-à-vous, regard droit devant. Ne suis pas l'inspecteur des yeux.","At attention, eyes front. Don't follow the inspector with your eyes."],
+ ["Ne parle pas, sauf si on te pose une question. Réponds clairement, brièvement, avec « Monsieur », « Madame » ou le grade.","Don't speak unless asked a question. Answer clearly and briefly, with “Sir”, “Ma'am” or the rank."],
+ ["Si on relève un défaut, ne te justifie pas : « Oui, Monsieur / Madame ». On corrige après.","If a fault is pointed out, don't argue: “Yes, Sir / Ma'am”. You fix it afterwards."],
+ ["Ne bouge pas pour corriger ta tenue pendant que l'inspecteur est devant toi.","Don't adjust your uniform while the inspector is in front of you."],
+ ["Quand la rangée est inspectée, reste au garde-à-vous jusqu'au commandement suivant.","Once your rank has been inspected, stay at attention until the next command."]];
+const INSP_CEREMONIAL=[
+ ["Cheveux sous le col : chignon, une tresse, deux tresses centrées, ou tresses/locks ramenées au centre du dos. (§ 14c)","Hair below the collar: bun, single braid, two centred braids, or braids/locks pulled to the centre of the back. (para 14c)"],
+ ["Bagues : deux au maximum (sauf alliance en ensemble ou bague professionnelle). Colliers et bracelets non visibles. (§ 14d)","Rings: two maximum (except a wedding set or professional ring). Necklaces and bracelets not visible. (para 14d)"],
+ ["Boucles d'oreilles : un seul clou ou une pierre par oreille, 1 cm max. (§ 14d)","Earrings: a single stud or stone per ear, 1 cm max. (para 14d)"],
+ ["Maquillage et vernis permis. (§ 14e-f)","Make-up and nail polish allowed. (para 14e-f)"]];
+const INSP_KIT=[["Cirage, brosse et chiffon","Polish, brush and cloth"],["Rouleau anti-peluches","Lint roller"],["Petits ciseaux (fils)","Small scissors (threads)"],["Fer à repasser et linge humide","Iron and damp cloth"],["Épingles de sûreté, fil et aiguille","Safety pins, needle and thread"],["Élastiques et pinces à cheveux de la couleur des cheveux","Hair ties and clips matching your hair"],["Rasoir ou tondeuse","Razor or trimmer"],["Petite règle (vérifier les 2,5 cm)","Small ruler (check the 2.5 cm)"]];
+const INSP_LOCKER=[
+ ["Suis exactement le modèle de casier et de lit de ton unité ou de ton cours : c'est lui qui est inspecté.","Follow your unit's or course's exact locker and bed layout: that's what is inspected."],
+ ["Tout est propre, plié pareil et étiqueté à ton nom si on le demande.","Everything clean, folded the same way and labelled with your name if required."],
+ ["Rien de personnel ou d'interdit en vue ; rien sous le lit qui ne soit pas prévu.","Nothing personal or prohibited in view; nothing under the bed that isn't in the layout."],
+ ["Poussière : dessus du casier, cadre du lit, rebords de fenêtre, souliers sous le lit.","Dust: top of locker, bed frame, window sills, shoes under the bed."]];
+if(!S.insp)S.insp={};
+function viewInsp(){
+ const done=INSP_CHECK.filter((_,i)=>S.insp[i]).length;
+ const secs=Object.keys(INSP_SECS);
+ $("#view").innerHTML=`<h2>${L(["Inspection : être prêt","Inspection: be ready"])}</h2>
+ <p class="lead">${L(["Ce qu'un inspecteur regarde et comment te préparer. Les règles avec un numéro de paragraphe viennent des Instructions sur la tenue des FAC ; le reste est la pratique courante. Le standard de ton unité et de ton instructeur passe en premier.","What an inspector looks at and how to prepare. Rules with a paragraph number come from the CAF Dress Instructions; the rest is common practice. Your unit's and instructor's standard comes first."])}</p>
+ <div class="panel" style="margin-bottom:14px"><div class="qhead"><span>${U(["Auto-inspection devant le miroir","Self-inspection in the mirror"])}</span><span>${done}/${INSP_CHECK.length}</span></div><div class="bar"><i style="width:${done/INSP_CHECK.length*100}%;${done===INSP_CHECK.length?"background:var(--ok)":""}"></i></div>
+ ${secs.map(s=>`<div class="muted" style="margin-top:10px;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.05em">${U(INSP_SECS[s])}</div>`+INSP_CHECK.map((c,i)=>[c,i]).filter(x=>x[0].s===s).map(([c,i])=>`<label class="eorow" style="cursor:pointer;align-items:flex-start"><input type="checkbox" data-i="${i}" ${S.insp[i]?"checked":""}><span><b style="font-weight:600">${L(c.t)}</b><br><span class="muted" style="font-size:13.5px">${L(c.r)}</span></span></label>`).join("")).join("")}
+ <div class="row">${done===INSP_CHECK.length?`<span style="color:var(--ok);font-weight:700;align-self:center">✓ ${U(["Prêt pour l'inspection.","Ready for inspection."])}</span>`:""}<button class="btn" id="iReset">${U(["Recommencer la liste","Reset the list"])}</button></div></div>
+ <h3>${L(["Pendant l'inspection","During the inspection"])}</h3><ol class="pts">${INSP_DURING.map(p=>`<li>${L(p)}</li>`).join("")}</ol>
+ <h3>${L(["Tenue de cérémonie (tenue n° 1) : en plus","Ceremonial dress (No. 1): in addition"])}</h3><ol class="pts">${INSP_CEREMONIAL.map(p=>`<li>${L(p)}</li>`).join("")}</ol>
+ <h3>${L(["Inspection du casier et des quartiers","Locker and quarters inspection"])}</h3><ol class="pts">${INSP_LOCKER.map(p=>`<li>${L(p)}</li>`).join("")}</ol>
+ <h3>${L(["Ta trousse d'inspection","Your inspection kit"])}</h3><div class="cols" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">${INSP_KIT.map(k=>`<div class="chip">${L(k)}</div>`).join("")}</div>
+ <div class="row" style="margin-top:20px"><button class="btn gold" id="iRev">${U(["Réviser les règles d'inspection (cartes)","Review inspection rules (cards)"])}</button>
+ <a class="btn" style="text-decoration:none;color:inherit" href="https://www.canada.ca/en/services/defence/caf/military-identity-system/dress-manual/chapter-2/section-2.html" target="_blank" rel="noopener">${U(["Instructions sur la tenue (canada.ca)","Dress Instructions (canada.ca)"])}</a></div>`;
+ document.querySelectorAll("input[data-i]").forEach(c=>c.onchange=()=>{S.insp[c.dataset.i]=c.checked;save();viewInsp()});
+ $("#iReset").onclick=()=>{S.insp={};save();viewInsp()};
+ $("#iRev").onclick=()=>{S.qscope="insp";save();QZ=null;go("quiz")};
+}
+const INSPQ=[
+ {q:["Selon les Instructions sur la tenue, l'uniforme doit être :","Per the Dress Instructions, the uniform shall be:"],o:[["Propre, repassé, sans plis et soigné","Clean, pressed, without wrinkles and tidy"],["Propre seulement","Clean only"],["Neuf","New"],["Repassé une fois par mois","Pressed once a month"]],e:["Ch. 2, sect. 1, § 25.","Ch. 2, sect. 1, para 25."]},
+ {q:["Longueur maximale de la barbe ou de la moustache ?","Maximum length of a beard or moustache?"],o:[["2,5 cm","2.5 cm"],"1 cm","5 cm",["Aucune limite","No limit"]],e:["Symétrique, 2,5 cm max. (§ 6.1). Le commandant peut restreindre (§ 6.2).","Symmetrical, 2.5 cm max. (para 6.1). The CO may restrict it (para 6.2)."]},
+ {q:["Cheveux qui descendent sous le col :","Hair that falls below the collar:"],o:[["Attachés, loin du visage et du col","Tied back, away from the face and off the collar"],["Interdits","Not allowed"],["Cachés sous la chemise","Tucked under the shirt"],["Permis tels quels","Allowed as is"]],e:["Ch. 2, sect. 2, § 5.3.","Ch. 2, sect. 2, para 5.3."]},
+ {q:["La plaque d'identité de la Marine indique :","The Navy name tag shows:"],o:[["Le nom de famille seulement","The surname only"],["Prénom et nom","First and last name"],["Grade et nom","Rank and name"],["Matricule","Service number"]],e:["Plaque noire et blanche, 6,3 × 1,2 cm. (ch. 3, sect. 7, § 40)","Black and white tag, 6.3 × 1.2 cm. (ch. 3, sect. 7, para 40)"]},
+ {q:["Comment porte-t-on la casquette ?","How is the service cap worn?"],o:[["Droite, visière à la hauteur des sourcils","Square, peak in line with the eyebrows"],["Inclinée vers l'arrière","Tilted back"],["Visière au-dessus du front","Peak above the forehead"],["Sur le côté droit","On the right side"]],e:["Ch. 2, sect. 2, § 16.1.","Ch. 2, sect. 2, para 16.1."]},
+ {q:["Le béret se porte avec l'insigne :","The beret is worn with the badge:"],o:[["Au-dessus de l'œil gauche","Over the left eye"],["Au-dessus de l'œil droit","Over the right eye"],["Au centre du front","Centred on the forehead"],["Sur le côté gauche","On the left side"]],e:["Bande à 2,5 cm au-dessus des sourcils, couronne tirée vers la droite. (§ 16.3)","Band 2.5 cm above the eyebrows, crown pulled to the right. (para 16.3)"]},
+ {q:["Un collier en uniforme :","A necklace in uniform:"],o:[["Ne doit pas être visible","Must not be visible"],["Peut se porter par-dessus la chemise","May be worn over the shirt"],["Est interdit en tout temps","Is never allowed"],["Doit être doré","Must be gold"]],e:["Ch. 2, sect. 2, § 8.2.","Ch. 2, sect. 2, para 8.2."]},
+ {q:["En tenue de cérémonie, combien de bagues au maximum ?","In ceremonial dress, how many rings at most?"],o:["2","1","3",["Aucune","None"]],e:["Sauf alliance en ensemble ou bague professionnelle. (§ 14d)","Except a wedding set or a professional ring. (para 14d)"]},
+ {q:["L'inspecteur relève un défaut sur ta tenue. Tu :","The inspector points out a fault. You:"],o:[["Réponds « Oui, Monsieur / Madame » et corriges après","Answer “Yes, Sir / Ma'am” and fix it afterwards"],["Expliques pourquoi","Explain why"],["Corriges tout de suite devant lui","Fix it right away in front of them"],["Ne dis rien et souris","Say nothing and smile"]],e:["On ne se justifie pas pendant l'inspection.","You don't argue during the inspection."]},
+ {q:["Pendant l'inspection, ton regard :","During the inspection, your eyes:"],o:[["Reste droit devant","Stay front"],["Suit l'inspecteur","Follow the inspector"],["Regarde le sol","Look at the floor"],["Regarde ton voisin","Look at your neighbour"]],e:["Au garde-à-vous, regard droit devant.","At attention, eyes front."]}];
+CAT.insp=["Inspections","Inspections"];
+INSPQ.forEach(f=>CARDS.push({k:"in-"+hash(f.q[0]),c:"insp",po:null,b:()=>{const o=shuffle(f.o.map((_,i)=>i));return {q:f.q,opts:o.map(i=>f.o[i]),ans:o.indexOf(0),exp:f.e}}}));
+CARDS.forEach(c=>CARD_BY[c.k]=c);
+QSCOPES.insp=["Inspections","Inspections"];
+const _td28=tutorDocs;tutorDocs=function(){const d=_td28();INSP_CHECK.forEach(c=>d.push({title:c.t[0],fr:c.t[0]+" : "+c.r[0],en:c.t[1]+": "+c.r[1]}));INSP_DURING.concat(INSP_CEREMONIAL,INSP_LOCKER).forEach(p=>d.push({title:"Inspection",fr:"Inspection : "+p[0],en:"Inspection: "+p[1]}));return d};
+
+/* ============ v2.8 (unit boards) — dress posters, orders of dress, reports, leave memo, fitness, online courses, numeral flags + Morse ============ */
+// ---- Dress policy posters (Politique sur la tenue — Chapitre 2, changements juin 2024)
+const HAIR_OK=[["Les cheveux ne couvrent pas le visage.","Hair does not cover the face."],["Attachés s'ils tombent sous le bas du col, à la nuque.","Tied back if they fall below the bottom of the collar at the nape."],["N'empêchent pas le port correct de la coiffure.","Don't prevent wearing the headdress correctly."],["Quelle que soit la coiffure, elle est soignée et reflète une image positive.","Whatever the style, it is neat and reflects a positive image."]];
+const HAIR_NO=[["Pas de chignon qui glisse","No slipping bun"],["Pas de mèches lâches","No loose strands"],["Pas d'épingles qui dépassent","No protruding pins"],["Le toupet ne couvre pas le visage, ne tombe pas dessus ni sous les sourcils","The fringe doesn't cover or fall on the face, nor below the eyebrows"]];
+const ACC_OK=[["Élastiques","Hair elastics"],["Filet à cheveux","Hair net"],["Chouchou (scrunchie) uni","Plain scrunchie"],["Épingles à cheveux et pinces bobby","Bobby pins and hair pins"],["Pinces à pression","Snap clips"],["Barrette","Barrette"]];
+const ACC_NO=[["Bandeau ou foulard","Bandana or head wrap"],["Nœud décoratif","Decorative bow"],["Grosse pince (pince crabe)","Jumbo claw clip"],["Serre-tête","Headband"],["Accessoire décoratif (fleur)","Decorative accessory (flower)"]];
+const CEREMONY_HAIR=[["En chignon","In a bun"],["En tresse simple","In a single braid"],["En tresses doubles centrées vers l'arrière","In double braids centred at the back"],["En tresses multiples ou dreadlocks tirées vers le centre du dos, ou réparties également le long des omoplates et sécurisées","In multiple braids or locks pulled to the centre of the back, or evenly along the shoulder blades and secured"],["Si le type de cheveux ne le permet pas : en discuter avec la chaîne de commandement","If hair type doesn't allow it: discuss with the chain of command"]];
+const ORDERS=[
+ ["cer",["Cérémonie","Ceremonial"],[["N° 1","No. 1",["Tenue de cérémonie avec accessoires (ceinturon, gants…)","Ceremonial dress with accoutrements (belt, gloves…)"]],["N° 1A","No. 1A",["Cérémonie avec médailles","Ceremonial with medals"]],["N° 1C","No. 1C",["Semi-cérémonie avec médailles (blanc tropical, Marine)","Semi-ceremonial with medals (tropical white, Navy)"]],["N° 1D","No. 1D",["Semi-cérémonie avec rubans","Semi-ceremonial with ribbons"]]]],
+ ["mess",["Mess","Mess"],[["N° 2","No. 2",["Tenue de mess standard (soirées officielles)","Standard mess dress (formal dinners)"]],["N° 2B","No. 2B",["Tenue de mess de service","Service mess dress"]]]],
+ ["serv",["Service","Service"],[["N° 3","No. 3",["Tenue de service avec tunique","Service dress with jacket"]],["N° 3A","No. 3A",["Chemise à manches longues et cravate","Long-sleeved shirt and tie"]],["N° 3B","No. 3B",["Chemise à manches courtes (dont blanc tropical, Marine)","Short-sleeved shirt (incl. tropical white, Navy)"]],["N° 3C","No. 3C",["Chandail, avec ou sans cravate","Sweater, with or without tie"]]]],
+ ["ops",["Opérationnelle","Operational"],[["NCD","NCD",["Tenue de combat navale : la tenue de travail de la Marine","Naval combat dress: the Navy's working dress"]],["CADPAT","CADPAT",["Tenue de combat camouflée","Camouflage combat dress"]]]]];
+const _vi28=viewInsp;viewInsp=function(){_vi28();
+ $("#view").insertAdjacentHTML("beforeend",`<h3>${L(["Cheveux : la politique de juin 2024","Hair: the June 2024 policy"])}</h3>
+ <div class="ocards"><div class="ocard"><div class="oname" style="color:var(--ok)">✓ ${U(["Autorisé","Allowed"])}</div><ul style="margin:6px 0 0;padding-left:18px;font-size:14px">${HAIR_OK.map(x=>`<li>${L(x)}</li>`).join("")}</ul></div>
+ <div class="ocard"><div class="oname" style="color:var(--bad)">✗ ${U(["Non autorisé","Not allowed"])}</div><ul style="margin:6px 0 0;padding-left:18px;font-size:14px">${HAIR_NO.map(x=>`<li>${L(x)}</li>`).join("")}</ul></div>
+ <div class="ocard"><div class="oname" style="color:var(--ok)">✓ ${U(["Accessoires autorisés","Allowed accessories"])}</div><ul style="margin:6px 0 0;padding-left:18px;font-size:14px">${ACC_OK.map(x=>`<li>${L(x)}</li>`).join("")}</ul></div>
+ <div class="ocard"><div class="oname" style="color:var(--bad)">✗ ${U(["Accessoires non autorisés","Accessories not allowed"])}</div><ul style="margin:6px 0 0;padding-left:18px;font-size:14px">${ACC_NO.map(x=>`<li>${L(x)}</li>`).join("")}</ul></div></div>
+ <h3>${L(["Cérémonies : cheveux sous le col de la tunique","Ceremonies: hair below the jacket collar"])}</h3><ol class="pts">${CEREMONY_HAIR.map(x=>`<li>${L(x)}</li>`).join("")}</ol>
+ <h3>${L(["Pilosité faciale","Facial hair"])}</h3><p class="lead">${L(["Tous les styles et favoris sont permis : coupés selon des lignes nettes, bien entretenus, symétriques, 2,5 cm (1 po) maximum de longueur et de volume. Les moustaches, y compris en guidon, ne dépassent pas 2,5 cm de long.","All styles and sideburns allowed: trimmed with clean lines, well maintained, symmetrical, 2.5 cm (1 in) maximum length and bulk. Moustaches, including handlebars, no longer than 2.5 cm."])}</p>
+ <h3>${L(["Les ordres de tenue des FAC","CAF orders of dress"])}</h3>
+ <div class="ocards">${ORDERS.map(g=>`<div class="ocard"><div class="oname">${L(g[1])}</div>${g[2].map(o=>`<div style="font-size:14px;margin-top:6px"><b style="color:var(--gold)">${EN()?o[1]:o[0]}</b> — ${L(o[2])}</div>`).join("")}</div>`).join("")}</div>
+ <p class="muted" style="font-size:13.5px">${L(["Sacs à dos : portés ou tenus correctement (selon les consignes de l'unité). Tenue de maternité prévue dans chaque catégorie. Source : affiches de l'unité (Politique sur la tenue, juin 2024 ; CF Orders of Dress) et Instructions sur la tenue des FAC.","Backpacks: worn or carried correctly (per unit orders). Maternity dress exists in each category. Source: unit posters (Dress policy, June 2024; CF Orders of Dress) and CAF Dress Instructions."])}</p>`)};
+INSPQ.push(
+ {q:["Lequel est un accessoire pour cheveux NON autorisé ?","Which hair accessory is NOT allowed?"],o:[["Grosse pince (pince crabe)","Jumbo claw clip"],["Élastique","Hair elastic"],["Filet à cheveux","Hair net"],["Épingle à cheveux","Bobby pin"]],e:["Non autorisés : bandeau, nœud, grosse pince, serre-tête, accessoire décoratif.","Not allowed: bandana, bow, jumbo clip, headband, decorative accessory."]},
+ {q:["Le toupet (frange) :","The fringe:"],o:[["Ne doit pas couvrir le visage ni tomber sous les sourcils","Must not cover the face or fall below the eyebrows"],["Peut couvrir un œil","May cover one eye"],["Est interdit","Is not allowed"],["Doit être attaché","Must be tied"]],e:["Politique sur la tenue, juin 2024.","Dress policy, June 2024."]},
+ {q:["La tenue de travail de la Marine s'appelle :","The Navy's working dress is called:"],o:["NCD","CADPAT",["N° 1","No. 1"],["N° 2","No. 2"]],e:["Tenue de combat navale (Naval Combat Dress).","Naval Combat Dress."]},
+ {q:["La tenue n° 2 est la tenue :","No. 2 dress is:"],o:[["De mess","Mess dress"],["De cérémonie","Ceremonial"],["De service","Service"],["Opérationnelle","Operational"]],e:["N° 1 cérémonie, n° 2 mess, n° 3 service.","No. 1 ceremonial, No. 2 mess, No. 3 service."]},
+ {q:["La tenue n° 1A, c'est la cérémonie avec :","No. 1A is ceremonial with:"],o:[["Médailles","Medals"],["Rubans","Ribbons"],["Chandail","Sweater"],["Chemise à manches courtes","Short-sleeved shirt"]],e:["1A médailles ; 1D semi-cérémonie avec rubans.","1A medals; 1D semi-ceremonial with ribbons."]});
+INSPQ.slice(-5).forEach(f=>CARDS.push({k:"in-"+hash(f.q[0]),c:"insp",po:null,b:()=>{const o=shuffle(f.o.map((_,i)=>i));return {q:f.q,opts:o.map(i=>f.o[i]),ans:o.indexOf(0),exp:f.e}}}));
+
+// ---- REPORTS & CORRESPONDENCE
+const REPORTS={
+ senior:{t:["Rapport du senior","Senior report"],when:["Le senior de la classe ou du groupe présente l'effectif à l'instructeur au début d'une période.","The class or group senior reports the strength to the instructor at the start of a period."],f:[["Numéro de matricule","Service number"],["Grade","Rank"],["Nom de famille","Last name"],["Numéro et nom complet du métier","Trade number and full trade name"],["Nombre de présences","Number present"],["Nombre d'absences et raison (si besoin)","Number absent and reason (if required)"],["« Prêt pour instruction »","“Ready for instruction”"]],ex:[["A12 345 567","Matelot 3e classe","Blogging","00105, Manœuvrier","21/22 candidats présents","1 absent pour rendez-vous médical","PRÊT POUR INSTRUCTION"],["A12 345 567","Sailor 3rd class","Blogging","00105, Boatswain","21/22 candidates present","1 absent for a medical appointment","READY FOR INSTRUCTION"]]},
+ perso:{t:["Rapport personnel","Personal report"],when:["Quand tu te présentes seul à un supérieur, par exemple pour motiver un retard.","When you report alone to a superior, for example to explain being late."],f:[["Numéro de matricule","Service number"],["Grade","Rank"],["Nom de famille","Last name"],["Numéro et nom complet du métier","Trade number and full trade name"],["Motif","Reason"]],ex:[["A12 345 567","Matelot 3e classe","Tremblay","00105, Manœuvrier","Motiver mon retard"],["A12 345 567","Sailor 3rd class","Tremblay","00105, Boatswain","To explain my lateness"]]}};
+if(!S.rep)S.rep={sn:"",rank:"s3",name:"",trade:"",present:"",absent:"",reason:""};
+let repSel="senior";
+function repLines(kind,lang){const r=S.rep,rk=byId[r.rank]||byId.s3,fr=lang==="fr";
+ const trade=r.trade||(fr?"00105, Manœuvrier":"00105, Boatswain");
+ const base=[r.sn||"A12 345 567",fr?rk.fr:rk.en,(r.name||"Nom").toUpperCase(),trade];
+ return kind==="senior"?base.concat([(r.present||"21/22")+(fr?" candidats présents":" candidates present"),r.absent?r.absent:(fr?"Aucun absent":"None absent"),fr?"PRÊT POUR INSTRUCTION":"READY FOR INSTRUCTION"]):base.concat([r.reason||(fr?"Motif":"Reason")])}
+function viewReports(){
+ const R0=REPORTS[repSel],fr=!EN(),lines=repLines(repSel,fr?"fr":"en");
+ const inp=(k,ph,w)=>`<label style="display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--muted);flex:1 1 ${w||160}px">${ph}<input data-k="${k}" value="${(S.rep[k]||"").replace(/"/g,"&quot;")}" style="background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px;font:15px var(--sans)"></label>`;
+ $("#view").innerHTML=`<h2>${L(["Rapports et correspondance","Reports and correspondence"])}</h2>
+ <p class="lead">${L(["Les formats affichés à l'unité. Pratique ton rapport à voix haute jusqu'à le dire sans regarder. Tes données restent sur ton appareil.","The formats posted at the unit. Practise your report out loud until you can say it without looking. Your data stays on your device."])}</p>
+ <div class="seg" id="rseg">${Object.keys(REPORTS).map(k=>`<button aria-pressed="${k===repSel}" data-r="${k}">${U(REPORTS[k].t)}</button>`).join("")}<button aria-pressed="${repSel==="leave"}" data-r="leave">${U(["Demande de congé","Leave request"])}</button></div>
+ ${repSel==="leave"?leaveHTML():`<p>${L(R0.when)}</p>
+ <div class="ocards"><div class="ocard"><div class="oname">${U(["Format","Format"])}</div><ol style="margin:6px 0 0;padding-left:20px;font-size:14.5px">${R0.f.map(x=>`<li>${L(x)}</li>`).join("")}</ol></div>
+ <div class="ocard"><div class="oname">${U(["Exemple affiché","Posted example"])}</div><ul style="margin:6px 0 0;padding-left:18px;font-size:14.5px">${R0.ex[fr?0:1].map(x=>`<li>${x}</li>`).join("")}</ul></div></div>
+ <h3>${L(["Prépare ton rapport","Prepare your report"])}</h3>
+ <div class="panel"><div class="row" style="margin-top:0">${inp("sn",U(["Matricule","Service number"]))}
+ <label style="display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--muted);flex:1 1 160px">${U(["Grade","Rank"])}<select data-k="rank" style="background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px;font:15px var(--sans)">${["s3","s2","s1","ms","po2","po1","cpo2","cpo1","ncdt","aslt","slt","ltn"].map(id=>`<option value="${id}" ${S.rep.rank===id?"selected":""}>${nm(byId[id])}</option>`).join("")}</select></label>
+ ${inp("name",U(["Nom de famille","Last name"]))}${inp("trade",U(["Numéro et nom du métier (ex. 00105, Manœuvrier)","Trade number and name (e.g. 00105, Boatswain)"]),240)}</div>
+ <div class="row">${repSel==="senior"?inp("present",U(["Présences (ex. 21/22)","Present (e.g. 21/22)"]))+inp("absent",U(["Absences et raison","Absences and reason"]),240):inp("reason",U(["Motif","Reason"]),300)}</div>
+ <div class="panel" style="margin-top:12px;background:var(--surface2)"><ol style="margin:0;padding-left:20px;font-size:16px;font-weight:600" id="repOut">${lines.map(x=>`<li>${x}</li>`).join("")}</ol></div>
+ <div class="row"><button class="btn gold" id="repSay">🔊 ${U(["Écouter mon rapport","Hear my report"])}</button><button class="btn" id="repHide">${U(["Mode mémoire : cacher","Memory mode: hide"])}</button></div>
+ <p class="muted" style="font-size:13px">${L(["Ton vrai matricule n'est jamais envoyé : il reste dans ce navigateur. Sur un appareil partagé, laisse l'exemple.","Your real service number is never sent anywhere: it stays in this browser. On a shared device, keep the example."])}</p></div>`}`;
+ document.querySelectorAll("#rseg button").forEach(b=>b.onclick=()=>{repSel=b.dataset.r;viewReports()});
+ document.querySelectorAll("[data-k]").forEach(e=>{e.oninput=e.onchange=()=>{S.rep[e.dataset.k]=e.value;save();const o=$("#repOut");if(o)o.innerHTML=repLines(repSel,EN()?"en":"fr").map(x=>`<li>${x}</li>`).join("");if(e.tagName==="SELECT")viewReports()}});
+ if($("#repSay"))$("#repSay").onclick=()=>speakSeq(repLines(repSel,EN()?"en":"fr").map(x=>x.replace(/(\d)/g,"$1 ")),EN()?"en-CA":"fr-CA");
+ if($("#repHide"))$("#repHide").onclick=()=>{const o=$("#repOut");o.style.filter=o.style.filter?"":"blur(7px)"};
+ if(repSel==="leave")bindLeave();
+}
+if(!S.leave)S.leave={date:"",to:"Cmdt pon",dates:"",dest:"",transport:"",r1:"",r2:"",r3:"",unit:""};
+function leaveText(){const l=S.leave,r=S.rep,rk=byId[r.rank]||byId.s3;const nm2=(r.name||"NOM").toUpperCase();
+ const reasons=[l.r1,l.r2,l.r3].filter(Boolean);const lettr="abc";
+ return `PROTÉGÉ A
+
+Note de service
+
+5060-1 (Candidat)
+
+${l.date||"JJ Mmm AA"}
+
+${l.to||"Cmdt pon"}
+
+DEMANDE DE CONGÉ
+
+Réfs : A. ELRFC OPC Chap 7 para 7.5.3
+B. DOAD 5060-0
+
+1.  Je, ${r.sn||"A12 345 678"}, ${rk.frA}, X.X. ${nm2}, ${r.trade||"MÉTIER, 00XXX"}, demande un congé.
+
+2.  Je demande ce congé durant le week-end, du ${l.dates||"[dates du prochain week-end]"}, me permettant de me rendre ${l.dest||"[destination]"} en ${l.transport||"[moyen de transport]"} pour les raisons suivantes :
+
+${(reasons.length?reasons:["[raison détaillée 1]","[raison détaillée 2]","[raison détaillée 3]"]).map((x,i,a)=>`    ${lettr[i]}.  ${x}${i<a.length-2?" ;":i===a.length-2?" ; et":"."}`).join("\n\n")}
+
+3.  L'approbation de cette demande serait bénéfique pour moi et ma famille.
+
+Le candidat de ${l.unit||"R0XXX"},
+
+
+
+X.X. ${nm2}
+${rk.frA}
+Candidat(e) ${l.unit||"R0XXX"}
+
+PROTÉGÉ A`}
+function leaveHTML(){const f=(k,ph,w)=>`<label style="display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--muted);flex:1 1 ${w||180}px">${ph}<input data-l="${k}" value="${(S.leave[k]||"").replace(/"/g,"&quot;")}" style="background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px;font:15px var(--sans)"></label>`;
+ return `<p>${L(["Modèle de note de service affiché à l'unité pour une demande de congé de fin de semaine. Remplis les champs : le texte se construit en dessous. Ton matricule, ton grade, ton nom et ton métier viennent de l'onglet Rapport du senior. Fais toujours vérifier le format par ta chaîne de commandement.","Memo template posted at the unit for a weekend leave request (French format). Fill in the fields: the text builds below. Your service number, rank, name and trade come from the Senior report tab. Always have the format checked by your chain of command."])}</p>
+ <div class="panel"><div class="row" style="margin-top:0">${f("date",U(["Date (JJ Mmm AA)","Date (DD Mmm YY)"]))}${f("to",U(["Destinataire","To"]))}${f("unit",U(["Numéro de candidat / section (ex. R0XXX)","Candidate / section no. (e.g. R0XXX)"]))}</div>
+ <div class="row">${f("dates",U(["Dates du congé","Leave dates"]))}${f("dest",U(["Destination","Destination"]))}${f("transport",U(["Moyen de transport","Transport"]))}</div>
+ <div class="row">${f("r1",U(["Raison 1","Reason 1"]),260)}${f("r2",U(["Raison 2","Reason 2"]),260)}${f("r3",U(["Raison 3","Reason 3"]),260)}</div>
+ <pre id="lvOut" style="white-space:pre-wrap;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:14px;font:14px/1.5 Georgia,serif;margin-top:12px">${leaveText().replace(/</g,"&lt;")}</pre>
+ <div class="row"><button class="btn gold" id="lvCopy">${U(["Copier le texte","Copy the text"])}</button><span class="muted" id="lvMsg" style="align-self:center;font-size:14px"></span></div>
+ <p class="muted" style="font-size:13px">${L(["« PROTÉGÉ A » : document qui contient des renseignements personnels. Ne le partage pas en dehors de la voie hiérarchique.","“PROTECTED A”: a document containing personal information. Don't share it outside the chain of command."])}</p></div>`}
+function bindLeave(){document.querySelectorAll("[data-l]").forEach(e=>e.oninput=()=>{S.leave[e.dataset.l]=e.value;save();$("#lvOut").textContent=leaveText()});
+ $("#lvCopy").onclick=async()=>{let ok=false;try{await navigator.clipboard.writeText(leaveText());ok=true}catch(e){}$("#lvMsg").textContent=ok?U(["Copié.","Copied."]):U(["Sélectionne le texte et copie-le.","Select the text and copy it."])}}
+const REPQ=[
+ {q:["Dans le rapport du senior, que dit-on en dernier ?","In the senior report, what comes last?"],o:[["« Prêt pour instruction »","“Ready for instruction”"],["Le nom de famille","The last name"],["Le nombre d'absences","The number absent"],["Le matricule","The service number"]],e:["Matricule, grade, nom, métier, présences, absences, prêt pour instruction.","Service number, rank, name, trade, present, absent, ready for instruction."]},
+ {q:["Quel est le premier élément d'un rapport ?","What is the first item of a report?"],o:[["Le numéro de matricule","The service number"],["Le grade","The rank"],["Le nom","The name"],["Le métier","The trade"]],e:["Senior et personnel commencent par le matricule.","Senior and personal reports start with the service number."]},
+ {q:["Le rapport personnel se termine par :","The personal report ends with:"],o:[["Le motif","The reason"],["Le nombre de présences","The number present"],["« Prêt pour instruction »","“Ready for instruction”"],["La date","The date"]],e:["Ex. : « Motiver mon retard ».","E.g., “To explain my lateness”."]},
+ {q:["Numéro de métier du manœuvrier ?","Boatswain trade number?"],o:["00105","00099","00334","00366"],e:["« 00105, Manœuvrier ».","“00105, Boatswain”."]},
+ {q:["Une note de service de demande de congé porte la mention :","A leave request memo is marked:"],o:[["PROTÉGÉ A","PROTECTED A"],["SECRET","SECRET"],["NON CLASSIFIÉ","UNCLASSIFIED"],["TRÈS SECRET","TOP SECRET"]],e:["Elle contient des renseignements personnels.","It contains personal information."]}];
+CAT.rep=["Rapports","Reports"];
+REPQ.forEach(f=>CARDS.push({k:"rp-"+hash(f.q[0]),c:"rep",po:null,b:()=>{const o=shuffle(f.o.map((_,i)=>i));return {q:f.q,opts:o.map(i=>f.o[i]),ans:o.indexOf(0),exp:f.e}}}));
+
+// ---- FITNESS: Strengthening the Forces running programs + PSP warm-up
+const RUN3=[
+ ["Courses 1-1-2-1-1-2 min (zone 1) · marche 3 min","Courses 6 × 2 min (zone 1) · marche 2 min","Courses 1-2-3-2-1 min (zone 1) · marche 3 min"],
+ ["Courses 1-2-3-2-4 min (zone 1) · marche 2 min","Courses 4 × 3 min (zone 1) · marche 2 min","Courses 2-3-2-3 min (zone 1) · marche 2 min"],
+ ["Courses 2-4-5 min (zone 1) + 3 × 2 min (zone 2) · marche 2 min","Courses 5 × 3 min (zone 1) · marche 2 min","Courses 6 × 2 min (zone 2) · marche 3 min"],
+ ["Courses 4-5-6 min (zone 1) + 3 × 2 min (zone 2) · marche 2 min","Courses 4 × 5 min (zone 1) · marche 2 min","Courses 1-2-3-1-2-3 min (zone 2) · marche 2 min"],
+ ["Courses 3 × 8 min (zone 1) · marche 2 min","Courses 4 × 6 min (zone 1) · marche 2 min","Courses 6 × 3 min (zone 2) · marche 2 min"],
+ ["Courses 5-10-12 min (zone 1) · marche 2 puis 4 min","Courses 4 × 4 min (zone 2) · marche 2 min","Courses 6-5-4-2 min (zones 1,1,2,2) · marche 2 min"],
+ ["3 km de course sans arrêt","",""]];
+const RUN5=[
+ ["Courses 8 à 12 × 1 min (zone 1) · marche 3 min","Courses 4 à 6 × 1 min (zone 1) · marche 1 min","Courses 3 à 5 × 2 min (zone 1) · marche 2 min"],
+ ["Courses 8 à 10 × 2 min (zone 1) · marche 3 min","Courses 3 à 5 × 2 min (zone 1) · marche 2 min","Courses 3 à 5 × 3 min (zone 1) · marche 3 min"],
+ ["Courses 3 à 4 × 5 min (zone 1 + R) · marche 3 min","Courses 2 × 5 min (zone 1 + R) · marche 3 min","Courses 2 × 7 min (zone 1 + R) · marche 3 min"],
+ ["Courses 10-10-12 min (zone 2) · marche 10 min","Courses 1 × 15 min (zone 1)","Courses 2 × 10 min (zone 1 + R) · marche 5 min"],
+ ["Courses 3 × 10 min (zone 2) · marche 5 min","Courses 3 × 10 min (zone 1) · marche 3 min","Courses 10-8-6-4-2 min (zone 2) · marche 5-4-3-2 min"],
+ ["Test : 3 à 4 km de course sans arrêt (20 à 25 min)","",""]];
+const WARMUP=[
+ [["Marche sur l'intérieur des pieds","Walk on the inside of the feet"],["Lentement, poids sur le bord interne, sans tordre les chevilles.","Slowly, weight on the inner edge, without rolling the ankles."]],
+ [["Marche sur l'extérieur des pieds","Walk on the outside of the feet"],["Lentement, poids sur le bord externe, sans tordre les chevilles.","Slowly, weight on the outer edge, without rolling the ankles."]],
+ [["Marche sur la pointe des pieds","Walk on tiptoe"],["Dos droit, tête haute, abdos tendus, talons levés.","Back straight, head up, abs tight, heels raised."]],
+ [["Marche sur les talons","Walk on the heels"],["Dos droit, devant des pieds levé.","Back straight, front of the feet raised."]],
+ [["Alternance talon / pointe","Heel / toe alternation"],["2 pas sur la pointe, 2 pas sur les talons, poitrine sortie.","2 steps on tiptoe, 2 on the heels, chest out."]],
+ [["Talons aux fesses","Butt kicks"],["Genoux sous les hanches, talons tirés vers les fesses, sur le devant du pied.","Knees under hips, heels pulled to the buttocks, on the forefoot."]],
+ [["Marche genoux hauts","High-knee march"],["Coudes à 90°, genoux levés de façon dynamique, bras opposé.","Elbows at 90°, knees raised dynamically, opposite arm."]],
+ [["Pas chassé","Side shuffle"],["Tête au-dessus des pieds, dos droit, abdos contractés.","Head over the feet, back straight, abs tight."]],
+ [["Fente avant avec rotation du tronc","Forward lunge with trunk rotation"],["Grand pas, genou à ~90°, tourner tête et épaules d'un côté, revenir, alterner.","Big step, knee at ~90°, turn head and shoulders to one side, return, alternate."]]];
+if(!S.run)S.run={};let runSel="3";
+function viewFit(){
+ const P=runSel==="3"?RUN3:RUN5,done=Object.keys(S.run).filter(k=>k.startsWith(runSel+"-")&&S.run[k]).length,tot=P.reduce((a,w)=>a+w.filter(Boolean).length,0);
+ $("#view").innerHTML=`<h2>${L(["Forme physique","Fitness"])}</h2>
+ <p class="lead">${L(["Les programmes de course « Énergiser les Forces » affichés à l'unité, pour bâtir ta base avant l'évaluation FORCE. Coche chaque séance faite : ta progression reste sur ton appareil.","The “Strengthening the Forces” running programs posted at the unit, to build your base before the FORCE evaluation. Tick each session done: your progress stays on your device."])}</p>
+ <div class="seg" id="fseg"><button aria-pressed="${runSel==="3"}" data-f="3">${U(["Programme 3 km (7 sem.)","3 km program (7 wk)"])}</button><button aria-pressed="${runSel==="5"}" data-f="5">${U(["Programme 5 km (6 sem.)","5 km program (6 wk)"])}</button></div>
+ <div class="panel" style="margin-bottom:12px"><div class="qhead"><span>${U(["Séances faites","Sessions done"])}</span><span>${done}/${tot}</span></div><div class="bar"><i style="width:${done/tot*100}%"></i></div></div>
+ <div class="tblwrap"><table class="cmp"><thead><tr><th>${U(["Sem.","Wk"])}</th><th>${U(["Jour 1 (groupe)","Day 1 (group)"])}</th><th>${U(["Jour 3","Day 3"])}</th><th>${U(["Jour 5 (optionnel)","Day 5 (optional)"])}</th></tr></thead><tbody>
+ ${P.map((w,i)=>`<tr><td><b>${i+1}</b></td>${w.map((s,j)=>s?`<td style="white-space:normal;min-width:150px"><label style="display:flex;gap:8px;align-items:flex-start;cursor:pointer"><input type="checkbox" data-run="${runSel}-${i}-${j}" ${S.run[runSel+"-"+i+"-"+j]?"checked":""} style="accent-color:var(--gold);margin-top:3px"><span style="font-size:13.5px">${s}</span></label></td>`:(j===1&&!w[1]?"":"<td></td>")).join("").replace(/<td><\/td><td><\/td>$/,"")}</tr>`).join("")}</tbody></table></div>
+ <p class="muted" style="font-size:13.5px">${L(["Chaque séance commence par 10 à 15 min d'échauffement actif et finit par des étirements. Zone 1 = jogging facile ; Zone 1 + R = jogging facile, respiration contrôlée ; Zone 2 = jogging plus rapide. Programme issu de Start to Run (Ooms et al., 2013), autorisé par la Fédération néerlandaise d'athlétisme.","Every session starts with 10 to 15 min of active warm-up and ends with stretching. Zone 1 = easy jog; Zone 1 + R = easy jog, controlled breathing; Zone 2 = faster jog. Program based on Start to Run (Ooms et al., 2013), authorized by the Dutch Athletics Federation."])}</p>
+ <h3>${L(["Échauffement course à pied (PSP)","Running warm-up (PSP)"])}</h3>
+ <p class="lead">${L(["3 à 5 min d'activation légère, puis chaque exercice 30 s (ou 30 m) et retour en joggant. Avant des sprints : 2 à 3 accélérations progressives de 15-20 s à 70-90 % de ta vitesse maximale, 1 à 2 min de repos entre elles.","3 to 5 min of light activation, then each exercise for 30 s (or 30 m) and jog back. Before sprints: 2 to 3 progressive 15-20 s accelerations at 70-90% of top speed, 1 to 2 min rest between."])}</p>
+ <ol class="pts">${WARMUP.map(w=>`<li><b>${L(w[0])}</b><br><span class="muted">${L(w[1])}</span></li>`).join("")}</ol>
+ <div class="row"><a class="btn" style="text-decoration:none;color:inherit" href="https://cfmws.ca/FORCEEvaluation" target="_blank" rel="noopener">${U(["Évaluation FORCE (CFMWS)","FORCE Evaluation (CFMWS)"])}</a></div>`;
+ document.querySelectorAll("#fseg button").forEach(b=>b.onclick=()=>{runSel=b.dataset.f;viewFit()});
+ document.querySelectorAll("[data-run]").forEach(c=>c.onchange=()=>{S.run[c.dataset.run]=c.checked;save();viewFit()});
+}
+
+// ---- ONLINE MANDATORY COURSES (unit list)
+const ONLINE=[
+ ["301328 / 301329",["Formation générale sur les marchandises contrôlées","Controlled Goods General Awareness"],"1 h","DLN"],
+ ["301746 / 301747",["Gestion de l'information au sein du MDN/FAC","DND/CAF Information Management"],"1 h","DLN"],
+ ["303492 / 303493",["EPC commun 01 — Introduction au Système d'évaluation de la performance et des compétences","PaCE 01 Common — Intro to Performance & Competency Evaluation"],"4-5 h","DLN"],
+ ["303407 / 303408",["Cours de sécurité générale pour individu","General Safety Individual course"],"3-4 h","DLN"],
+ ["303683 / 303684",["Formation sur les extincteurs portatifs (membres PEA seulement)","Portable fire extinguisher training (AEP members only)"],"1 h","DLN"],
+ ["COR310",["Sensibilisation à la sécurité","Security Awareness"],"3 h","CSPS"],
+ ["INC101",["Introduction à l'ACS+","Introduction to GBA+"],"1,5 h","CSPS"],
+ ["WMT101",["Prévention du harcèlement et de la violence","Workplace harassment and violence prevention"],"1,5 h","CSPS"],
+ ["WMT109",["SIMDUT","WHMIS"],"1,5 h","CSPS"],
+ ["DDN235",["Découvrez la cybersécurité","Discover Cyber Security"],"1,5 h","CSPS"]];
+if(!S.online)S.online={};
+const _vp28=viewPath;viewPath=function(){_vp28();const n=ONLINE.filter((_,i)=>S.online[i]).length;
+ $("#view").insertAdjacentHTML("beforeend",`<h3>${L(["Formations en ligne à faire","Online courses to complete"])}</h3>
+ <p class="lead">${L(["Liste affichée à l'unité. Codes : anglais / français. RAD = Réseau d'apprentissage de la Défense ; EFPC = École de la fonction publique du Canada.","List posted at the unit. Codes: English / French. DLN = Defence Learning Network; CSPS = Canada School of Public Service."])}</p>
+ <div class="panel"><div class="qhead"><span>${U(["Complétées","Completed"])}</span><span>${n}/${ONLINE.length}</span></div><div class="bar"><i style="width:${n/ONLINE.length*100}%"></i></div>
+ ${ONLINE.map((c,i)=>`<label class="eorow" style="cursor:pointer"><input type="checkbox" data-on="${i}" ${S.online[i]?"checked":""}><span><b style="font-weight:600">${L(c[1])}</b><br><span class="muted" style="font-size:13px">${c[0]} · ${c[2]} · ${c[3]==="DLN"?U(["RAD","DLN"]):U(["EFPC","CSPS"])}</span></span></label>`).join("")}
+ <div class="row"><a class="btn" style="text-decoration:none;color:inherit" href="https://dln-rad.forces.gc.ca" target="_blank" rel="noopener">${U(["RAD (dln-rad.forces.gc.ca)","DLN (dln-rad.forces.gc.ca)"])}</a><a class="btn" style="text-decoration:none;color:inherit" href="https://www.csps-efpc.gc.ca" target="_blank" rel="noopener">${U(["EFPC (csps-efpc.gc.ca)","CSPS (csps-efpc.gc.ca)"])}</a></div></div>`);
+ document.querySelectorAll("[data-on]").forEach(c=>c.onchange=()=>{S.online[c.dataset.on]=c.checked;save();viewPath()})};
+
+// ---- NUMERAL FLAGS (NATO ATP-01 Vol II) + MORSE
+const MORSE={A:".-",B:"-...",C:"-.-.",D:"-..",E:".",F:"..-.",G:"--.",H:"....",I:"..",J:".---",K:"-.-",L:".-..",M:"--",N:"-.",O:"---",P:".--.",Q:"--.-",R:".-.",S:"...",T:"-",U:"..-",V:"...-",W:".--",X:"-..-",Y:"-.--",Z:"--..",0:"-----",1:".----",2:"..---",3:"...--",4:"....-",5:".....",6:"-....",7:"--...",8:"---..",9:"----."};
+const NUMNAMES=["ZERO","ONE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE"];
+function numFlagSVG(n,w){const Y="#F5C400",B="#1B4FA0",R="#D52B1E",W="#FFFFFF";const r=(x,y,ww,hh,c)=>`<rect x="${x}" y="${y}" width="${ww}" height="${hh}" fill="${c}"/>`;let s="";
+ switch(+n){case 1:s=r(0,0,60,13,R)+r(0,13,60,14,Y)+r(0,27,60,13,R);break;case 2:s=r(0,0,60,13,Y)+r(0,13,60,14,R)+r(0,27,60,13,Y);break;case 3:s=r(0,0,60,13,B)+r(0,13,60,14,R)+r(0,27,60,13,B);break;
+  case 4:s=r(0,0,60,40,R)+`<path d="M0 0L60 40M60 0L0 40" stroke="${W}" stroke-width="8"/>`;break;case 5:s=r(0,0,60,40,Y)+`<path d="M0 0L60 40M60 0L0 40" stroke="${B}" stroke-width="8"/>`;break;
+  case 6:s=r(0,0,60,40,W)+`<clipPath id="c6${w}"><rect width="60" height="40"/></clipPath><g clip-path="url(#c6${w})" stroke="${B}" stroke-width="6">${[-30,-10,10,30,50,70].map(x=>`<line x1="${x}" y1="40" x2="${x+40}" y2="0"/>`).join("")}</g>`;break;
+  case 7:s=r(0,0,25,40,R)+r(25,0,10,40,W)+r(35,0,25,40,R);break;case 8:s=r(0,0,22,40,Y)+r(22,0,16,40,B)+r(38,0,22,40,Y);break;case 9:s=r(0,0,25,40,B)+r(25,0,10,40,W)+r(35,0,25,40,B);break;
+  case 0:s=r(0,0,60,40,W)+[[15,10],[45,10],[30,20],[15,30],[45,30]].map(([x,y])=>`<path d="M${x-5} ${y}h10M${x} ${y-5}v10" stroke="${B}" stroke-width="3.5"/>`).join("");break}
+ return `<svg class="flag" viewBox="0 0 60 40" width="${w}" height="${w*2/3}" role="img" aria-label="${NUMNAMES[n]}">${s}</svg>`}
+const morseVis=c=>MORSE[c].split("").map(x=>x==="."?"•":"—").join(" ");
+let ACm=null;function playMorse(text){try{ACm=ACm||new (window.AudioContext||window.webkitAudioContext)();if(ACm.state==="suspended")ACm.resume();const u=.09;let t=ACm.currentTime+.05;
+ for(const ch of text.toUpperCase()){if(ch===" "){t+=u*7;continue}const m=MORSE[ch];if(!m)continue;for(const s of m){const o=ACm.createOscillator(),g=ACm.createGain();o.frequency.value=650;o.type="sine";const d=s==="."?u:u*3;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.35,t+.005);g.gain.setValueAtTime(.35,t+d-.005);g.gain.linearRampToValueAtTime(0,t+d);o.connect(g);g.connect(ACm.destination);o.start(t);o.stop(t+d+.01);t+=d+u}t+=u*2}return true}catch(e){return false}}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest(".mrs");if(b){e.stopPropagation();playMorse(b.dataset.m)}},true);
+const mrsBtn=c=>`<button class="spk mrs" data-m="${c}" title="Morse" aria-label="Morse ${c}">·−</button>`;
+const _fh28=flagsHTML;flagsHTML=function(){let h=_fh28();
+ // add Morse under each letter flag
+ Object.keys(FLAGS).forEach(k=>{h=h.replace(`<b>${k} — ${FLAGS[k][0]} `,`<b>${k} — ${FLAGS[k][0]} ${mrsBtn(k)} `).replace(`<small>${L(FLAGS[k][1])}</small>`,`<small style="font-family:monospace;color:var(--gold)">${morseVis(k)}</small><small>${L(FLAGS[k][1])}</small>`)});
+ return h+`<h3>${L(["Pavillons numériques OTAN","NATO numeral flags"])}</h3><p class="lead">${L(["Selon l'ATP-01, vol. II (OTAN non classifié). À ne pas confondre avec les flammes numériques du Code international. Touche ·− pour entendre le code Morse.","Per ATP-01, Vol. II (NATO unclassified). Not to be confused with the International Code numeral pennants. Tap ·− to hear the Morse code."])}</p>
+ <div class="fgrid">${[1,2,3,4,5,6,7,8,9,0].map(n=>`<div class="fcard">${numFlagSVG(n,96).replace('class="flag"','class="flag" style="margin:0 auto"')}<b>${n} — ${NUMNAMES[n]} ${spk(n===9?"Niner":NUMNAMES[n].toLowerCase(),"en-US")} ${mrsBtn(String(n))}</b><small style="font-family:monospace;color:var(--gold)">${morseVis(String(n))}</small></div>`).join("")}</div>`};
+// Listen tab: Morse section
+const _va28=viewAudio;viewAudio=function(){_va28();$("#view").insertAdjacentHTML("beforeend",`<h3>${L(["Code Morse","Morse code"])}</h3><p class="lead" style="margin-bottom:8px">${L(["Point = court, trait = long (3 fois plus long). Écris un mot ou touche une lettre.","Dot = short, dash = long (3 times longer). Type a word or tap a letter."])}</p>
+ <div class="row" style="margin-top:0"><input id="mIn" value="SOS" style="flex:1 1 200px;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px;font:16px var(--sans);text-transform:uppercase"><button class="btn gold" id="mGo">·− ${U(["Jouer","Play"])}</button></div>
+ <div id="mVis" style="font-family:monospace;color:var(--gold);margin:8px 0;font-size:18px"></div>
+ <div class="cols">${Object.keys(MORSE).map(c=>`<button class="chip mrs" data-m="${c}" style="cursor:pointer;text-align:left"><b>${c}</b> <span style="font-family:monospace">${morseVis(c)}</span></button>`).join("")}</div>`);
+ const vis=()=>{$("#mVis").textContent=$("#mIn").value.toUpperCase().split("").map(c=>c===" "?" / ":MORSE[c]?morseVis(c):"").join("   ")};vis();
+ $("#mIn").oninput=vis;$("#mGo").onclick=()=>playMorse($("#mIn").value)};
+for(let n=0;n<10;n++){CARDS.push({k:"nf-"+n,c:"flag",po:null,b:()=>{const ds=shuffle([n,...pick([0,1,2,3,4,5,6,7,8,9].filter(x=>x!==n),3)]);return {q:["Quel pavillon numérique OTAN est-ce ?","Which NATO numeral flag is this?"],svg:numFlagSVG(n,110),opts:ds.map(x=>`${x} — ${NUMNAMES[x]}`),ans:ds.indexOf(n),exp:[`${NUMNAMES[n]} · Morse ${morseVis(String(n))}`,`${NUMNAMES[n]} · Morse ${morseVis(String(n))}`]}}})}
+["S","O","E","T","A","N"].forEach(c=>CARDS.push({k:"mo-"+c,c:"flag",po:null,b:()=>{const ds=shuffle([c,...pick(Object.keys(FLAGS).filter(x=>x!==c),3)]);return {q:[`Quelle lettre correspond au Morse ${morseVis(c)} ?`,`Which letter is Morse ${morseVis(c)}?`],opts:ds.map(x=>`${x} — ${FLAGS[x][0]}`),ans:ds.indexOf(c),exp:[`${c} = ${morseVis(c)}. SOS = ••• — — — •••`,`${c} = ${morseVis(c)}. SOS = ••• — — — •••`]}}}));
+CARDS.forEach(c=>CARD_BY[c.k]=c);
+QSCOPES.rep=["Rapports","Reports"];
+const _td28b=tutorDocs;tutorDocs=function(){const d=_td28b();const add=(t,fr,en)=>d.push({title:t,fr,en});
+ Object.values(REPORTS).forEach(r=>add(r.t[0],r.t[0]+" : "+r.f.map(x=>x[0]).join(", ")+". Exemple : "+r.ex[0].join(", "),r.t[1]+": "+r.f.map(x=>x[1]).join(", ")+". Example: "+r.ex[1].join(", ")));
+ add("Cheveux",HAIR_OK.concat(HAIR_NO).map(x=>x[0]).join(" "),HAIR_OK.concat(HAIR_NO).map(x=>x[1]).join(" "));
+ add("Accessoires","Autorisés : "+ACC_OK.map(x=>x[0]).join(", ")+". Non autorisés : "+ACC_NO.map(x=>x[0]).join(", "),"Allowed: "+ACC_OK.map(x=>x[1]).join(", ")+". Not allowed: "+ACC_NO.map(x=>x[1]).join(", "));
+ ORDERS.forEach(g=>g[2].forEach(o=>add("Tenue "+o[0],o[0]+" : "+o[2][0],o[1]+": "+o[2][1])));
+ ONLINE.forEach(c=>add(c[0],c[0]+" "+c[1][0]+" "+c[2],c[0]+" "+c[1][1]+" "+c[2]));
+ WARMUP.forEach(w=>add(w[0][0],w[0][0]+" : "+w[1][0],w[0][1]+": "+w[1][1]));return d};
+
 /* ============ ROUTER ============ */
-const VIEWS={path:viewPath,drill:viewDrill,first:viewFirst,tutor:viewTutor,audio:viewAudio,review:viewReview,exam:viewExam,other:viewOther,lesson:viewLesson,learn:viewLearn,table:viewTable,flash:viewFlash,quiz:viewQuiz,order:viewOrder,course:viewCourse,navy:viewNavy,man:viewMan,src:viewSrc};
+const VIEWS={insp:viewInsp,rep:viewReports,fit:viewFit,path:viewPath,drill:viewDrill,first:viewFirst,tutor:viewTutor,audio:viewAudio,review:viewReview,exam:viewExam,other:viewOther,lesson:viewLesson,learn:viewLearn,table:viewTable,flash:viewFlash,quiz:viewQuiz,order:viewOrder,course:viewCourse,navy:viewNavy,man:viewMan,src:viewSrc};
 let current="learn";
 function go(v,keepScroll){current=v;const tab=v==="lesson"?"course":v==="exam"?"review":v;document.querySelectorAll("#tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===tab));VIEWS[v]();if(!keepScroll)window.scrollTo({top:0});
  const sel=document.querySelector('#tabs button[aria-selected="true"]');if(sel)sel.scrollIntoView({inline:"nearest",block:"nearest"});setTimeout(tabArrows,350)}
