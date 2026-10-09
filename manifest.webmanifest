@@ -1,0 +1,30 @@
+{
+ "name": "NavalOS — Marine royale canadienne",
+ "short_name": "NavalOS",
+ "description": "Grades, insignes, OREN 001, flotte et métiers de la MRC / RCN ranks, insignia, PO 001, fleet and trades",
+ "start_url": "./",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#060E1C",
+ "theme_color": "#060E1C",
+ "lang": "fr-CA",
+ "icons": [
+  {
+   "src": "icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "icon-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}
