@@ -208,6 +208,7 @@ ol.pts li::before{content:counter(p);position:absolute;left:14px;top:9px;font-fa
 
   <div class="tabbar"><button class="tabarrow l" id="tabL" aria-label="Onglets précédents / Previous tabs">‹</button><button class="tabarrow r" id="tabR" aria-label="Onglets suivants / Next tabs">›</button>
   <nav class="tabs" role="tablist" id="tabs">
+    <button role="tab" data-v="about"></button>
     <button role="tab" data-v="review" aria-selected="true"></button>
     <button role="tab" data-v="first"></button>
     <button role="tab" data-v="insp"></button>
@@ -227,7 +228,6 @@ ol.pts li::before{content:counter(p);position:absolute;left:14px;top:9px;font-fa
     <button role="tab" data-v="man"></button>
     <button role="tab" data-v="tutor"></button>
     <button role="tab" data-v="src"></button>
-    <button role="tab" data-v="about"></button>
     <button role="tab" data-v="more"></button>
   </nav></div>
 
@@ -658,9 +658,10 @@ const LESSONS={
 
 /* ============ STORAGE ============ */
 const KEY="navalos.v1";
-const APP_VERSION="3.0.2",CONTENT_DATE="2026-10-11";
+const APP_VERSION="3.0.3",CONTENT_DATE="2026-10-11";
 const ONLINE_URL="https://claude.ai/artifact/4F2zWfYVFgg7cK4XfHdmkA";
-const CHANGELOG=[["3.0.2","2026-10-11",["Remarques : envoi direct par Gmail ou Outlook (travail ou personnel), même sans application de courriel installée. Correctif d'affichage de la version installable.","Feedback: send directly through Gmail or Outlook (work or personal), even without an email app installed. Display fix for the installable version."]],
+const CHANGELOG=[["3.0.3","2026-10-11",["À la première ouverture, NavalOS s'ouvre sur la page de présentation (À propos), avec un bouton Commencer. Ensuite, l'app s'ouvre directement sur ta révision. L'onglet À propos est maintenant le premier.","On first launch, NavalOS opens on the introduction page (About), with a Get started button. After that, the app opens straight to your review. The About tab now comes first."]],
+ ["3.0.2","2026-10-11",["Remarques : envoi direct par Gmail ou Outlook (travail ou personnel), même sans application de courriel installée. Correctif d'affichage de la version installable.","Feedback: send directly through Gmail or Outlook (work or personal), even without an email app installed. Display fix for the installable version."]],
  ["3.0","2026-10-11",["Progression neutre : 8 niveaux (Découverte à Référence) au lieu d'un grade. Mon étape de carrière : choisis ton grade (Mat 3 à PM 1re classe, ou officier) et NavalOS adapte tes priorités (QEL, QIL, QAL, QSL). Page À propos avec code QR. Enregistrer la page (fichier lisible hors ligne) ou l'imprimer en PDF. Bouton Remarques pour écrire au créateur.","Neutral progress: 8 levels (Discovery to Master) instead of a rank. My career stage: choose your rank (S3 to CPO1, or officer) and NavalOS adapts your priorities (PLQ, ILQ, ALQ, SLQ). About page with QR code. Save the page (offline file) or print it to PDF. Feedback button to write to the creator."]],
  ["2.9","2026-10-09",["Choisis ton métier dès l'accueil : plan personnalisé, mode focus (seuls les onglets utiles s'affichent ; le reste est dans ☰ Tout), ce que tu peux laisser de côté, et liens officiels de ton métier. 13 métiers communs aux FAC ajoutés (musicien, renseignement, cyber, imagerie, police militaire, santé, aumônier, affaires publiques) avec leur formation. Tuteur pour tous : recherche dans NavalOS (hors ligne) et envoi vers Copilot (compte MDN/FAC). Installation sur iPhone expliquée pas à pas, et bouton Partager. Avertissement : NavalOS est un aide-mémoire qui ne remplace ni le cours ni les manuels.","Choose your trade from the home page: personal plan, focus mode (only useful tabs shown; the rest under ☰ All), what to leave aside, and official links for your trade. 13 CAF-wide trades added (musician, intelligence, cyber, imagery, military police, health, chaplain, public affairs) with their training. Tutor for everyone: NavalOS search (offline) and hand-off to Copilot (DND/CAF account). Step-by-step iPhone install and a Share button. Disclaimer: NavalOS is a memory aid that replaces neither the course nor the manuals."]],
  ["2.8","2026-10-09",["Onglet Inspection : auto-inspection en 12 points, déroulement, casier, trousse, politique sur la tenue (juin 2024 : cheveux, accessoires, cérémonie) et ordres de tenue n° 1 à 5. Onglet Rapports : rapport du senior, rapport personnel (pratique + écoute) et générateur de demande de congé. Onglet Forme : programmes de course 3 km et 5 km avec suivi, échauffement PSP. Parcours : 10 cours en ligne obligatoires à cocher. Pavillons numériques OTAN et code Morse avec son. 26 nouvelles cartes de révision.","Inspection tab: 12-point self-inspection, procedure, locker, kit, dress policy (June 2024: hair, accessories, ceremony) and Orders of Dress No. 1 to 5. Reports tab: senior report, personal report (practice + listen) and leave-request generator. Fitness tab: 3 km and 5 km running programs with tracking, PSP warm-up. Career path: 10 mandatory online courses checklist. NATO numeral flags and Morse code with sound. 26 new review cards."]],
@@ -2622,8 +2623,11 @@ function viewAbout(){const t=myTradeObj();
   ["🇨🇦","Bilingue","Bilingual","Français, anglais ou les deux côte à côte, pour apprendre les termes dans les deux langues officielles.","French, English or both side by side, to learn the terms in both official languages."],
   ["📲","Hors ligne et installable","Offline and installable","S'installe comme une app sur iPhone, Android et ordinateur, et fonctionne sans Internet.","Installs like an app on iPhone, Android and computer, and works without internet."],
   ["🔒","Privé","Private","Aucun compte. Ta progression reste sur ton appareil.","No account. Your progress stays on your device."]];
- $("#view").innerHTML=`<h2>${L(["À propos de NavalOS","About NavalOS"])}</h2>
+ const first=!S.seenAbout&&!S.onb;if(!S.seenAbout){S.seenAbout=1;save()}
+ const startBtn=`<div class="row"><button class="btn gold" id="ab30go" style="font-size:17px;padding:12px 22px">${S.onb?U(["Aller à ma révision →","Go to my review →"]):U(["Commencer : choisir mon métier →","Get started: choose my trade →"])}</button></div>`;
+ $("#view").innerHTML=`<h2>${L([first?"Bienvenue sur NavalOS":"À propos de NavalOS",first?"Welcome to NavalOS":"About NavalOS"])}</h2>
  <p class="lead" style="font-size:19px">${L(["Ton aide-mémoire de poche pour la Marine royale canadienne.","Your pocket memory aid for the Royal Canadian Navy."])}</p>
+${startBtn}
  <p>${L(["NavalOS aide les recrues et les marins de tous les métiers à apprendre et réviser l'essentiel : grades et insignes, cours OREN, coutumes, navires, pavillons, exercice militaire, inspection et rapports. Il suit ta progression et t'accompagne du premier jour jusqu'aux étapes de leadership.","NavalOS helps recruits and sailors of every trade learn and review the essentials: ranks and insignia, the PO course, customs, ships, flags, drill, inspection and reports. It tracks your progress and supports you from day one through the leadership steps."])}</p>
  <div class="ocards">${feats.map(f=>`<div class="ocard"><div class="oname">${f[0]} ${U([f[1],f[2]])}</div><div style="font-size:14.5px;margin-top:4px">${L([f[3],f[4]])}</div></div>`).join("")}</div>
  <h3>${L(["Pour qui ?","Who is it for?"])}</h3>
@@ -2634,8 +2638,8 @@ function viewAbout(){const t=myTradeObj();
  <div class="panel" style="margin-top:12px"><b>📲 ${U(["Installer","Install"])}</b>${installHTML()}</div>
  <h3>${L(["Important","Important"])}</h3><p class="disc29">${L(DISCLAIMER)}</p>
  <p class="muted" style="font-size:14px">${L([`Conçu par Martin B., Réserve navale (NCSM Montcalm). Projet personnel non officiel, non affilié au ministère de la Défense nationale ni aux Forces armées canadiennes. Version ${APP_VERSION}, contenu vérifié le ${CONTENT_DATE}.`,`Created by Martin B., Naval Reserve (HMCS Montcalm). Unofficial personal project, not affiliated with the Department of National Defence or the Canadian Armed Forces. Version ${APP_VERSION}, content checked ${CONTENT_DATE}.`])}</p>
- <details><summary style="cursor:pointer;color:var(--gold)">${U(["Nouveautés","What's new"])}</summary><ul class="skp29">${CHANGELOG.slice(0,5).map(c=>`<li><b>${c[0]}</b> (${c[1]}) — ${L(c[2])}</li>`).join("")}</ul></details>`;
- bindPlan();bindInstall()}
+ <details><summary style="cursor:pointer;color:var(--gold)">${U(["Nouveautés","What's new"])}</summary><ul class="skp29">${CHANGELOG.slice(0,5).map(c=>`<li><b>${c[0]}</b> (${c[1]}) — ${L(c[2])}</li>`).join("")}</ul></details>${startBtn.replace('id="ab30go"','id="ab30go2"')}`;
+ bindPlan();bindInstall();["#ab30go","#ab30go2"].forEach(id=>{const b=$(id);if(b)b.onclick=()=>go("review")})}
 
 // ---- Save this page (HTML file) / Print or PDF / Feedback — bar under every page
 let DLNS=null;try{if(window.claude&&window.claude.use)window.claude.use("downloads").then(d=>{DLNS=d}).catch(()=>{})}catch(e){}
@@ -2682,7 +2686,7 @@ document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>go(b.dataset.
 document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{S.lang=b.dataset.l;save();applyLang();go(current,true)});
 function applyTheme(){if(S.theme)document.documentElement.setAttribute("data-theme",S.theme);else document.documentElement.removeAttribute("data-theme")}
 $("#themeBtn").onclick=()=>{const dark=S.theme?S.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;S.theme=dark?"light":"dark";save();applyTheme()};
-applyTheme();applyLang();updMastery();go("review");
+applyTheme();applyLang();updMastery();go(S.onb||S.seenAbout?"review":"about");
 </script>
 <script>if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){navigator.serviceWorker.register("sw.js").catch(()=>{})}</script>
 </body>
