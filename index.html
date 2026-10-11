@@ -182,6 +182,8 @@ ol.pts li::before{content:counter(p);position:absolute;left:14px;top:9px;font-fa
 .lnk29,.skp29{margin:6px 0 4px;padding-left:20px}.lnk29 li,.skp29 li{margin:4px 0}.lnk29 a{color:var(--gold)}
 .sel29{width:100%;max-width:480px;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font:15px var(--sans)}
 .welc29,.plan29{border-color:var(--gold)}
+.segno{width:100%;height:auto}
+@media print{.tabbar,.top .tools,#pgbar,#storeWarn,.row,button,.tabarrow,#toast{display:none!important}body{background:#fff!important;color:#000!important}.panel,.ocard{break-inside:avoid;box-shadow:none!important}a{color:#000}.wrap{max-width:none}}
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#060E1C">
@@ -225,11 +227,13 @@ ol.pts li::before{content:counter(p);position:absolute;left:14px;top:9px;font-fa
     <button role="tab" data-v="man"></button>
     <button role="tab" data-v="tutor"></button>
     <button role="tab" data-v="src"></button>
+    <button role="tab" data-v="about"></button>
     <button role="tab" data-v="more"></button>
   </nav></div>
 
   <div id="storeWarn" class="explain" style="display:none;margin-top:12px"></div>
   <main id="view"></main>
+  <div id="pgbar" style="margin-top:26px;padding-top:12px;border-top:1px solid var(--line)"></div>
   <p id="disc" class="disc29" style="margin:28px 0 8px;font-size:13px"></p>
 </div>
 
@@ -654,9 +658,10 @@ const LESSONS={
 
 /* ============ STORAGE ============ */
 const KEY="navalos.v1";
-const APP_VERSION="2.9",CONTENT_DATE="2026-10-09";
+const APP_VERSION="3.0",CONTENT_DATE="2026-10-11";
 const ONLINE_URL="https://claude.ai/artifact/4F2zWfYVFgg7cK4XfHdmkA";
-const CHANGELOG=[["2.9","2026-10-09",["Choisis ton métier dès l'accueil : plan personnalisé, mode focus (seuls les onglets utiles s'affichent ; le reste est dans ☰ Tout), ce que tu peux laisser de côté, et liens officiels de ton métier. 13 métiers communs aux FAC ajoutés (musicien, renseignement, cyber, imagerie, police militaire, santé, aumônier, affaires publiques) avec leur formation. Tuteur pour tous : recherche dans NavalOS (hors ligne) et envoi vers Copilot (compte MDN/FAC). Installation sur iPhone expliquée pas à pas, et bouton Partager. Avertissement : NavalOS est un aide-mémoire qui ne remplace ni le cours ni les manuels.","Choose your trade from the home page: personal plan, focus mode (only useful tabs shown; the rest under ☰ All), what to leave aside, and official links for your trade. 13 CAF-wide trades added (musician, intelligence, cyber, imagery, military police, health, chaplain, public affairs) with their training. Tutor for everyone: NavalOS search (offline) and hand-off to Copilot (DND/CAF account). Step-by-step iPhone install and a Share button. Disclaimer: NavalOS is a memory aid that replaces neither the course nor the manuals."]],
+const CHANGELOG=[["3.0","2026-10-11",["Progression neutre : 8 niveaux (Découverte à Référence) au lieu d'un grade. Mon étape de carrière : choisis ton grade (Mat 3 à PM 1re classe, ou officier) et NavalOS adapte tes priorités (QEL, QIL, QAL, QSL). Page À propos avec code QR. Enregistrer la page (fichier lisible hors ligne) ou l'imprimer en PDF. Bouton Remarques pour écrire au créateur.","Neutral progress: 8 levels (Discovery to Master) instead of a rank. My career stage: choose your rank (S3 to CPO1, or officer) and NavalOS adapts your priorities (PLQ, ILQ, ALQ, SLQ). About page with QR code. Save the page (offline file) or print it to PDF. Feedback button to write to the creator."]],
+ ["2.9","2026-10-09",["Choisis ton métier dès l'accueil : plan personnalisé, mode focus (seuls les onglets utiles s'affichent ; le reste est dans ☰ Tout), ce que tu peux laisser de côté, et liens officiels de ton métier. 13 métiers communs aux FAC ajoutés (musicien, renseignement, cyber, imagerie, police militaire, santé, aumônier, affaires publiques) avec leur formation. Tuteur pour tous : recherche dans NavalOS (hors ligne) et envoi vers Copilot (compte MDN/FAC). Installation sur iPhone expliquée pas à pas, et bouton Partager. Avertissement : NavalOS est un aide-mémoire qui ne remplace ni le cours ni les manuels.","Choose your trade from the home page: personal plan, focus mode (only useful tabs shown; the rest under ☰ All), what to leave aside, and official links for your trade. 13 CAF-wide trades added (musician, intelligence, cyber, imagery, military police, health, chaplain, public affairs) with their training. Tutor for everyone: NavalOS search (offline) and hand-off to Copilot (DND/CAF account). Step-by-step iPhone install and a Share button. Disclaimer: NavalOS is a memory aid that replaces neither the course nor the manuals."]],
  ["2.8","2026-10-09",["Onglet Inspection : auto-inspection en 12 points, déroulement, casier, trousse, politique sur la tenue (juin 2024 : cheveux, accessoires, cérémonie) et ordres de tenue n° 1 à 5. Onglet Rapports : rapport du senior, rapport personnel (pratique + écoute) et générateur de demande de congé. Onglet Forme : programmes de course 3 km et 5 km avec suivi, échauffement PSP. Parcours : 10 cours en ligne obligatoires à cocher. Pavillons numériques OTAN et code Morse avec son. 26 nouvelles cartes de révision.","Inspection tab: 12-point self-inspection, procedure, locker, kit, dress policy (June 2024: hair, accessories, ceremony) and Orders of Dress No. 1 to 5. Reports tab: senior report, personal report (practice + listen) and leave-request generator. Fitness tab: 3 km and 5 km running programs with tracking, PSP warm-up. Career path: 10 mandatory online courses checklist. NATO numeral flags and Morse code with sound. 26 new review cards."]],
  ["2.7","2026-10-09",["Onglet Parcours (du premier jour au métier, officiers, formation par métier, plan NavalOS par métier) ; onglet Drill avec commandements officiels et 16 vidéos de l'École navale ; départements du navire ; caractéristiques de la flotte et numéros de coque ; nouveaux métiers (MET, administration des soins de santé).","Career path tab (day one to trade, officers, training by trade, NavalOS plan per trade); Drill tab with official commands and 16 École navale videos; ship departments; fleet specifications and hull numbers; new trades (MET, health care administration)."]],
  ["2.6","2026-10-03",["Guide « Premier jour » avec liste de départ et cartes ; tuteur IA (version en ligne).","“First day” guide with checklist and cards; AI tutor (online version)."]],
@@ -697,7 +702,7 @@ function applyLang(){
  document.documentElement.lang=S.lang==="en"?"en":"fr";
  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===S.lang));
  document.querySelectorAll("#tabs button").forEach(b=>b.textContent=U(TABS[b.dataset.v]));
- document.getElementById("tagline").textContent=U(["Marine royale canadienne · grades, insignes et OREN 001","Royal Canadian Navy · ranks, insignia and PO 001"]);
+ document.getElementById("tagline").textContent=U(["Marine royale canadienne · l'aide-mémoire de tous les marins","Royal Canadian Navy · the memory aid for every sailor"]);
  const w=document.getElementById("storeWarn");w.style.display=STORE_OK?"none":"block";
 if(typeof CARDS!=="undefined")updMastery();
  w.textContent=U(["Ce navigateur ne conserve pas ta progression. Utilise « Copier mon code de sauvegarde » (onglet Sources) avant de fermer, ou ouvre le fichier avec Chrome ou Samsung Internet.","This browser won't keep your progress. Use “Copy my backup code” (Sources tab) before closing, or open the file in Chrome or Samsung Internet."]);
@@ -1393,13 +1398,14 @@ function newCards(n){
 // overall mastery: each card worth its box (0..6) out of 6
 function overall(cat){const list=cat?CARDS.filter(c=>c.c===cat):CARDS;return list.reduce((a,c)=>a+box(c.k),0)/(list.length*6)}
 // ---- app rank: the Navy NCM ladder, earned by overall mastery
+const LEVELS=[["Découverte","Discovery"],["Premiers pas","First steps"],["Bases","Foundations"],["Solide","Solid"],["Confirmé","Proficient"],["Avancé","Advanced"],["Expert","Expert"],["Référence","Master"]].map((n,i)=>({n:i+1,fr:`Niveau ${i+1} · ${n[0]}`,en:`Level ${i+1} · ${n[1]}`,frA:`Niv. ${i+1} · ${n[0]}`,enA:`Lvl ${i+1} · ${n[1]}`,img:null}));
 const APP_RANKS=[["s3",0],["s2",.05],["s1",.15],["ms",.28],["po2",.42],["po1",.56],["cpo2",.72],["cpo1",.88]];
-function appRank(){const p=overall();let i=0;APP_RANKS.forEach((r,j)=>{if(p>=r[1])i=j});return {i,r:byId[APP_RANKS[i][0]],p,next:APP_RANKS[i+1]?{r:byId[APP_RANKS[i+1][0]],at:APP_RANKS[i+1][1]}:null}}
+function appRank(){const p=overall();let i=0;APP_RANKS.forEach((r,j)=>{if(p>=r[1])i=j});return {i,r:LEVELS[i],p,next:APP_RANKS[i+1]?{r:LEVELS[i+1],at:APP_RANKS[i+1][1]}:null}}
 function updMastery(){
  const a=appRank();const el=document.getElementById("mPct");if(!el)return;
  el.textContent=Math.round(a.p*100)+"%";
  document.getElementById("mLbl").innerHTML=`${IMG[a.r.img]?`<img src="${IMG[a.r.img]}" alt="" style="height:16px;vertical-align:-3px;margin-right:4px;border-radius:2px">`:""}${EN()?a.r.enA:a.r.frA}`;
- if(S.lastRank!==undefined&&a.i>S.lastRank){toast(L([`Promotion ! Tu es maintenant ${a.r.fr} (${a.r.frA}).`,`Promotion! You are now ${a.r.en} (${a.r.enA}).`]))}
+ if(S.lastRank!==undefined&&a.i>S.lastRank){toast(L([`Nouveau niveau ! Tu atteins le ${a.r.fr}.`,`Level up! You reached ${a.r.en}.`]))}
  if(S.lastRank!==a.i){S.lastRank=a.i;save()}
 }
 function toast(html){let t=document.getElementById("toast");if(!t){t=document.createElement("div");t.id="toast";t.setAttribute("role","status");t.style.cssText="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--gold);color:#1A1405;font-weight:700;padding:12px 18px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.35);z-index:50;max-width:90vw;text-align:center";document.body.appendChild(t)}
@@ -1434,12 +1440,12 @@ function viewReview(){
  const due=dueCards().length,nl=Math.min(newLeft(),CARDS.filter(c=>!box(c.k)).length),a=appRank(),s=S.streak,t=today();
  const live=s.last===t||s.last===t-1?s.n:0;
  const mast=CARDS.filter(c=>box(c.k)>=6).length,started=CARDS.filter(c=>box(c.k)).length;
- const nextTxt=a.next?L([`Prochaine promotion : ${a.next.r.fr} (${a.next.r.frA}) à ${Math.round(a.next.at*100)} %.`,`Next promotion: ${a.next.r.en} (${a.next.r.enA}) at ${Math.round(a.next.at*100)}%.`]):L(["Grade maximal atteint. Garde tes cartes à jour.","Top rank reached. Keep your cards current."]);
+ const nextTxt=a.next?L([`Prochain niveau : ${a.next.r.fr} à ${Math.round(a.next.at*100)} %.`,`Next level: ${a.next.r.en} at ${Math.round(a.next.at*100)}%.`]):L(["Niveau maximal atteint. Garde tes cartes à jour.","Top level reached. Keep your cards current."]);
  const prog=a.next?Math.min(1,(a.p-APP_RANKS[a.i][1])/(a.next.at-APP_RANKS[a.i][1])):1;
  $("#view").innerHTML=`<h2>${L(["Révision du jour","Today's review"])}</h2>
  <p class="lead">${L(["Quelques minutes par jour suffisent. L'app te repose chaque question juste avant que tu l'oublies : une erreur la ramène demain, une bonne réponse l'espace (1, 2, 4, 8, 16 puis 32 jours).","A few minutes a day is enough. The app asks each question again just before you'd forget it: a miss brings it back tomorrow, a correct answer spaces it out (1, 2, 4, 8, 16, then 32 days)."])}</p>
- <section class="hero"><div class="slips" style="max-width:80px;margin:0 auto">${slip(a.r,nm(a.r))}</div><div>
-  <div class="muted" style="font-size:14px">${U(["Ton grade NavalOS","Your NavalOS rank"])}</div><div class="rk">${nm(a.r)}</div><div class="en">${Math.round(a.p*100)} % ${U(["de maîtrise globale","overall mastery"])}</div>
+ <section class="hero"><div style="max-width:90px;margin:0 auto">${levelBadge(a.i+1,80)}</div><div>
+  <div class="muted" style="font-size:14px">${U(["Ton niveau NavalOS","Your NavalOS level"])}</div><div class="rk">${nm(a.r)}</div><div class="en">${Math.round(a.p*100)} % ${U(["de maîtrise globale","overall mastery"])}</div>
   <div class="bar" style="margin:10px 0 6px"><i style="width:${prog*100}%"></i></div><div class="muted" style="font-size:14px">${nextTxt}</div></div></section>
  <div class="ocards" style="margin-top:14px">
   <div class="ocard"><div class="oname">${U(["À revoir aujourd'hui","Due today"])}</div><div class="mastery" style="text-align:left"><b>${due}</b></div></div>
@@ -1449,8 +1455,8 @@ function viewReview(){
  <div class="row"><button class="btn gold" id="go" ${due+nl?"":"disabled"}>${due+nl?U(["Commencer la révision","Start review"])+` (${Math.min(30,due)+Math.min(nl,Math.max(0,30-Math.min(30,due)))})`:U(["Rien à revoir : reviens demain","Nothing due: come back tomorrow"])}</button><button class="btn" id="exam">${U(["Simulateur d'examen OREN","PO exam simulator"])}</button></div>
  <h3>${L(["Maîtrise par thème","Mastery by topic"])}</h3>
  <div class="panel">${Object.keys(CAT).map(k=>{const n=CARDS.filter(c=>c.c===k).length,p=overall(k);return `<div class="qhead" style="margin-top:6px"><span>${U(CAT[k])} <span class="muted">(${n})</span></span><span>${Math.round(p*100)} %</span></div><div class="bar" style="margin:4px 0 8px"><i style="width:${p*100}%"></i></div>`}).join("")}</div>
- <h3>${L(["Échelle de promotion","Promotion ladder"])}</h3>
- <div class="strip">${APP_RANKS.map((x,j)=>{const r=byId[x[0]];return `<div style="flex:0 0 auto;text-align:center;opacity:${j<=a.i?1:.4};font-size:12px;color:var(--muted)">${slip(r,r.frA)}<div style="${j===a.i?"color:var(--gold);font-weight:700":""}">${EN()?r.enA:r.frA}</div><div>${Math.round(x[1]*100)} %</div></div>`}).join("")}</div>`;
+ <h3>${L(["Niveaux","Levels"])}</h3>
+ <div class="strip">${APP_RANKS.map((x,j)=>{const r=LEVELS[j];return `<div style="flex:0 0 auto;text-align:center;opacity:${j<=a.i?1:.4};font-size:12px;color:var(--muted);width:76px">${levelBadge(j+1,36)}<div style="${j===a.i?"color:var(--gold);font-weight:700":""}">${U([r.fr.split(" · ")[1],r.en.split(" · ")[1]])}</div><div>${Math.round(x[1]*100)} %</div></div>`}).join("")}</div>`;
  document.querySelectorAll(".strip .slip").forEach(i=>i.style.width="36px");
  if(due+nl)$("#go").onclick=()=>{startReview();viewReview()};
  $("#exam").onclick=()=>{EX=null;go("exam")};
@@ -1980,7 +1986,7 @@ const PATH_NCM=[
  [["Instruction en environnement naval (NETP)","Naval environmental training (NETP)"],["Environ 4 à 5 semaines à Halifax ou Esquimalt : histoire et organisation navale, sécurité à bord, quarts, matelotage, survie en mer, et lutte contre l'incendie et contrôle des avaries (environ 2 semaines, presque tout en pratique).","About 4 to 5 weeks in Halifax or Esquimalt: naval history and organization, shipboard safety, watchkeeping, seamanship, sea survival, and firefighting and damage control (about 2 weeks, almost all hands-on)."]],
  [["Qualification de métier (PP1)","Occupational qualification (DP1)"],["Le cours de ton métier (voir chaque métier ci-dessous). Réserve : souvent l'été, à l'École navale (Québec) ou aux écoles navales de la flotte.","Your trade course (see each trade below). Reserve: often in summer, at the Naval Fleet School (Quebec) or the Naval Fleet Schools."]],
  [["Formation en cours d'emploi et en mer","On-the-job and sea training"],["Tâches à bord, carnets de qualification, quarts. Chaque nouvelle affectation en mer exige de refaire la lutte contre l'incendie et le contrôle des avaries.","Duties on board, qualification task books, watches. Each new sea posting requires redoing firefighting and damage control."]],
- [["Progression","Progression"],["Avec l'expérience : niveau avancé du métier et cours de leadership (QLP, qualification de leadership primaire) pour devenir matelot-chef puis maître de 2e classe.","With experience: advanced trade level and leadership courses (PLQ, Primary Leadership Qualification) to become Master Sailor, then Petty Officer 2nd Class."]]];
+ [["Progression","Progression"],["Avec l'expérience : niveau avancé du métier et cours de leadership (QEL, qualification élémentaire en leadership, puis QIL) pour devenir matelot-chef puis maître de 2e classe.","With experience: advanced trade level and leadership courses (PLQ, Primary Leadership Qualification) to become Master Sailor, then Petty Officer 2nd Class."]]];
 const PATH_OFF=[
  [["Plans d'entrée","Entry plans"],["PFOR (Programme de formation des officiers de la Force régulière) : études payées au Collège militaire royal. Officier en entrée directe : déjà diplômé. Réserve : formation surtout l'été, compatible avec les études.","ROTP (Regular Officer Training Plan): paid studies at Royal Military College. Direct Entry Officer: already have a degree. Reserve: training mostly in summer, compatible with studies."]],
  [["QMBO (Qualification militaire de base des officiers)","BMOQ (Basic Military Officer Qualification)"],["12 semaines à Saint-Jean-sur-Richelieu : leadership, règlements et coutumes, armes, premiers soins, navigation terrestre, conditionnement physique. En français ou en anglais.","12 weeks in Saint-Jean-sur-Richelieu: leadership, regulations and customs, weapons, first aid, land navigation, fitness. In French or English."]],
@@ -2550,8 +2556,116 @@ const _tutorDocs29=tutorDocs;tutorDocs=function(){const d=_tutorDocs29();const s
 
 if(S.myTrade&&!S.onb)S.onb=1;
 
+
+/* ============ v3.0 : niveaux neutres, mon grade et mon étape, À propos + code QR, enregistrer la page, remarques ============ */
+// ---- Neutral levels (no rank tied to the score)
+function levelBadge(n,size){const s=size||64;return `<svg width="${s}" height="${s}" viewBox="0 0 64 64" aria-hidden="true" style="display:block;margin:0 auto"><circle cx="32" cy="32" r="29" fill="none" stroke="var(--gold)" stroke-width="3"/><circle cx="32" cy="32" r="23" fill="var(--surface2)"/><text x="32" y="40" text-anchor="middle" font-family="var(--serif),Georgia,serif" font-size="24" font-weight="700" fill="var(--gold)">${n}</text></svg>`}
+
+// ---- My rank (optional) → career stage → what to work on now
+const STAGE_OF={s3:"rec",s2:"rec",s1:"trn",ms:"trn",po2:"lead",po1:"lead",cpo2:"snr",cpo1:"snr",fcpo:"snr",ccpo:"snr",cfcwo:"snr",ncdt:"joff",aslt:"joff",slt:"joff",ltn:"joff",lcdr:"soff",cdr:"soff",captn:"soff",cmdre:"soff",radm:"soff",vadm:"soff",adm:"soff"};
+const STAGES={
+ rec:{t:["Recrue","Recruit"],m:["Prochaines étapes : QMB, instruction navale, puis qualification de ton métier.","Next steps: BMQ, naval environmental training, then your trade qualification."],
+  p:[["Premier jour + Inspection : les bases de la vie à l'unité","First day + Inspection: the basics of unit life","first"],["Cours OREN : leçons et simulateur d'examen","PO course: lessons and exam simulator","course"],["Révision : 10 cartes par jour","Review: 10 cards a day","review"]]},
+ trn:{t:["Marin qualifié (Mat 1, Mat C)","Trained sailor (S1, MS)"],m:["Jalon de cette étape : la QEL (qualification élémentaire en leadership), généralement exigée pour devenir matelot-chef. Déjà faite ? Prépare la suite : diriger une petite équipe. Vérifie les exigences à jour avec ta chaîne de commandement.","Milestone for this stage: PLQ (Primary Leadership Qualification), generally required to become Master Sailor. Already done? Prepare what comes next: leading a small team. Confirm current requirements with your chain of command."],
+  p:[["Drill : apprends à commander une petite troupe (voix, commandements)","Drill: learn to command a small group (voice, words of command)","drill"],["Rapports : présenter l'effectif et rendre compte","Reports: present the parade state and report","rep"],["Inspection : apprends à inspecter, pas seulement à être inspecté","Inspection: learn to inspect, not just be inspected","insp"],["Classement : toute la chaîne des grades","Ranking: the whole rank chain","order"]]},
+ lead:{t:["Chef d'équipe (M2, M1)","Team leader (PO2, PO1)"],m:["Prochain jalon : la QIL (qualification intermédiaire en leadership). Vérifie les exigences à jour avec ta chaîne de commandement.","Next milestone: ILQ (Intermediate Leadership Qualification). Confirm current requirements with your chain of command."],
+  p:[["Inspection : inspecter tes marins avec la grille en 12 points","Inspection: inspect your sailors with the 12-point checklist","insp"],["Rapports et demande de congé : guider tes marins dans la correspondance","Reports and leave request: guide your sailors through correspondence","rep"],["Parcours : orienter tes marins (cours en ligne, métier)","Career path: guide your sailors (online courses, trade)","path"],["Simulateur d'examen : un outil pour faire réviser tes recrues","Exam simulator: a tool to drill your recruits","review"]]},
+ snr:{t:["Sous-officier supérieur (PM2 et plus)","Senior NCO (CPO2 and up)"],m:["Jalons : QAL puis QSL (qualifications avancée et supérieure en leadership). Ton rôle : la norme, le mentorat et les traditions.","Milestones: ALQ then SLQ (Advanced and Senior Leadership Qualifications). Your role: the standard, mentoring and traditions."],
+  p:[["La Marine → Coutumes : gardien des traditions et du mess","The Navy → Customs: keeper of traditions and the mess","navy"],["Inspection et ordres de tenue : la norme de l'unité","Inspection and orders of dress: the unit standard","insp"],["Premier jour : la page à donner à chaque nouvelle recrue","First day: the page to give every new recruit","first"],["Remarques : propose des corrections ou du contenu","Feedback: suggest corrections or content","fb"]]},
+ joff:{t:["Officier subalterne","Junior officer"],m:["Jalons : qualifications navales d'officier (p. ex. NWO II à IV, certificat de chef de quart à la passerelle).","Milestones: naval officer qualifications (e.g., NWO II to IV, Bridge Watchkeeping Certificate)."],
+  p:[["Classement + Équivalences : toute la chaîne","Ranking + Equivalents: the whole chain","order"],["La Marine → Coutumes du carré et cérémonial","The Navy → Wardroom customs and ceremonial","navy"],["Écoute 🔊 : ordres de barre","Listen 🔊: helm orders","audio"]]},
+ soff:{t:["Officier supérieur","Senior officer"],m:["Ton rôle : faire connaître NavalOS comme outil d'appoint, en complément de l'instruction officielle.","Your role: share NavalOS as a supplementary tool, alongside official training."],
+  p:[["La Marine : flotte, histoire et héros","The Navy: fleet, history and heroes","navy"],["À propos : code QR et lien à partager à l'unité","About: QR code and link to share with the unit","about"]]}};
+const RANK_IDS=["s3","s2","s1","ms","po2","po1","cpo2","cpo1","fcpo","ccpo","cfcwo","ncdt","aslt","slt","ltn","lcdr","cdr","captn","cmdre","radm","vadm","adm"].filter(id=>byId[id]);
+function rankPicker(){return `<select id="rk30" class="sel29"><option value="">${U(["— Mon grade (facultatif) —","— My rank (optional) —"])}</option><optgroup label="${U(["Militaires du rang","NCMs"])}">${RANK_IDS.filter(i=>!["joff","soff"].includes(STAGE_OF[i])).map(i=>`<option value="${i}"${S.myRank===i?" selected":""}>${nm(byId[i])}</option>`).join("")}</optgroup><optgroup label="${U(["Officiers","Officers"])}">${RANK_IDS.filter(i=>["joff","soff"].includes(STAGE_OF[i])).map(i=>`<option value="${i}"${S.myRank===i?" selected":""}>${nm(byId[i])}</option>`).join("")}</optgroup></select>`}
+function stageHTML(){const st=S.myRank&&STAGES[STAGE_OF[S.myRank]];
+ return `<div class="panel stage30" style="margin-top:10px"><div class="qhead" style="margin:0"><span class="muted">${U(["Mon étape de carrière","My career stage"])}</span></div>
+ <div style="margin:6px 0 8px">${rankPicker()}</div>
+ ${st?`<div class="rk" style="font-family:var(--serif);font-size:20px;font-weight:700">${U(st.t)}</div><p style="margin:4px 0 6px">${L(st.m)}</p>
+  <ol class="pts">${st.p.map(p=>`<li>${L([p[0],p[1]])} <button class="btn gopl" data-go="${p[2]}" style="padding:3px 10px;font-size:13px;margin-left:6px">${U(["Ouvrir","Open"])} →</button></li>`).join("")}</ol>`
+ :`<p class="muted" style="margin:0">${L(["Choisis ton grade : NavalOS adapte tes priorités à mesure que tu avances, de recrue jusqu'à premier maître et officier.","Choose your rank: NavalOS adapts your priorities as you progress, from recruit to chief and officer."])}</p>`}</div>`}
+
+// ---- Feedback (mailto)
+const FEEDBACK_EMAIL="navalos2026@gmail.com";
+let FB={type:0,page:"",msg:"",who:""};
+const FB_TYPES=[["Suggestion","Suggestion"],["Erreur dans le contenu","Content error"],["Problème technique","Technical problem"],["Question","Question"],["Autre","Other"]];
+function fbDevice(){const e=envInfo();return e.ios?"iOS":e.android?"Android":"Ordinateur/Computer"}
+function fbMail(){const sub=`NavalOS ${APP_VERSION} — ${FB_TYPES[FB.type][0]}${FB.page&&TABS[FB.page]?" — "+TABS[FB.page][0]:""}`;
+ const body=`${FB.msg}\n\n— ${FB.who||U(["(anonyme)","(anonymous)"])}\nNavalOS ${APP_VERSION} · ${S.lang} · ${fbDevice()}${S.myTrade?" · "+S.myTrade:""}`;
+ return {sub,body,href:`mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`}}
+function viewFb(){
+ $("#view").innerHTML=`<h2>${L(["Remarques et suggestions","Feedback and suggestions"])}</h2>
+ <p class="lead">${L(["Une erreur, une idée, un contenu à ajouter ? Ton message part par courriel au créateur de NavalOS. Il contient seulement ce que tu écris ici, plus la version de l'app et le type d'appareil.","Found a mistake, have an idea or content to add? Your message goes by email to NavalOS's creator. It contains only what you write here, plus the app version and device type."])}</p>
+ <div class="panel" style="display:grid;gap:10px">
+  <label>${U(["Type","Type"])}<br><select id="fbT" class="sel29">${FB_TYPES.map((t,i)=>`<option value="${i}"${FB.type===i?" selected":""}>${U(t)}</option>`).join("")}</select></label>
+  <label>${U(["Page concernée","Page concerned"])}<br><select id="fbP" class="sel29"><option value="">${U(["— Générale —","— General —"])}</option>${Object.keys(TAB_DESC).filter(k=>k!=="fb").map(k=>`<option value="${k}"${FB.page===k?" selected":""}>${U(TABS[k])}</option>`).join("")}</select></label>
+  <label>${U(["Ton message","Your message"])}<br><textarea id="fbM" rows="6" class="sel29" style="max-width:none">${esc29(FB.msg)}</textarea></label>
+  <label>${U(["Ton nom ou grade (facultatif)","Your name or rank (optional)"])}<br><input id="fbW" class="sel29" value="${esc29(FB.who)}"></label>
+  <div class="explain" style="margin:0">${L(["N'écris aucune information personnelle ou PROTÉGÉE (matricule, dossier médical, etc.).","Don't write any personal or PROTECTED information (service number, medical record, etc.)."])}</div>
+  <div class="row" style="margin:0"><a class="btn gold" id="fbS" target="_blank" rel="noopener" style="text-decoration:none">✉ ${U(["Envoyer par courriel","Send by email"])}</a><button class="btn" id="fbC">${U(["Copier le message","Copy the message"])}</button></div>
+  <div class="muted" id="fbI" style="font-size:14px">${L([`Le bouton ouvre ton application de courriel. Sinon, copie le message et envoie-le à ${FEEDBACK_EMAIL}.`,`The button opens your email app. Otherwise, copy the message and send it to ${FEEDBACK_EMAIL}.`])}</div></div>`;
+ const upd=()=>{FB.type=+$("#fbT").value;FB.page=$("#fbP").value;FB.msg=$("#fbM").value;FB.who=$("#fbW").value;$("#fbS").href=fbMail().href};upd();
+ ["#fbT","#fbP"].forEach(s=>$(s).onchange=upd);["#fbM","#fbW"].forEach(s=>$(s).oninput=upd);
+ $("#fbS").onclick=e=>{upd();if(!FB.msg.trim()){e.preventDefault();$("#fbI").textContent=U(["Écris d'abord ton message.","Write your message first."])}};
+ $("#fbC").onclick=async()=>{upd();const m=fbMail();const ok=await copyText(`À : ${FEEDBACK_EMAIL}\nObjet : ${m.sub}\n\n${m.body}`);$("#fbI").textContent=ok?U(["✓ Message copié. Colle-le dans un courriel à ","✓ Message copied. Paste it into an email to "])+FEEDBACK_EMAIL:U(["Copie impossible ici.","Copy isn't available here."])}}
+
+// ---- About
+const QR_SVG=`<svg role="img" aria-label="QR code fisbal.github.io/navalos" style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 132" class="segno"><g transform="scale(4)"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#0b1b33" d="M2 2.5h7m6 0h3m1 0h4m1 0h7m-29 1h1m5 0h1m2 0h8m1 0h1m3 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m3 0h2m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h2m2 0h1m1 0h2m1 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m2 0h1m3 0h5m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m1 0h1m2 0h1m5 0h1m4 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h1m1 0h1m3 0h1m1 0h1m2 0h1m-20 1h1m1 0h5m4 0h1m5 0h2m3 0h5m-27 1h2m1 0h2m2 0h1m1 0h3m1 0h3m1 0h8m3 0h1m-28 1h4m1 0h2m1 0h1m2 0h4m1 0h1m2 0h2m-21 1h1m2 0h1m2 0h3m2 0h2m1 0h1m4 0h1m3 0h2m1 0h1m-27 1h4m1 0h1m2 0h2m3 0h2m1 0h1m2 0h1m4 0h2m-27 1h2m1 0h1m4 0h1m2 0h1m3 0h1m1 0h8m3 0h1m-29 1h2m1 0h2m1 0h3m3 0h1m2 0h3m4 0h2m1 0h2m-25 1h2m3 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h1m2 0h1m2 0h1m2 0h1m-25 1h2m1 0h2m1 0h2m1 0h1m4 0h1m1 0h1m1 0h1m1 0h1m1 0h2m-27 1h1m1 0h1m1 0h1m2 0h2m4 0h2m3 0h7m1 0h1m1 0h1m-29 1h1m3 0h1m1 0h1m1 0h4m1 0h4m1 0h1m3 0h3m1 0h1m-27 1h1m1 0h1m2 0h1m5 0h3m6 0h3m4 0h1m-28 1h1m2 0h2m1 0h4m1 0h1m2 0h4m2 0h5m1 0h3m-21 1h3m1 0h1m3 0h1m2 0h2m3 0h5m-29 1h7m2 0h2m1 0h1m2 0h3m1 0h2m1 0h1m1 0h3m-27 1h1m5 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h3m3 0h1m-25 1h1m1 0h3m1 0h1m1 0h2m2 0h1m4 0h1m2 0h5m1 0h2m-28 1h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1m1 0h2m5 0h4m-29 1h1m1 0h3m1 0h1m1 0h2m3 0h3m2 0h1m1 0h8m-28 1h1m5 0h1m3 0h7m3 0h1m4 0h1m1 0h1m-28 1h7m1 0h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h3m1 0h1"/></g></svg>
+`;
+function viewAbout(){const t=myTradeObj();
+ const feats=[["🧠","Révision intelligente","Smart review","La répétition espacée te repose chaque question juste avant que tu l'oublies : quelques minutes par jour suffisent.","Spaced repetition asks each question again just before you'd forget it: a few minutes a day is enough."],
+  ["🎯","Ton métier, ton plan","Your trade, your plan","34 métiers de la Marine et des FAC. Choisis le tien : NavalOS affiche seulement ce qui compte pour toi.","34 Navy and CAF trades. Choose yours: NavalOS shows only what matters for you."],
+  ["📈","Pour toute la carrière","For your whole career","De la recrue au premier maître et à l'officier : tes priorités changent avec ton grade.","From recruit to chief and officer: your priorities change with your rank."],
+  ["🇨🇦","Bilingue","Bilingual","Français, anglais ou les deux côte à côte, pour apprendre les termes dans les deux langues officielles.","French, English or both side by side, to learn the terms in both official languages."],
+  ["📲","Hors ligne et installable","Offline and installable","S'installe comme une app sur iPhone, Android et ordinateur, et fonctionne sans Internet.","Installs like an app on iPhone, Android and computer, and works without internet."],
+  ["🔒","Privé","Private","Aucun compte. Ta progression reste sur ton appareil.","No account. Your progress stays on your device."]];
+ $("#view").innerHTML=`<h2>${L(["À propos de NavalOS","About NavalOS"])}</h2>
+ <p class="lead" style="font-size:19px">${L(["Ton aide-mémoire de poche pour la Marine royale canadienne.","Your pocket memory aid for the Royal Canadian Navy."])}</p>
+ <p>${L(["NavalOS aide les recrues et les marins de tous les métiers à apprendre et réviser l'essentiel : grades et insignes, cours OREN, coutumes, navires, pavillons, exercice militaire, inspection et rapports. Il suit ta progression et t'accompagne du premier jour jusqu'aux étapes de leadership.","NavalOS helps recruits and sailors of every trade learn and review the essentials: ranks and insignia, the PO course, customs, ships, flags, drill, inspection and reports. It tracks your progress and supports you from day one through the leadership steps."])}</p>
+ <div class="ocards">${feats.map(f=>`<div class="ocard"><div class="oname">${f[0]} ${U([f[1],f[2]])}</div><div style="font-size:14.5px;margin-top:4px">${L([f[3],f[4]])}</div></div>`).join("")}</div>
+ <h3>${L(["Pour qui ?","Who is it for?"])}</h3>
+ <ul class="skp29"><li>${L(["Les recrues en QMB et en cours OREN","Recruits in BMQ and the PO course"])}</li><li>${L(["Les marins qui préparent un cours de leadership","Sailors preparing a leadership course"])}</li><li>${L(["Les chefs et instructeurs qui font réviser leurs marins","Leaders and instructors who drill their sailors"])}</li><li>${L(["Les membres des autres métiers des FAC qui portent l'uniforme de la Marine","Members of other CAF trades who wear the Navy uniform"])}</li></ul>
+ <h3>${L(["Scanne pour l'ouvrir","Scan to open it"])}</h3>
+ <div class="panel" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap"><div style="width:180px;max-width:100%;background:#fff;padding:8px;border-radius:12px">${QR_SVG}</div>
+  <div style="flex:1 1 220px"><p style="margin-top:0"><b>${GH_URL.replace("https://","")}</b></p><p class="muted" style="font-size:14px">${L(["Ouvre l'appareil photo du téléphone et vise le code. Ensuite, installe NavalOS sur l'écran d'accueil.","Open the phone camera and point it at the code. Then install NavalOS on the home screen."])}</p><div class="row" style="margin:0">${shareBtn()}<button class="btn gopl" data-go="fb">✉ ${U(["Envoyer une remarque","Send feedback"])}</button></div></div></div>
+ <div class="panel" style="margin-top:12px"><b>📲 ${U(["Installer","Install"])}</b>${installHTML()}</div>
+ <h3>${L(["Important","Important"])}</h3><p class="disc29">${L(DISCLAIMER)}</p>
+ <p class="muted" style="font-size:14px">${L([`Conçu par Martin B., Réserve navale (NCSM Montcalm). Projet personnel non officiel, non affilié au ministère de la Défense nationale ni aux Forces armées canadiennes. Version ${APP_VERSION}, contenu vérifié le ${CONTENT_DATE}.`,`Created by Martin B., Naval Reserve (HMCS Montcalm). Unofficial personal project, not affiliated with the Department of National Defence or the Canadian Armed Forces. Version ${APP_VERSION}, content checked ${CONTENT_DATE}.`])}</p>
+ <details><summary style="cursor:pointer;color:var(--gold)">${U(["Nouveautés","What's new"])}</summary><ul class="skp29">${CHANGELOG.slice(0,5).map(c=>`<li><b>${c[0]}</b> (${c[1]}) — ${L(c[2])}</li>`).join("")}</ul></details>`;
+ bindPlan();bindInstall()}
+
+// ---- Save this page (HTML file) / Print or PDF / Feedback — bar under every page
+let DLNS=null;try{if(window.claude&&window.claude.use)window.claude.use("downloads").then(d=>{DLNS=d}).catch(()=>{})}catch(e){}
+function pageTitle(){return U((TABS[current==="lesson"?"course":current==="exam"?"review":current])||["NavalOS","NavalOS"])}
+async function savePage(){const v=$("#view");if(!v)return;const c=v.cloneNode(true);
+ c.querySelectorAll("details").forEach(d=>d.setAttribute("open",""));
+ c.querySelectorAll("button,select,input,textarea,script,iframe,video,.row,.welc29 select").forEach(e=>e.remove());
+ const css=[...document.querySelectorAll("style")].map(s=>s.textContent).join("\n");
+ const d=new Date(),ds=d.toISOString().slice(0,10),title=pageTitle().replace(/[^\p{L}\p{N} ]/gu,"").trim();
+ const theme=document.documentElement.getAttribute("data-theme");
+ const html=`<!doctype html><html lang="${S.lang==="en"?"en":"fr"}"${theme?` data-theme="${theme}"`:""}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NavalOS — ${title}</title><style>${css}</style></head><body><div class="wrap"><header class="top"><div class="brand"><span class="w">Naval</span><span class="g">OS</span><small>${title} · ${ds} · ${GH_URL.replace("https://","")}</small></div></header><main>${c.innerHTML}</main><p class="disc29" style="margin-top:24px">${U(DISCLAIMER)}</p></div><script>if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){navigator.serviceWorker.register("sw.js").catch(()=>{})}</script>
+</body></html>`;
+ const fn=`NavalOS-${title.replace(/\s+/g,"-")||"page"}-${ds}.html`,msg=$("#pg30m");
+ if(DLNS){try{await DLNS.save({filename:fn,data:html});if(msg)msg.textContent=U(["✓ Page enregistrée.","✓ Page saved."])}catch(e){if(msg&&e&&e.code!=="declined")msg.textContent=U(["Enregistrement impossible ici. Essaie « Imprimer / PDF ».","Saving isn't available here. Try “Print / PDF”."])}return}
+ try{const b=new Blob([html],{type:"text/html"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);if(msg)msg.textContent=U(["✓ Fichier téléchargé : il s'ouvre sans Internet.","✓ File downloaded: it opens without internet."])}catch(e){if(msg)msg.textContent=U(["Téléchargement impossible ici.","Download isn't available here."])}}
+function printPage(){document.querySelectorAll("#view details").forEach(d=>d.setAttribute("open",""));try{window.print()}catch(e){const m=$("#pg30m");if(m)m.textContent=U(["Impression impossible ici. Utilise « Enregistrer la page ».","Printing isn't available here. Use “Save page”."])}}
+function renderPgBar(){const b=document.getElementById("pgbar");if(!b)return;
+ b.innerHTML=`<div class="row" style="justify-content:center;margin:0"><button class="btn" id="pg30s">⬇ ${U(["Enregistrer la page","Save page"])}</button><button class="btn" id="pg30p">🖨 ${U(["Imprimer / PDF","Print / PDF"])}</button><button class="btn" id="pg30f">✉ ${U(["Remarque","Feedback"])}</button></div><div id="pg30m" class="muted" style="text-align:center;font-size:13.5px;min-height:1em"></div>`;
+ $("#pg30s").onclick=savePage;$("#pg30p").onclick=printPage;$("#pg30f").onclick=()=>{FB.page=TAB_DESC[current]?current:"";go("fb")}}
+const _applyLang30=applyLang;applyLang=function(){_applyLang30();renderPgBar()};
+const _go30=go;go=function(v,k){_go30(v,k);const m=$("#pg30m");if(m)m.textContent=""};
+
+// ---- Tabs, focus and plan integration
+TABS.about=["À propos","About"];TABS.fb=["Remarques","Feedback"];
+Object.assign(TAB_DESC,{about:["Ce qu'est NavalOS, code QR, installer et partager","What NavalOS is, QR code, install and share"],fb:["Envoyer une remarque ou signaler une erreur","Send feedback or report an error"]});
+FOCUS_BASE.push("about");
+const _viewReview30=viewReview;viewReview=function(){const dash=!RV;_viewReview30();if(!dash||RV||!S.onb)return;
+ const anchor=document.querySelector("#view .plan29")||document.querySelector("#view h2 + .panel");if(!anchor)return;
+ anchor.insertAdjacentHTML("afterend",stageHTML());bindPlan();
+ const r=$("#rk30");if(r)r.onchange=()=>{S.myRank=r.value||null;save();viewReview()}};
+
 /* ============ ROUTER ============ */
-const VIEWS={more:viewMore,insp:viewInsp,rep:viewReports,fit:viewFit,path:viewPath,drill:viewDrill,first:viewFirst,tutor:viewTutor,audio:viewAudio,review:viewReview,exam:viewExam,other:viewOther,lesson:viewLesson,learn:viewLearn,table:viewTable,flash:viewFlash,quiz:viewQuiz,order:viewOrder,course:viewCourse,navy:viewNavy,man:viewMan,src:viewSrc};
+const VIEWS={about:viewAbout,fb:viewFb,more:viewMore,insp:viewInsp,rep:viewReports,fit:viewFit,path:viewPath,drill:viewDrill,first:viewFirst,tutor:viewTutor,audio:viewAudio,review:viewReview,exam:viewExam,other:viewOther,lesson:viewLesson,learn:viewLearn,table:viewTable,flash:viewFlash,quiz:viewQuiz,order:viewOrder,course:viewCourse,navy:viewNavy,man:viewMan,src:viewSrc};
 let current="learn";
 function go(v,keepScroll){current=v;const tab=v==="lesson"?"course":v==="exam"?"review":v;document.querySelectorAll("#tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===tab));VIEWS[v]();if(!keepScroll)window.scrollTo({top:0});
  const sel=document.querySelector('#tabs button[aria-selected="true"]');if(sel)sel.scrollIntoView({inline:"nearest",block:"nearest"});setTimeout(tabArrows,350)}
