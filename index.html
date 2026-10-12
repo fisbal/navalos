@@ -204,7 +204,7 @@ nav.tabs button small.tb35{display:block;font-size:11px;font-weight:500;opacity:
       <small id="tagline"></small></div>
     <div class="tools">
       <div class="lang" role="group" aria-label="Langue / Language">
-        <button data-l="fr">FR</button><button data-l="en">EN</button><button data-l="bi">FR+EN</button>
+        <button data-l="en">EN</button><button data-l="fr">FR</button><button data-l="bi">EN+FR</button>
       </div>
       <div class="mastery"><b id="mPct">0%</b><span id="mLbl"></span></div>
       <button class="iconbtn" id="themeBtn" aria-label="Thème / Theme">◐</button>
@@ -663,9 +663,10 @@ const LESSONS={
 
 /* ============ STORAGE ============ */
 const KEY="navalos.v1";
-const APP_VERSION="3.5",CONTENT_DATE="2026-10-11";
+const APP_VERSION="3.6",CONTENT_DATE="2026-10-11";
 const ONLINE_URL="https://claude.ai/artifact/4F2zWfYVFgg7cK4XfHdmkA";
-const CHANGELOG=[["3.5","2026-10-12",["En mode FR+EN, les onglets s'affichent dans les deux langues. Bouton « Effacer mes infos personnelles » (matricule, nom, lettres) pour les appareils partagés. Note de confidentialité : rien n'est envoyé, tout reste sur l'appareil. Version installable renforcée (politique de sécurité du contenu).","In FR+EN mode, tabs show both languages. “Erase my personal info” button (service number, name, letters) for shared devices. Privacy note: nothing is sent, everything stays on the device. Installable version hardened (content security policy)."]],
+const CHANGELOG=[["3.6","2026-10-12",["L'anglais passe en premier : boutons EN, FR, EN+FR ; en mode EN+FR, l'anglais s'affiche d'abord et le français dessous. Un nouvel utilisateur démarre dans la langue de son appareil.","English comes first: EN, FR, EN+FR buttons; in EN+FR mode, English shows first with French below. A new user starts in their device's language."]],
+ ["3.5","2026-10-12",["En mode FR+EN, les onglets s'affichent dans les deux langues. Bouton « Effacer mes infos personnelles » (matricule, nom, lettres) pour les appareils partagés. Note de confidentialité : rien n'est envoyé, tout reste sur l'appareil. Version installable renforcée (politique de sécurité du contenu).","In FR+EN mode, tabs show both languages. “Erase my personal info” button (service number, name, letters) for shared devices. Privacy note: nothing is sent, everything stays on the device. Installable version hardened (content security policy)."]],
  ["3.4","2026-10-12",["La Marine → La flotte : photos des navires (frégate Halifax, Harry DeWolf, sous-marin Victoria, Kingston, Orca, Protecteur) et une galerie à faire glisser, tirées de l'affiche officielle « Fleet Vessels ».","The Navy → The fleet: ship photos (Halifax frigate, Harry DeWolf, Victoria submarine, Kingston, Orca, Protecteur) and a swipeable gallery, from the official “Fleet Vessels” poster."]],
  ["3.3","2026-10-12",["Inspection : les affiches de la politique sur la tenue sont redessinées en illustrations nettes et bilingues (cheveux, accessoires, cérémonies, pilosité faciale), avec des visages variés. L'affiche originale reste accessible d'un toucher.","Inspection: the dress policy posters are redrawn as crisp bilingual illustrations (hair, accessories, ceremonies, facial hair), with diverse faces. The original poster is still one tap away."]],
  ["3.2","2026-10-12",["Inspection illustrée : silhouette de la tête aux pieds avec 10 points à toucher, et les affiches de l'unité (cheveux autorisés et non autorisés, accessoires, cérémonies, pilosité faciale, ordres de tenue) à agrandir d'un toucher.","Illustrated inspection: head-to-toe figure with 10 tappable points, plus the unit posters (allowed and not allowed hair, accessories, ceremonies, facial hair, orders of dress) that enlarge with a tap."]],
@@ -699,15 +700,15 @@ function bump(id,ok){S.m[id]=Math.max(0,Math.min(5,mastery(id)+(ok?1:-2)));save(
 // LANG: "fr" | "en" | "bi" (French first, English underneath)
 const pair=a=>Array.isArray(a)?a:[a,a];
 // Content text: bilingual mode shows both
-function L(a){a=pair(a);if(S.lang==="en")return a[1];if(S.lang==="bi"&&a[0]!==a[1])return `${a[0]}<span class="alt">${a[1]}</span>`;return a[0]}
+function L(a){a=pair(a);if(S.lang==="en")return a[1];if(S.lang==="bi"&&a[0]!==a[1])return `${a[1]}<span class="alt">${a[0]}</span>`;return a[0]}
 // Short interface labels: one language only (FR in bilingual mode)
-function U(a){a=pair(a);return S.lang==="en"?a[1]:a[0]}
+function U(a){a=pair(a);return S.lang==="en"||S.lang==="bi"?a[1]:a[0]}
 const EN=()=>S.lang==="en";
 const C=()=>EN()?": ":" : "; // colon spacing: English vs French typography
 const nm=r=>EN()?r.en:r.fr;              // primary name
 const ab=r=>EN()?r.enA:r.frA;            // primary abbreviation
 const nameLine=r=>[`${r.fr} (${r.frA})`,`${r.en} (${r.enA})`];
-const army=r=>S.lang==="en"?`${r.arEn} (${r.arA})`:S.lang==="bi"?`${r.arFr} — ${r.arEn} (${r.arA})`:`${r.arFr} (${r.arA})`;
+const army=r=>S.lang==="en"?`${r.arEn} (${r.arA})`:S.lang==="bi"?`${r.arEn} — ${r.arFr} (${r.arA})`:`${r.arFr} (${r.arA})`;
 const grpName={off:["Officiers","Officers"],ncm:["Militaires du rang","NCMs"],appt:["Nominations supérieures","Senior appointments"],music:["Musique","Music"]};
 const TABS={review:["Révision","Review"],first:["Premier jour","First day"],insp:["Inspection","Inspection"],rep:["Rapports","Reports"],fit:["Forme 🏃","Fitness 🏃"],path:["Parcours","Career path"],drill:["Drill 🎬","Drill 🎬"],tutor:["Tuteur ✨","Tutor ✨"],learn:["Grades","Ranks"],table:["Équivalences","Equivalents"],flash:["Cartes","Flashcards"],quiz:["Quiz","Quiz"],order:["Classement","Ranking"],course:["Cours OREN","Course (PO/EO)"],other:["Autres éléments","Other elements"],navy:["La Marine","The Navy"],audio:["Écoute 🔊","Listen 🔊"],man:["Métiers","Trades"],src:["Sources","Sources"]};
 function applyLang(){
@@ -772,7 +773,7 @@ function viewLearn(){
 function viewTable(){
  const oi=(el,id)=>{const it=OTHER[el].items.find(x=>x[1]===id);return it?{img:it[0],fr:it[2],en:it[3],ab:it[4],g:it[5]||[]}:null};
  const airNcm={s3:["Aviateur(trice) (recrue)","Aviator (Basic)"],s2:["Aviateur(trice) (confirmé(e))","Aviator (Trained)"]};
- const cell=(o,fallback)=>{if(!o&&!fallback)return "—";const name=o?(S.lang==="en"?o.en:S.lang==="bi"?`${o.fr}<span class="alt">${o.en}</span>`:o.fr):fallback;
+ const cell=(o,fallback)=>{if(!o&&!fallback)return "—";const name=o?(S.lang==="en"?o.en:S.lang==="bi"?`${o.en}<span class="alt">${o.fr}</span>`:o.fr):fallback;
   return `<div class="eqc">${o?oimg(o.img,"slip")+o.g.map(x=>oimg(x,"gorget")).join(""):""}<span>${name}${o&&o.ab?` <span class="muted">(${o.ab})</span>`:""}</span></div>`};
  const armyCell=r=>{const o=oi("army",r.id);return o?cell(o):(r.arFr==="—"?"—":cell(null,army(r)))};
  const airCell=r=>{const o=oi("air",r.id);if(o)return cell(o);if(airNcm[r.id])return cell(null,L(airNcm[r.id]));return r.arFr==="—"?"—":cell(null,army(r))};
@@ -1416,7 +1417,7 @@ function appRank(){const p=overall();let i=0;APP_RANKS.forEach((r,j)=>{if(p>=r[1
 function updMastery(){
  const a=appRank();const el=document.getElementById("mPct");if(!el)return;
  el.textContent=Math.round(a.p*100)+"%";
- document.getElementById("mLbl").innerHTML=`${IMG[a.r.img]?`<img src="${IMG[a.r.img]}" alt="" style="height:16px;vertical-align:-3px;margin-right:4px;border-radius:2px">`:""}${EN()?a.r.enA:a.r.frA}`;
+ document.getElementById("mLbl").innerHTML=`${IMG[a.r.img]?`<img src="${IMG[a.r.img]}" alt="" style="height:16px;vertical-align:-3px;margin-right:4px;border-radius:2px">`:""}${S.lang!=="fr"?a.r.enA:a.r.frA}`;
  if(S.lastRank!==undefined&&a.i>S.lastRank){toast(L([`Nouveau niveau ! Tu atteins le ${a.r.fr}.`,`Level up! You reached ${a.r.en}.`]))}
  if(S.lastRank!==a.i){S.lastRank=a.i;save()}
 }
@@ -2693,7 +2694,7 @@ function rankPool(scope){const p=[];
  if(scope==="all"||scope==="navy")R.forEach(r=>{if(ORD[r.id]&&IMG[r.img])p.push({svc:"navy",img:r.img,fr:r.fr,en:r.en,frA:r.frA,enA:r.enA,ord:ORD[r.id],nid:r.id})});
  ["army","air"].forEach(k=>{if((scope==="all"||scope===k)&&OTHER[k])OTHER[k].items.forEach(it=>{if(ORD[it[1]]&&IMG[it[0]]&&!p.find(x=>x.img===it[0]))p.push({svc:k,img:it[0],fr:it[2],en:it[3],frA:it[4],enA:it[4],ord:ORD[it[1]],nid:it[1]})})});
  return p}
-const gName=x=>EN()?x.en:S.lang==="bi"?`${x.fr} / ${x.en}`:x.fr;
+const gName=x=>EN()?x.en:S.lang==="bi"?`${x.en} / ${x.fr}`:x.fr;
 const gImg=(x,h)=>`<img src="${IMG[x.img]}" alt="" style="height:${h||90}px;max-width:100%;object-fit:contain;display:block;margin:0 auto">`;
 if(!S.gbest)S.gbest={};
 let GM={g:"chrono",scope:"navy",st:null};let GT=null;
@@ -3141,7 +3142,7 @@ const _viewNavy34=viewNavy;viewNavy=function(){_viewNavy34();
 /* ============ v3.5 : onglets bilingues en FR+EN, effacement des données personnelles, confidentialité ============ */
 const _applyLang35=applyLang;applyLang=function(){_applyLang35();
  document.querySelectorAll("#tabs button").forEach(b=>{const t=TABS[b.dataset.v];if(!t)return;
-  if(S.lang==="bi"&&t[0]!==t[1]){b.innerHTML=`<span>${t[0]}</span><small class="tb35">${t[1]}</small>`}else b.textContent=U(t)});
+  if(S.lang==="bi"&&t[0]!==t[1]){b.innerHTML=`<span>${t[1]}</span><small class="tb35">${t[0]}</small>`}else b.textContent=U(t)});
  if(typeof tabArrows==="function")setTimeout(tabArrows,60)};
 // Erase personal data kept in this browser (service number, name, letters)
 function wipe35(){if(!confirm(U(["Effacer ton matricule, ton nom, tes initiales et le contenu de tes lettres et demandes de congé sur cet appareil ? Ta progression d'étude est conservée.","Erase your service number, name, initials and the content of your letters and leave requests on this device? Your study progress is kept."])))return;
@@ -3152,6 +3153,9 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 const PRIV35=["🔒 Confidentialité : NavalOS n'a ni compte, ni serveur, ni suivi. Rien de ce que tu tapes (matricule, nom, lettres, progression) n'est envoyé : tout reste dans le navigateur de ton appareil. Sur un appareil partagé, utilise « Effacer mes infos personnelles » (onglet Rapports). N'y entre jamais d'information classifiée.","🔒 Privacy: NavalOS has no account, no server and no tracking. Nothing you type (service number, name, letters, progress) is sent anywhere: it all stays in your device's browser. On a shared device, use “Erase my personal info” (Reports tab). Never enter classified information."];
 const _viewAbout35=viewAbout;viewAbout=function(){_viewAbout35();const d=document.querySelector("#view .disc29");if(d)d.insertAdjacentHTML("afterend",`<p class="disc29" style="border-left-color:var(--ok)">${L(PRIV35)}</p>`)};
 const _viewSrc35=viewSrc;viewSrc=function(){_viewSrc35();const d=document.querySelector("#view .disc29");if(d)d.insertAdjacentHTML("afterend",`<p class="disc29" style="border-left-color:var(--ok)">${L(PRIV35)}</p>`)};
+
+/* ============ v3.6 : anglais en premier (EN, FR, EN+FR) ; langue de l'appareil pour un nouvel utilisateur ============ */
+if(!S.langSet){if(!S.onb&&!S.seenAbout&&!Object.keys(S.m||{}).length){const nl=(navigator.language||"en").toLowerCase();S.lang=nl.startsWith("fr")?"fr":"en"}S.langSet=1;save()}
 
 /* ============ ROUTER ============ */
 const VIEWS={about:viewAbout,fb:viewFb,more:viewMore,insp:viewInsp,rep:viewReports,fit:viewFit,path:viewPath,drill:viewDrill,first:viewFirst,tutor:viewTutor,audio:viewAudio,review:viewReview,exam:viewExam,other:viewOther,lesson:viewLesson,learn:viewLearn,table:viewTable,flash:viewFlash,quiz:viewQuiz,order:viewOrder,course:viewCourse,navy:viewNavy,man:viewMan,src:viewSrc};
