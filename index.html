@@ -663,9 +663,10 @@ const LESSONS={
 
 /* ============ STORAGE ============ */
 const KEY="navalos.v1";
-const APP_VERSION="3.7",CONTENT_DATE="2026-10-11";
+const APP_VERSION="3.8",CONTENT_DATE="2026-10-11";
 const ONLINE_URL="https://claude.ai/artifact/4F2zWfYVFgg7cK4XfHdmkA";
-const CHANGELOG=[["3.7","2026-10-12",["En mode EN+FR, tous les titres (métiers, grades, termes, rapports, tuteur) s'affichent en anglais d'abord, avec le français en dessous.","In EN+FR mode, all titles (trades, ranks, terms, reports, tutor) now show English first, with French below."]],
+const CHANGELOG=[["3.8","2026-10-12",["Rapports → CV : un modèle de CV professionnel à remplir (civil ou FAC, anglais ou français, style Exécutif ou Classique), avec aperçu en direct, vérification, guide, tableau de traduction militaire → civil et téléchargement en PDF, Word ou texte. Toute première ouverture se fait en anglais ; ton choix de langue est ensuite gardé.","Reports → Résumé: a professional résumé template to fill in (civilian or CAF, English or French, Executive or Classic style), with live preview, checklist, guide, military → civilian translation table and download as PDF, Word or text. Every first launch is in English; your language choice is then kept."]],
+ ["3.7","2026-10-12",["En mode EN+FR, tous les titres (métiers, grades, termes, rapports, tuteur) s'affichent en anglais d'abord, avec le français en dessous.","In EN+FR mode, all titles (trades, ranks, terms, reports, tutor) now show English first, with French below."]],
  ["3.6","2026-10-12",["L'anglais passe en premier : boutons EN, FR, EN+FR ; en mode EN+FR, l'anglais s'affiche d'abord et le français dessous. Un nouvel utilisateur démarre dans la langue de son appareil.","English comes first: EN, FR, EN+FR buttons; in EN+FR mode, English shows first with French below. A new user starts in their device's language."]],
  ["3.5","2026-10-12",["En mode FR+EN, les onglets s'affichent dans les deux langues. Bouton « Effacer mes infos personnelles » (matricule, nom, lettres) pour les appareils partagés. Note de confidentialité : rien n'est envoyé, tout reste sur l'appareil. Version installable renforcée (politique de sécurité du contenu).","In FR+EN mode, tabs show both languages. “Erase my personal info” button (service number, name, letters) for shared devices. Privacy note: nothing is sent, everything stays on the device. Installable version hardened (content security policy)."]],
  ["3.4","2026-10-12",["La Marine → La flotte : photos des navires (frégate Halifax, Harry DeWolf, sous-marin Victoria, Kingston, Orca, Protecteur) et une galerie à faire glisser, tirées de l'affiche officielle « Fleet Vessels ».","The Navy → The fleet: ship photos (Halifax frigate, Harry DeWolf, Victoria submarine, Kingston, Orca, Protecteur) and a swipeable gallery, from the official “Fleet Vessels” poster."]],
@@ -3156,7 +3157,235 @@ const _viewAbout35=viewAbout;viewAbout=function(){_viewAbout35();const d=documen
 const _viewSrc35=viewSrc;viewSrc=function(){_viewSrc35();const d=document.querySelector("#view .disc29");if(d)d.insertAdjacentHTML("afterend",`<p class="disc29" style="border-left-color:var(--ok)">${L(PRIV35)}</p>`)};
 
 /* ============ v3.6 : anglais en premier (EN, FR, EN+FR) ; langue de l'appareil pour un nouvel utilisateur ============ */
-if(!S.langSet){if(!S.onb&&!S.seenAbout&&!Object.keys(S.m||{}).length){const nl=(navigator.language||"en").toLowerCase();S.lang=nl.startsWith("fr")?"fr":"en"}S.langSet=1;save()}
+if(!S.langSet){if(!S.onb&&!S.seenAbout&&!Object.keys(S.m||{}).length){S.lang="en"}S.langSet=1;save()} // v3.8: every new user starts in English; a saved choice (FR or EN+FR) is always kept
+
+
+/* ============ v3.8 : CV / résumé builder (Reports) ============ */
+const CV38_DOC_CSS=`.cv38doc{background:#fff;color:#1B2230;font:10.5pt/1.45 Calibri,"Segoe UI",Arial,sans-serif;max-width:816px;margin:0 auto;padding:44px 52px;box-sizing:border-box;text-align:left}
+.cv38doc h1{font:700 23pt/1.1 Georgia,"Times New Roman",serif;letter-spacing:.05em;text-transform:uppercase;margin:0;color:#0B1B33}
+.cv38doc .hl{font-size:12pt;color:#7A5F1E;font-weight:600;margin:5px 0 6px}
+.cv38doc .ct,.cv38doc .ml{font-size:9.5pt;color:#3B4656;margin:1px 0}
+.cv38doc .hd{border-bottom:2px solid #0B1B33;padding-bottom:10px;margin-bottom:4px}
+.cv38doc h2{font:700 10.5pt/1.2 Calibri,"Segoe UI",Arial,sans-serif;text-transform:uppercase;letter-spacing:.12em;color:#0B1B33;border-bottom:1px solid #C9A43A;padding-bottom:3px;margin:15px 0 7px}
+.cv38doc h2{break-after:avoid;page-break-after:avoid}
+.cv38doc p{margin:0 0 4px}.cv38doc ul{margin:3px 0 0;padding-left:18px}.cv38doc li{margin:0 0 2px}
+.cv38doc ul.sk{columns:3 150px;column-gap:18px;list-style:none;padding:0;margin:0}
+.cv38doc ul.sk li{break-inside:avoid;padding-left:12px;position:relative}.cv38doc ul.sk li:before{content:"▪";position:absolute;left:0;color:#A8842F}
+.cv38doc .en{margin:0 0 10px;break-inside:avoid}
+.cv38doc .eh{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+.cv38doc .et{font-weight:700;color:#0B1B33}.cv38doc .eo{font-style:italic;color:#3B4656}.cv38doc .ed{white-space:nowrap;font-size:9.5pt;color:#3B4656}
+.cv38doc .ref{margin-top:14px;font-size:9.5pt;color:#3B4656;font-style:italic}
+.cv38doc.tx{padding-top:0}
+.cv38doc.tx .hd{background:#0B1B33;margin:0 -52px 8px;padding:30px 52px 16px;border-bottom:4px solid #C9A43A;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cv38doc.tx h1{color:#fff}.cv38doc.tx .hl{color:#E2C36B}.cv38doc.tx .ct,.cv38doc.tx .ml{color:#D5DCE6}
+.cv38doc.w{padding:0;max-width:none}.cv38doc.w.tx .hd{margin:0 0 8px;padding:16px 18px 12px}`;
+const CV38_UI_CSS=`.cv38 .cvf{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.cv38 label.l{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--muted)}
+.cv38 input,.cv38 textarea,.cv38 select{background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px;font:15px var(--sans);width:100%;box-sizing:border-box}
+.cv38 input[type=checkbox]{width:auto;margin:0 6px 0 0}.cv38 label.ck{display:flex;align-items:center;font-size:14px;color:var(--text)}
+.cv38 textarea{min-height:88px;resize:vertical;line-height:1.4}.cv38 .wide{grid-column:1/-1}
+.cv38 .cvx{border:1px dashed var(--line);border-radius:10px;padding:10px;margin:8px 0}
+.cv38 .cvxh{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px;font-weight:700}
+.cv38 .mini{padding:3px 9px;font-size:13px}
+.cv38 ul.chk{list-style:none;padding:0;margin:4px 0;font-size:14px}.cv38 ul.chk li{margin:3px 0}
+.cv38 ul.chk li.ok:before{content:"✓ ";color:var(--ok);font-weight:700}.cv38 ul.chk li.no:before{content:"⚠ ";color:#C98A1B;font-weight:700}
+.cv38 table.tr{width:100%;border-collapse:collapse;font-size:14px}.cv38 table.tr td,.cv38 table.tr th{border-top:1px solid var(--line);padding:6px 4px;vertical-align:top;text-align:left}
+.cv38 .pv{border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 6px 22px rgba(0,0,0,.12);margin-top:10px;background:#fff}
+@media screen and (max-width:640px){.cv38 .pv .cv38doc{padding:22px 18px;font-size:9.5pt}.cv38 .pv .cv38doc h1{font-size:18pt}.cv38 .pv .cv38doc.tx .hd{margin:0 -18px 8px;padding:20px 18px 12px}.cv38 .pv .cv38doc .eh{flex-direction:column;gap:0}}
+#cv38pb{display:none}
+@media print{body.cv38print>*:not(#cv38pb){display:none!important}body.cv38print #cv38pb{display:block!important}body.cv38print #cv38pb .cv38doc{max-width:none;padding:0 2mm}body.cv38print #cv38pb .cv38doc.tx .hd{margin:0 -2mm 8px;padding:18px 4mm 12px}}`;
+(function(){try{if(!document.getElementById("cv38css")){const s=document.createElement("style");s.id="cv38css";s.textContent=CV38_DOC_CSS+"\n"+CV38_UI_CSS;document.head.appendChild(s)}}catch(e){}})();
+
+const CV38_L={en:{prof:"Professional Profile",skills:"Core Competencies",exp:"Professional Experience",edu:"Education",train:"Training & Certifications",awards:"Awards & Distinctions",vol:"Volunteer & Community Involvement",langs:"Languages",clear:"Security clearance",refs:"References available upon request.",now:"Present",sn:"Service no.",c:": "},
+ fr:{prof:"Profil professionnel",skills:"Compétences clés",exp:"Expérience professionnelle",edu:"Formation",train:"Cours et certifications",awards:"Distinctions",vol:"Bénévolat et engagement communautaire",langs:"Langues",clear:"Cote de sécurité",refs:"Références disponibles sur demande.",now:"aujourd'hui",sn:"Matricule",c:" : "}};
+function cv38Def(){return {lang:S.lang==="fr"?"fr":"en",tpl:"tx",mode:"civ",name:"",head:"",city:"",phone:"",email:"",link:"",rank:"",trade:"",unit:"",sn:"",showSN:false,clear:"",langs:"",sum:"",skills:"",exp:[{}],edu:[{}],train:"",awards:"",vol:"",refs:true}}
+function cvGet(){if(!S.cv||typeof S.cv!=="object")S.cv=cv38Def();const c=S.cv;if(!Array.isArray(c.exp)||!c.exp.length)c.exp=[{}];if(!Array.isArray(c.edu)||!c.edu.length)c.edu=[{}];return c}
+const cv38Lines=s=>(s||"").split(/\n+/).map(x=>x.replace(/^[\s•\-–*▪·]+/,"").trim()).filter(Boolean);
+const cv38Skills=s=>{const a=cv38Lines(s);return a.length===1&&/[,;•]/.test(a[0])?a[0].split(/[,;•]/).map(x=>x.trim()).filter(Boolean):a};
+const cv38M=m=>{m=(m||"").trim();const x=m.match(/^(\d{4})-(\d{2})/);return x?`${x[2]}/${x[1]}`:m};
+const cv38File=c=>"CV-"+((c.name||"NavalOS").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9 -]/g,"").trim().replace(/\s+/g,"-")||"NavalOS");
+function cv38Doc(c,word){const T=CV38_L[c.lang]||CV38_L.en,e=esc29,mil=c.mode==="mil";
+ const eh=(t,o,d)=>word?`<table width="100%" style="border-collapse:collapse"><tr><td style="padding:0;vertical-align:top"><span class="et">${t}</span>${o?`<br><span class="eo">${o}</span>`:""}</td><td style="padding:0;text-align:right;vertical-align:top;white-space:nowrap" class="ed">${d}</td></tr></table>`:`<div class="eh"><div><span class="et">${t}</span>${o?`<div class="eo">${o}</div>`:""}</div><div class="ed">${d}</div></div>`;
+ const sec=(h,body)=>body?`<h2>${h}</h2>${body}`:"";
+ const ul=a=>a.length?`<ul>${a.map(x=>`<li>${e(x)}</li>`).join("")}</ul>`:"";
+ const contact=[c.city,c.phone,c.email,c.link].filter(x=>x&&x.trim()).map(e).join(" &nbsp;·&nbsp; ");
+ const milL=mil?[c.rank,c.trade,c.unit,c.showSN&&c.sn?`${T.sn} ${c.sn}`:""].filter(x=>x&&x.trim()).map(e).join(" &nbsp;·&nbsp; "):"";
+ const clr=c.clear&&c.clear.trim()?`${T.clear}${T.c}${e(c.clear)}`:"";
+ const exps=(c.exp||[]).filter(x=>x&&(x.title||x.org)).map(x=>{const d=[cv38M(x.from),x.cur?T.now:cv38M(x.to)].filter(Boolean).join(" – ");
+  return `<div class="en">${eh(e(x.title||"")+(x.rank?` (${e(x.rank)})`:""),[x.org,x.city].filter(Boolean).map(e).join(", "),e(d))}${ul(cv38Lines(x.bul))}</div>`}).join("");
+ const edus=(c.edu||[]).filter(x=>x&&(x.dip||x.school)).map(x=>`<div class="en">${eh(e(x.dip||""),[x.school,x.city].filter(Boolean).map(e).join(", "),e(x.year||""))}</div>`).join("");
+ const sk=cv38Skills(c.skills);
+ return `<div class="cv38doc ${c.tpl==="tx"?"tx":"tc"}${word?" w":""}" lang="${c.lang}"><div class="hd"><h1>${e(c.name||(c.lang==="fr"?"Prénom Nom":"First Last"))}</h1>${c.head?`<div class="hl">${e(c.head)}</div>`:""}${contact?`<div class="ct">${contact}</div>`:""}${milL?`<div class="ml">${milL}</div>`:""}${clr?`<div class="ml">${clr}</div>`:""}</div>
+ ${sec(T.prof,c.sum&&c.sum.trim()?`<p>${e(c.sum.trim()).replace(/\n+/g,"<br>")}</p>`:"")}
+ ${sec(T.skills,sk.length?`<ul class="sk">${sk.map(x=>`<li>${e(x)}</li>`).join("")}</ul>`:"")}
+ ${sec(T.exp,exps)}${sec(T.edu,edus)}${sec(T.train,ul(cv38Lines(c.train)))}${sec(T.awards,ul(cv38Lines(c.awards)))}${sec(T.vol,ul(cv38Lines(c.vol)))}
+ ${sec(T.langs,cv38Lines(c.langs).length?`<p>${cv38Lines(c.langs).map(e).join(" &nbsp;·&nbsp; ")}</p>`:"")}
+ ${c.refs?`<p class="ref">${T.refs}</p>`:""}</div>`}
+function cv38Text(c){const T=CV38_L[c.lang]||CV38_L.en,mil=c.mode==="mil",o=[];const H=h=>{o.push("",h.toUpperCase(),"-".repeat(h.length))};
+ o.push((c.name||"").toUpperCase());if(c.head)o.push(c.head);const ct=[c.city,c.phone,c.email,c.link].filter(Boolean).join(" | ");if(ct)o.push(ct);
+ if(mil){const m=[c.rank,c.trade,c.unit,c.showSN&&c.sn?`${T.sn} ${c.sn}`:""].filter(Boolean).join(" | ");if(m)o.push(m)}if(c.clear)o.push(`${T.clear}${T.c}${c.clear}`);
+ if(c.sum){H(T.prof);o.push(c.sum.trim())}const sk=cv38Skills(c.skills);if(sk.length){H(T.skills);o.push(sk.join(" • "))}
+ const ex=(c.exp||[]).filter(x=>x&&(x.title||x.org));if(ex.length){H(T.exp);ex.forEach(x=>{o.push("",(x.title||"")+(x.rank?` (${x.rank})`:"")+" — "+[x.org,x.city].filter(Boolean).join(", "),[cv38M(x.from),x.cur?T.now:cv38M(x.to)].filter(Boolean).join(" – "));cv38Lines(x.bul).forEach(b=>o.push("• "+b))})}
+ const ed=(c.edu||[]).filter(x=>x&&(x.dip||x.school));if(ed.length){H(T.edu);ed.forEach(x=>o.push(`${x.dip||""} — ${[x.school,x.city].filter(Boolean).join(", ")}${x.year?` (${x.year})`:""}`))}
+ [["train",T.train],["awards",T.awards],["vol",T.vol]].forEach(([k,h])=>{const a=cv38Lines(c[k]);if(a.length){H(h);a.forEach(b=>o.push("• "+b))}});
+ const lg=cv38Lines(c.langs);if(lg.length){H(T.langs);o.push(lg.join(" · "))}if(c.refs)o.push("",T.refs);return o.join("\n").replace(/\n{3,}/g,"\n\n").trim()}
+
+// Quality checklist (Canadian civilian + CAF guidance)
+const CV38_JARGON=/\b(QMB|BMQ|MOSID|OREN|Mat ?[123]|Cmdt|ORFC|QR&O|pon|O Div|Div O|RAS|PRFO|NETP|OCOM|OCdt|Mat ?1|Matc|LS|AB|OS)\b/g;
+function cv38Check(c){const L2=(f,en)=>U([f,en]),r=[],ex=(c.exp||[]).filter(x=>x&&x.title);
+ const add=(ok,f,en)=>r.push(`<li class="${ok?"ok":"no"}">${L2(f,en)}</li>`);
+ add(c.name&&c.email&&c.phone&&c.city,"Coordonnées complètes : nom, ville et province, téléphone, courriel professionnel.","Complete contact: name, city and province, phone, professional email.");
+ add(!!(c.head&&c.head.trim()),"Titre visé sous ton nom (le poste que tu veux, avec les mots de l'offre).","Target title under your name (the job you want, using the posting's words).");
+ const sl=(c.sum||"").trim().length;add(sl>=150&&sl<=650,`Profil de 3 à 4 lignes (${sl} caractères ; idéal 150 à 650).`,`Profile of 3 to 4 lines (${sl} characters; ideal 150 to 650).`);
+ const sk=cv38Skills(c.skills).length;add(sk>=6&&sk<=15,`Compétences clés : ${sk} (idéal 6 à 15, tirées de l'offre d'emploi).`,`Core competencies: ${sk} (ideal 6 to 15, taken from the job posting).`);
+ add(ex.length>=1&&ex.every(x=>x.org&&x.from),"Chaque poste a un titre, un employeur et des dates (MM/AAAA).","Each job has a title, an employer and dates (MM/YYYY).");
+ add(ex.length&&ex.every(x=>cv38Lines(x.bul).length>=2),"Au moins 2 réalisations par poste, en commençant par un verbe d'action.","At least 2 achievements per job, each starting with an action verb.");
+ const nums=ex.reduce((n,x)=>n+cv38Lines(x.bul).filter(b=>/\d/.test(b)).length,0);add(nums>=2,`Résultats chiffrés : ${nums} (vise au moins 2 : équipe de 6, 30 manœuvres, 0 incident…).`,`Quantified results: ${nums} (aim for at least 2: team of 6, 30 evolutions, 0 incidents…).`);
+ if(c.mode!=="mil"){const all=[c.head,c.sum,c.skills,c.train,c.awards,c.vol].concat(ex.map(x=>[x.title,x.bul].join(" "))).join(" ").replace(/\([^)]*\)/g," ");const j=[...new Set((all.match(CV38_JARGON)||[]).map(x=>x.toUpperCase()))];
+  add(!j.length,j.length?`Jargon militaire à traduire pour un employeur civil : ${j.join(", ")} (voir le tableau de traduction).`:"Pas de jargon militaire non traduit.",j.length?`Military jargon to translate for a civilian employer: ${j.join(", ")} (see the translation table).`:"No untranslated military jargon.")}
+ const len=cv38Text(c).length;add(len<=6500,`Longueur : environ ${Math.max(1,Math.ceil(len/3300))} page(s). Civil : 1 à 2 pages ; FAC ou fonction publique : jusqu'à 3 si tout est pertinent.`,`Length: about ${Math.max(1,Math.ceil(len/3300))} page(s). Civilian: 1 to 2 pages; CAF or public service: up to 3 if all relevant.`);
+ r.push(`<li class="ok">${L2("Rien à mettre : photo, âge ou date de naissance, NAS, état civil, santé, salaire, signature.","Leave out: photo, age or date of birth, SIN, marital status, health, salary, signature.")}</li>`);
+ return r.join("")}
+
+const CV38_VERBS={en:["Led","Supervised","Coordinated","Trained","Mentored","Planned","Organized","Managed","Inspected","Maintained","Operated","Ensured","Improved","Reduced","Increased","Implemented","Resolved","Delivered","Reported","Achieved"],
+ fr:["Diriger","Superviser","Coordonner","Former","Encadrer","Planifier","Organiser","Gérer","Inspecter","Entretenir","Utiliser","Assurer","Améliorer","Réduire","Augmenter","Mettre en œuvre","Résoudre","Réaliser","Rendre compte","Atteindre"]};
+const CV38_TR=[
+ [["Commandant de section / chef d'équipe","Section commander / team lead"],["Chef d'équipe (6 à 10 personnes) : planification, consignes, sécurité","Team leader (6 to 10 people): planning, briefings, safety"]],
+ [["Système divisionnaire","Divisional system"],["Gestion du personnel : suivi, évaluation, mentorat, bien-être","People management: follow-up, appraisals, mentoring, well-being"]],
+ [["Quart de service, rondes","Duty watch, rounds"],["Quarts de travail et rondes de sécurité et de sûreté","Shift work and safety and security rounds"]],
+ [["Contrôle des avaries","Damage control"],["Intervention d'urgence : lutte contre l'incendie, inondation, premiers soins","Emergency response: firefighting, flooding, first aid"]],
+ [["Matelotage (manœuvrier)","Seamanship (Boatswain)"],["Opérations maritimes : gréement, amarrage, manutention de charges, petites embarcations","Marine operations: rigging, mooring, load handling, small boats"]],
+ [["Ravitaillement en mer (RAS)","Replenishment at sea (RAS)"],["Transfert de carburant et de cargaison entre navires, en équipe, sous contraintes de sécurité","Fuel and cargo transfer between ships, in a team, under strict safety rules"]],
+ [["Barreur d'embarcation","Small boat coxswain"],["Conducteur d'embarcation : navigation, sécurité des passagers","Small craft operator: navigation, passenger safety"]],
+ [["Magasin, équipement, « kit »","Stores, equipment, kit"],["Gestion des stocks et du matériel : inventaire, contrôle, traçabilité","Inventory and equipment management: stock-taking, control, tracking"]],
+ [["Inspection (tenue, poste)","Inspection (dress, mess deck)"],["Contrôle de la qualité et respect des normes","Quality control and standards compliance"]],
+ [["Rapport à l'officier, salle des rapports","Reporting to the officer, orderly room"],["Rapports écrits et verbaux, administration, correspondance officielle","Written and verbal reporting, administration, official correspondence"]],
+ [["Chaîne de commandement","Chain of command"],["Structure hiérarchique, communication ascendante et descendante","Reporting structure, upward and downward communication"]],
+ [["Qualification militaire de base (QMB)","Basic Military Qualification (BMQ)"],["Formation de base : travail d'équipe, discipline, premiers soins, gestion du stress","Basic training: teamwork, discipline, first aid, stress management"]],
+ [["Ordres, procédures permanentes","Orders, standing procedures"],["Politiques et procédures opérationnelles","Operational policies and procedures"]],
+ [["Cote Secret (niveau II)","Secret clearance (Level II)"],["Cote de sécurité Secret du gouvernement du Canada (si valide)","Government of Canada Secret security clearance (if valid)"]],
+ [["Code de métier (MOSID 00105)","Trade code (MOSID 00105)"],["Le titre du poste en mots, jamais le code seul","The job title in words, never the code alone"]]];
+
+function cv38Sample(lang){const fr=lang==="fr";return Object.assign(cv38Def(),{lang,tpl:(S.cv&&S.cv.tpl)||"tx",mode:(S.cv&&S.cv.mode)||"civ",
+ name:"Alex Tremblay",head:fr?"Chef d'équipe — opérations et service à la clientèle | Réserviste de la Marine royale canadienne":"Team Leader — Operations & Customer Service | Royal Canadian Navy Reservist",
+ city:"Québec (QC)",phone:"418-555-0142",email:"alex.tremblay@exemple.ca",link:"linkedin.com/in/alex-tremblay",rank:fr?"Mat 3":"S3",trade:fr?"Manœuvrier (00105)":"Boatswain (00105)",unit:fr?"NCSM Montcalm":"HMCS Montcalm",clear:fr?"Fiabilité":"Reliability Status",
+ langs:fr?"Français (langue maternelle)\nAnglais (professionnel, oral et écrit)":"French (native)\nEnglish (professional working proficiency)",
+ sum:fr?"Gestionnaire d'équipe avec plus de 10 ans d'expérience en commerce de détail et en restauration, maintenant réserviste de la Marine. Reconnu pour diriger des équipes sous pression, respecter les normes de sécurité et offrir un service irréprochable. Formation en électronique, maintenance informatique et réseautique. Bilingue.":"Team manager with 10+ years of experience in retail and restaurant operations, now serving as a Naval Reservist. Known for leading teams under pressure, following strict safety standards and delivering outstanding service. Trained in electronics, IT maintenance and networking. Bilingual (French/English).",
+ skills:fr?"Leadership d'équipe\nService à la clientèle\nGestion des stocks\nSanté et sécurité au travail\nRésolution de problèmes\nFormation et mentorat\nTravail sous pression\nSoutien informatique et réseaux\nCommunication bilingue":"Team leadership\nCustomer service\nInventory management\nOccupational health & safety\nProblem solving\nTraining & mentoring\nWorking under pressure\nIT & network support\nBilingual communication",
+ exp:[{title:fr?"Manœuvrier":"Boatswain",rank:fr?"Matelot de 3e classe":"Sailor 3rd Class",org:fr?"Réserve navale, Marine royale canadienne — NCSM Montcalm":"Naval Reserve, Royal Canadian Navy — HMCS Montcalm",city:"Québec (QC)",from:"2026-09",cur:true,
+  bul:fr?"Effectuer des manœuvres de matelotage (amarrage, gréement, manutention de charges) en équipe, dans le respect strict des règles de sécurité\nPréparer et présenter des rapports verbaux quotidiens à la chaîne de commandement\nRéussir une formation intensive en leadership, discipline, premiers soins et lutte contre les incendies":"Perform seamanship tasks (mooring, rigging, load handling) as part of a team, in strict compliance with safety rules\nPrepare and deliver daily verbal reports to the chain of command\nComplete intensive training in leadership, discipline, first aid and firefighting"},
+  {title:fr?"Directeur de magasin":"Store Manager",org:fr?"Boutique de télécommunications (commerce de détail)":"Telecommunications store (retail)",city:"Québec (QC)",from:"2019-03",to:"2026-09",
+  bul:fr?"Diriger une équipe de 8 conseillers : horaires, formation, évaluations et coaching quotidien\nAugmenter les ventes de 18 % en un an grâce à un plan de formation et de suivi des objectifs\nRéduire les écarts d'inventaire de 40 % en instaurant des comptes hebdomadaires\nRésoudre les plaintes complexes et maintenir une satisfaction client supérieure à 90 %":"Led a team of 8 sales associates: scheduling, training, appraisals and daily coaching\nIncreased sales by 18% in one year through a training and goal-tracking plan\nReduced inventory discrepancies by 40% by introducing weekly counts\nResolved complex complaints and kept customer satisfaction above 90%"}],
+ edu:[{dip:fr?"DEP en soutien informatique":"Vocational Diploma (DEP), Computer Support",school:fr?"Centre de formation professionnelle":"Vocational training centre",city:"Québec (QC)",year:"2014"}],
+ train:fr?"Qualification militaire de base (QMB), Réserve navale — 2026\nSecourisme général et RCR niveau C — 2026\nSIMDUT 2015 — 2026":"Basic Military Qualification (BMQ), Naval Reserve — 2026\nStandard First Aid & CPR Level C — 2026\nWHMIS 2015 — 2026",
+ awards:fr?"Meilleur magasin de la région pour la satisfaction client — 2023":"Top store in the region for customer satisfaction — 2023",
+ vol:fr?"Entraîneur bénévole, soccer mineur — 2021 à aujourd'hui":"Volunteer coach, minor soccer — 2021 to present",refs:true})}
+
+function cv38HTML(){const c=cvGet(),e=esc29,mil=c.mode==="mil";
+ const f=(k,lab,ph,w)=>`<label class="l${w?" wide":""}">${lab}<input data-cv="${k}" value="${e(c[k]||"")}" placeholder="${e(ph||"")}" autocomplete="off"></label>`;
+ const ta=(k,lab,ph)=>`<label class="l wide">${lab}<textarea data-cv="${k}" placeholder="${e(ph||"")}">${e(c[k]||"")}</textarea></label>`;
+ const xf=(l,i,k,lab,ph,type,dis)=>`<label class="l">${lab}<input ${type?`type="${type}"`:""} data-cvx="${l}|${i}|${k}" value="${e((c[l][i]||{})[k]||"")}" placeholder="${e(ph||"")}"${dis?" disabled":""}></label>`;
+ const seg=(k,opts)=>`<div class="seg" style="margin:4px 0">${opts.map(o=>`<button aria-pressed="${c[k]===o[0]}" data-cvset="${k}|${o[0]}">${o[1]}</button>`).join("")}</div>`;
+ const ctl=(l,i,n)=>`<span>${n>1?`<button class="btn mini" data-cvop="up|${l}|${i}" title="↑">↑</button> <button class="btn mini" data-cvop="dn|${l}|${i}" title="↓">↓</button> `:""}<button class="btn mini" data-cvop="del|${l}|${i}" title="✕">✕</button></span>`;
+ const exps=c.exp.map((x,i)=>`<div class="cvx"><div class="cvxh"><span>${U(["Poste","Job"])} ${i+1}</span>${ctl("exp",i,c.exp.length)}</div><div class="cvf">
+  ${xf("exp",i,"title",U(["Titre du poste","Job title"]),U(["ex. Chef d'équipe","e.g. Team Leader"]))}${xf("exp",i,"rank",U(["Grade (facultatif)","Rank (optional)"]),U(["ex. Matelot de 3e classe","e.g. Sailor 3rd Class"]))}
+  ${xf("exp",i,"org",U(["Employeur ou unité","Employer or unit"]),U(["ex. Marine royale canadienne — NCSM Montcalm","e.g. Royal Canadian Navy — HMCS Montcalm"]))}${xf("exp",i,"city",U(["Ville (province)","City (province)"]),"Québec (QC)")}
+  ${xf("exp",i,"from",U(["Début (mois/année)","Start (month/year)"]),"2024-09","month")}${xf("exp",i,"to",U(["Fin (mois/année)","End (month/year)"]),"2026-06","month",x.cur)}
+  <label class="ck wide"><input type="checkbox" data-cvx="exp|${i}|cur" ${x.cur?"checked":""}>${U(["Poste actuel","Current job"])}</label>
+  <label class="l wide">${U(["Réalisations : une par ligne, verbe d'action + quoi + résultat chiffré","Achievements: one per line, action verb + what + measurable result"])}<textarea data-cvx="exp|${i}|bul" placeholder="${e(U(["Superviser une équipe de 6 lors de 30 manœuvres d'amarrage, sans aucun incident","Supervised a team of 6 during 30 mooring evolutions with zero safety incidents"]))}">${e(x.bul||"")}</textarea></label></div></div>`).join("");
+ const edus=c.edu.map((x,i)=>`<div class="cvx"><div class="cvxh"><span>${U(["Diplôme","Credential"])} ${i+1}</span>${ctl("edu",i,c.edu.length)}</div><div class="cvf">
+  ${xf("edu",i,"dip",U(["Diplôme ou programme","Diploma or program"]),U(["ex. DEC en techniques de l'informatique","e.g. College Diploma, Computer Science"]))}${xf("edu",i,"school",U(["Établissement","School"]),"")}
+  ${xf("edu",i,"city",U(["Ville (province)","City (province)"]),"")}${xf("edu",i,"year",U(["Année","Year"]),"2020")}</div></div>`).join("");
+ return `<div class="cv38">
+ <p>${L(["Un CV professionnel, sobre et bien construit, accepté par les employeurs civils comme par les FAC. Il suit les règles canadiennes actuelles : une seule colonne lisible par les logiciels de tri (ATS), réalisations chiffrées, aucune information personnelle inutile. Remplis les cases : l'aperçu se met à jour en direct.","A professional, clean, well-built résumé, accepted by civilian employers and by the CAF. It follows current Canadian rules: one column that applicant tracking systems (ATS) can read, quantified achievements, no unnecessary personal information. Fill in the boxes: the preview updates live."])}</p>
+ <div class="panel"><div class="cvf">
+  <div><b>${U(["Langue du CV","Résumé language"])}</b>${seg("lang",[["en","English"],["fr","Français"]])}</div>
+  <div><b>${U(["Style","Style"])}</b>${seg("tpl",[["tx",U(["Exécutif","Executive"])],["tc",U(["Classique","Classic"])]])}</div>
+  <div><b>${U(["Pour qui ?","For whom?"])}</b>${seg("mode",[["civ",U(["Employeur civil","Civilian employer"])],["mil",U(["FAC / interne","CAF / internal"])]])}</div></div>
+  <div class="row"><button class="btn" id="cv38ex">✨ ${U(["Remplir avec l'exemple","Fill with the example"])}</button><button class="btn" id="cv38clr">🗑 ${U(["Tout effacer","Clear all"])}</button></div>
+  <p class="muted" style="font-size:13px;margin:4px 0 0">${L(["Ton CV reste uniquement sur cet appareil. L'exemple est fictif.","Your résumé stays only on this device. The example is fictional."])}</p></div>
+
+ <h3>1. ${L(["Identité et coordonnées","Identity and contact"])}</h3>
+ <div class="panel"><div class="cvf">${f("name",U(["Prénom et nom","First and last name"]),"Alex Tremblay")}${f("head",U(["Titre visé (poste recherché)","Target title (job you want)"]),U(["ex. Chef d'équipe — opérations","e.g. Team Leader — Operations"]))}
+  ${f("city",U(["Ville (province)","City (province)"]),"Québec (QC)")}${f("phone",U(["Téléphone","Phone"]),"418-555-0142")}${f("email",U(["Courriel professionnel","Professional email"]),"prenom.nom@…")}${f("link",U(["LinkedIn ou portfolio (facultatif)","LinkedIn or portfolio (optional)"]),"linkedin.com/in/…")}
+  ${f("clear",U(["Cote de sécurité (si valide)","Security clearance (if valid)"]),U(["ex. Fiabilité, Secret","e.g. Reliability, Secret"]))}
+  ${mil?f("rank",U(["Grade","Rank"]),U(["ex. Mat 3","e.g. S3"]))+f("trade",U(["Métier (code)","Trade (code)"]),U(["ex. Manœuvrier (00105)","e.g. Boatswain (00105)"]))+f("unit",U(["Unité","Unit"]),U(["ex. NCSM Montcalm","e.g. HMCS Montcalm"]))+f("sn",U(["Matricule","Service number"]),"A12 345 678")+`<label class="ck"><input type="checkbox" data-cv="showSN" ${c.showSN?"checked":""}>${U(["Afficher le matricule sur le CV","Show service number on the résumé"])}</label>`:""}</div>
+  ${mil?`<p class="muted" style="font-size:13px">${L(["Mode FAC : grade, métier et unité apparaissent sous ton nom. Le matricule n'apparaît que si tu le coches (demandé seulement pour certains postes internes).","CAF mode: rank, trade and unit appear under your name. The service number only appears if you tick it (asked only for some internal positions)."])}</p>`:""}</div>
+
+ <h3>2. ${L(["Profil professionnel","Professional profile"])}</h3>
+ <div class="panel"><div class="cvf">${ta("sum",U(["3 à 4 lignes : qui tu es, tes années d'expérience, tes forces, ce que tu apportes au poste visé","3 to 4 lines: who you are, your years of experience, your strengths, what you bring to the target job"]),U(["Gestionnaire d'équipe avec 10 ans d'expérience…","Team manager with 10 years of experience…"]))}
+  ${ta("skills",U(["Compétences clés : une par ligne (6 à 15), reprends les mots de l'offre d'emploi","Core competencies: one per line (6 to 15), reuse the job posting's words"]),U(["Leadership d'équipe\nService à la clientèle\n…","Team leadership\nCustomer service\n…"]))}</div></div>
+
+ <h3>3. ${L(["Expérience (la plus récente d'abord)","Experience (most recent first)"])}</h3>
+ <div class="panel">${exps}<button class="btn" data-cvop="add|exp|0">+ ${U(["Ajouter un poste","Add a job"])}</button></div>
+
+ <h3>4. ${L(["Formation, cours et plus","Education, courses and more"])}</h3>
+ <div class="panel">${edus}<button class="btn" data-cvop="add|edu|0">+ ${U(["Ajouter un diplôme","Add a credential"])}</button>
+  <div class="cvf" style="margin-top:10px">${ta("train",U(["Cours et certifications : un par ligne (cours — organisme — année)","Training and certifications: one per line (course — organization — year)"]),U(["Secourisme général et RCR niveau C — 2026","Standard First Aid & CPR Level C — 2026"]))}
+  ${ta("langs",U(["Langues : une par ligne, avec ton niveau honnête","Languages: one per line, with your honest level"]),U(["Français (langue maternelle)\nAnglais (intermédiaire)","English (native)\nFrench (intermediate)"]))}
+  ${ta("awards",U(["Distinctions (facultatif)","Awards (optional)"]),"")}${ta("vol",U(["Bénévolat et engagement (facultatif)","Volunteer and community (optional)"]),"")}
+  <label class="ck wide"><input type="checkbox" data-cv="refs" ${c.refs?"checked":""}>${U(["Ajouter « Références disponibles sur demande »","Add “References available upon request”"])}</label></div></div>
+
+ <h3>5. ${L(["Vérification","Check"])}</h3>
+ <div class="panel"><ul class="chk" id="cv38chk">${cv38Check(c)}</ul></div>
+
+ <h3>6. ${L(["Aperçu et téléchargement","Preview and download"])}</h3>
+ <div class="row"><button class="btn gold" id="cv38pdf">📄 ${U(["PDF (imprimer)","PDF (print)"])}</button><button class="btn" id="cv38doc">⬇ Word (.doc)</button><button class="btn" id="cv38cp">📋 ${U(["Copier le texte (ATS)","Copy text (ATS)"])}</button><button class="btn" id="cv38txt">⬇ .txt</button><span class="muted" id="cv38msg" style="align-self:center;font-size:14px"></span></div>
+ <p class="muted" style="font-size:13px">${L(["PDF : dans la fenêtre d'impression, choisis « Enregistrer en PDF ». Envoie le PDF par défaut ; le Word sert à retoucher le CV ; le texte sert aux formulaires en ligne (Guichet-Emplois, Emplois GC, Indeed).","PDF: in the print window, choose “Save as PDF”. Send the PDF by default; the Word file is for editing; the plain text is for online forms (Job Bank, GC Jobs, Indeed)."])}</p>
+ <div class="pv" id="cv38prev">${cv38Doc(c)}</div>
+
+ <h3>7. ${L(["Guide : un CV qui passe, au civil comme chez les militaires","Guide: a résumé that works, civilian and military"])}</h3>
+ <details class="panel" open><summary style="cursor:pointer"><b>✅ ${U(["Les règles qui comptent","The rules that matter"])}</b></summary><ol class="pts">${[
+  ["Une seule colonne, titres standards, pas d'images ni de zones de texte : les logiciels de tri (ATS) lisent alors tout ton CV.","One column, standard headings, no images or text boxes: applicant tracking systems (ATS) can then read your whole résumé."],
+  ["Adapte chaque CV à l'offre : reprends ses mots exacts dans ton titre, ton profil et tes compétences.","Tailor each résumé to the posting: reuse its exact words in your title, profile and skills."],
+  ["Expérience de la plus récente à la plus ancienne, dates MM/AAAA, 3 à 6 réalisations pour les postes récents.","Experience from most recent to oldest, MM/YYYY dates, 3 to 6 achievements for recent jobs."],
+  ["Chaque ligne = verbe d'action + quoi + résultat chiffré. On décrit ce que tu as accompli, pas une simple liste de tâches.","Each line = action verb + what + measurable result. Describe what you achieved, not just a list of duties."],
+  ["Traduis le militaire en civil pour un employeur civil : le titre en mots, pas d'acronymes. Ton grade peut aller entre parenthèses après le titre.","Translate military into civilian terms for a civilian employer: the title in words, no acronyms. Your rank can go in brackets after the title."],
+  ["Le bilinguisme est un atout au Canada et souvent exigé au Québec et au fédéral : indique ton vrai niveau.","Bilingualism is an asset in Canada and often required in Quebec and federal jobs: state your real level."],
+  ["N'inscris jamais : photo, âge ou date de naissance, NAS, état civil, santé, salaire, raisons de départ. On ne signe pas un CV (seulement la lettre de présentation).","Never include: photo, age or date of birth, SIN, marital status, health, salary, reasons for leaving. A résumé isn't signed (only the cover letter is)."],
+  ["Fonction publique fédérale (Emplois GC) : montre clairement, avec un exemple concret et des dates, comment tu réponds à chaque qualification essentielle de l'affiche.","Federal public service (GC Jobs): show clearly, with a concrete example and dates, how you meet each essential qualification on the poster."],
+  ["Zéro faute : fais relire. Nomme le fichier Prénom-Nom-CV.pdf et envoie-le en PDF.","Zero mistakes: have it proofread. Name the file First-Last-CV.pdf and send it as a PDF."]].map(r=>`<li>${L(r)}</li>`).join("")}</ol></details>
+ <details class="panel"><summary style="cursor:pointer"><b>🔁 ${U(["Traduire le militaire en civil","Translate military into civilian"])}</b></summary>
+  <table class="tr"><tr><th>${U(["Chez les militaires","Military"])}</th><th>${U(["Sur un CV civil","On a civilian résumé"])}</th></tr>${CV38_TR.map(t=>`<tr><td>${L(t[0])}</td><td>${L(t[1])}</td></tr>`).join("")}</table>
+  <p class="muted" style="font-size:13px">${L(["Outils officiels : l'outil d'équivalence MNET (métier militaire → emplois civils) et MySET (formation militaire → crédits scolaires), offerts par le Groupe de transition des FAC.","Official tools: MNET (military occupation → civilian jobs) and MySET (military training → education credits), from the CAF Transition Group."])}</p></details>
+ <details class="panel"><summary style="cursor:pointer"><b>💪 ${U(["Verbes d'action","Action verbs"])}</b></summary>
+  <p><b>English :</b> ${CV38_VERBS.en.join(" · ")}</p><p><b>Français :</b> ${CV38_VERBS.fr.join(" · ")}</p>
+  <p class="muted" style="font-size:13px">${L(["En français, garde la même forme partout (infinitif : « Superviser… » ou nom : « Supervision de… »). En anglais, le passé pour les anciens postes, le présent pour le poste actuel.","In French, keep the same form throughout (infinitive or noun). In English, past tense for past jobs, present tense for your current job."])}</p>
+  <div class="explain">${L(["Formule : Verbe + quoi + combien + résultat. Ex. « Superviser une équipe de 6 matelots lors de 30 manœuvres d'amarrage, sans aucun incident. »","Formula: Verb + what + how many + result. E.g. “Supervised a team of 6 sailors during 30 mooring evolutions with zero safety incidents.”"])}</div></details>
+ <details class="panel"><summary style="cursor:pointer"><b>📚 ${U(["Sources","Sources"])}</b></summary><ul class="lnk29" style="font-size:14px">
+  <li><a href="https://www.canada.ca/en/department-national-defence/services/benefits-military/transition/next-career.html" target="_blank" rel="noopener">Canada.ca — ${U(["Bâtir ta prochaine carrière (MNET, MySET)","Building your next career (MNET, MySET)"])} ↗</a></li>
+  <li><a href="https://military-transition-militaire.canada.ca/${S.lang==="fr"?"fr":"en"}" target="_blank" rel="noopener">${U(["Transition militaire des FAC (conseillers, 32 centres)","CAF Military Transition (advisors, 32 centres)"])} ↗</a></li>
+  <li><a href="https://www.cfmws.ca/CFMWS/media/Valcartier/documents/3.6.2/Job-Hunting-Practical-Guide.pdf" target="_blank" rel="noopener">SBMFC Valcartier — ${U(["Guide pratique de recherche d'emploi","Job Hunting Practical Guide"])} ↗</a></li>
+  <li><a href="https://www.jobbank.gc.ca" target="_blank" rel="noopener">${U(["Guichet-Emplois du Canada","Job Bank Canada"])} ↗</a></li>
+  <li><a href="https://atsverification.com/blog/canadian-resume-format-2026/" target="_blank" rel="noopener">${U(["Format de CV canadien 2026 (ATS)","Canadian resume format 2026 (ATS)"])} ↗</a></li></ul></details>
+ </div>`}
+
+async function cv38Save(fn,data,type,msg){if(typeof DLNS!=="undefined"&&DLNS){try{await DLNS.save({filename:fn,data});if(msg)msg.textContent=U(["✓ Enregistré.","✓ Saved."])}catch(e){if(msg&&e&&e.code!=="declined")msg.textContent=U(["Enregistrement impossible ici.","Saving isn't available here."])}return}
+ try{const b=new Blob([data],{type}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);if(msg)msg.textContent=U(["✓ Fichier téléchargé.","✓ File downloaded."])}catch(e){if(msg)msg.textContent=U(["Téléchargement impossible ici.","Download isn't available here."])}}
+function cv38Print(){const c=cvGet();let pb=document.getElementById("cv38pb");if(!pb){pb=document.createElement("div");pb.id="cv38pb";document.body.appendChild(pb)}
+ pb.innerHTML=cv38Doc(c);document.body.classList.add("cv38print");const old=document.title;document.title=cv38File(c);
+ const done=()=>{document.body.classList.remove("cv38print");pb.innerHTML="";document.title=old;window.removeEventListener("afterprint",done)};window.addEventListener("afterprint",done);
+ try{window.print()}catch(e){done();const m=$("#cv38msg");if(m)m.textContent=U(["Impression impossible ici : utilise Word (.doc).","Printing isn't available here: use Word (.doc)."])}}
+function cv38Bind(){const c=cvGet();const ref=()=>{const p=$("#cv38prev");if(p)p.innerHTML=cv38Doc(c);const k=$("#cv38chk");if(k)k.innerHTML=cv38Check(c)};
+ document.querySelectorAll("[data-cv]").forEach(el=>{el.oninput=el.onchange=()=>{c[el.dataset.cv]=el.type==="checkbox"?el.checked:el.value;save();ref()}});
+ document.querySelectorAll("[data-cvx]").forEach(el=>{el.oninput=el.onchange=()=>{const [l,i,k]=el.dataset.cvx.split("|");if(!c[l][+i])c[l][+i]={};c[l][+i][k]=el.type==="checkbox"?el.checked:el.value;save();ref();
+  if(k==="cur"){const t=el.closest(".cvx").querySelector('[data-cvx$="|to"]');if(t)t.disabled=el.checked}}});
+ document.querySelectorAll("[data-cvset]").forEach(b=>b.onclick=()=>{const [k,v]=b.dataset.cvset.split("|");const smp=k==="lang"&&c.lang!==v&&c.name==="Alex Tremblay"&&c.sum===cv38Sample(c.lang).sum;c[k]=v;if(smp)S.cv=cv38Sample(v);save();viewReports()});
+ document.querySelectorAll("[data-cvop]").forEach(b=>b.onclick=()=>{const [op,l,i]=b.dataset.cvop.split("|"),a=c[l],n=+i;
+  if(op==="add")a.push({});else if(op==="del"){if(!confirm(U(["Supprimer cette entrée ?","Delete this entry?"])))return;a.splice(n,1);if(!a.length)a.push({})}
+  else if(op==="up"&&n>0)[a[n-1],a[n]]=[a[n],a[n-1]];else if(op==="dn"&&n<a.length-1)[a[n+1],a[n]]=[a[n],a[n+1]];save();viewReports()});
+ $("#cv38ex").onclick=()=>{if((c.name||c.sum)&&!confirm(U(["Remplacer ton CV par l'exemple ?","Replace your résumé with the example?"])))return;S.cv=cv38Sample(c.lang);save();viewReports()};
+ $("#cv38clr").onclick=()=>{if(!confirm(U(["Effacer tout ton CV sur cet appareil ?","Erase your whole résumé from this device?"])))return;const k={lang:c.lang,tpl:c.tpl,mode:c.mode};S.cv=Object.assign(cv38Def(),k);save();viewReports()};
+ $("#cv38pdf").onclick=cv38Print;
+ $("#cv38doc").onclick=()=>{const c2=cvGet(),html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>${esc29(cv38File(c2))}</title><style>@page{size:8.5in 11in;margin:0.7in}${CV38_DOC_CSS}</style></head><body>${cv38Doc(c2,true)}<\/body><\/html>`;cv38Save(cv38File(c2)+".doc","﻿"+html,"application/msword",$("#cv38msg"))};
+ $("#cv38cp").onclick=async()=>{const ok=await copyText(cv38Text(cvGet()));$("#cv38msg").textContent=ok?U(["Copié.","Copied."]):U(["Copie impossible ici.","Copy isn't available here."])};
+ $("#cv38txt").onclick=()=>cv38Save(cv38File(cvGet())+".txt",cv38Text(cvGet()),"text/plain",$("#cv38msg"))}
+const _viewReports38=viewReports;viewReports=function(){const isC=repSel==="cv";if(isC)repSel="senior";_viewReports38();if(isC)repSel="cv";
+ const seg=$("#rseg");if(!seg)return;seg.insertAdjacentHTML("beforeend",`<button aria-pressed="${isC}" data-r="cv">📄 ${U(["CV","Résumé / CV"])}</button>`);
+ if(isC){seg.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.r==="cv"));let n=seg.nextElementSibling;while(n){const x=n.nextElementSibling;n.remove();n=x}seg.insertAdjacentHTML("afterend",cv38HTML());cv38Bind()}
+ seg.querySelectorAll("button").forEach(b=>b.onclick=()=>{repSel=b.dataset.r;viewReports()})};
+// "Erase my personal info" also erases the résumé
+const _wipe38=wipe35;wipe35=function(){const before=S.leave;_wipe38();if(S.leave!==before){S.cv=null;save();if(current==="rep")viewReports()}};
 
 /* ============ ROUTER ============ */
 const VIEWS={about:viewAbout,fb:viewFb,more:viewMore,insp:viewInsp,rep:viewReports,fit:viewFit,path:viewPath,drill:viewDrill,first:viewFirst,tutor:viewTutor,audio:viewAudio,review:viewReview,exam:viewExam,other:viewOther,lesson:viewLesson,learn:viewLearn,table:viewTable,flash:viewFlash,quiz:viewQuiz,order:viewOrder,course:viewCourse,navy:viewNavy,man:viewMan,src:viewSrc};
