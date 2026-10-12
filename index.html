@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; media-src 'self' data: blob:; frame-src https://player.vimeo.com; connect-src 'self'; worker-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; media-src 'self' data: blob:; frame-src https://player.vimeo.com; connect-src 'self' https://fr.wikipedia.org https://en.wikipedia.org; worker-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="author" content="Martin B.">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -663,9 +663,10 @@ const LESSONS={
 
 /* ============ STORAGE ============ */
 const KEY="navalos.v1";
-const APP_VERSION="3.8",CONTENT_DATE="2026-10-11";
+const APP_VERSION="3.9",CONTENT_DATE="2026-10-11";
 const ONLINE_URL="https://claude.ai/artifact/4F2zWfYVFgg7cK4XfHdmkA";
-const CHANGELOG=[["3.8","2026-10-12",["Rapports → CV : un modèle de CV professionnel à remplir (civil ou FAC, anglais ou français, style Exécutif ou Classique), avec aperçu en direct, vérification, guide, tableau de traduction militaire → civil et téléchargement en PDF, Word ou texte. Toute première ouverture se fait en anglais ; ton choix de langue est ensuite gardé.","Reports → Résumé: a professional résumé template to fill in (civilian or CAF, English or French, Executive or Classic style), with live preview, checklist, guide, military → civilian translation table and download as PDF, Word or text. Every first launch is in English; your language choice is then kept."]],
+const CHANGELOG=[["3.9","2026-10-12",["Tuteur intelligent pour tous : il comprend le français et l'anglais, les synonymes et les fautes de frappe, répond directement (grades, comparaisons, pavillons, vocabulaire, leçons, rapports, CV), propose des quiz et des sujets, lit ses réponses à voix haute, accepte la voix, cherche sur Wikipédia en direct et prépare ta question pour Perplexity, ChatGPT, Claude ou Copilot en un clic.","Smart tutor for everyone: it understands French and English, synonyms and typos, answers directly (ranks, comparisons, flags, vocabulary, lessons, reports, résumé), suggests quizzes and topics, reads answers aloud, accepts voice, searches Wikipedia live and prepares your question for Perplexity, ChatGPT, Claude or Copilot in one tap."]],
+ ["3.8","2026-10-12",["Rapports → CV : un modèle de CV professionnel à remplir (civil ou FAC, anglais ou français, style Exécutif ou Classique), avec aperçu en direct, vérification, guide, tableau de traduction militaire → civil et téléchargement en PDF, Word ou texte. Toute première ouverture se fait en anglais ; ton choix de langue est ensuite gardé.","Reports → Résumé: a professional résumé template to fill in (civilian or CAF, English or French, Executive or Classic style), with live preview, checklist, guide, military → civilian translation table and download as PDF, Word or text. Every first launch is in English; your language choice is then kept."]],
  ["3.7","2026-10-12",["En mode EN+FR, tous les titres (métiers, grades, termes, rapports, tuteur) s'affichent en anglais d'abord, avec le français en dessous.","In EN+FR mode, all titles (trades, ranks, terms, reports, tutor) now show English first, with French below."]],
  ["3.6","2026-10-12",["L'anglais passe en premier : boutons EN, FR, EN+FR ; en mode EN+FR, l'anglais s'affiche d'abord et le français dessous. Un nouvel utilisateur démarre dans la langue de son appareil.","English comes first: EN, FR, EN+FR buttons; in EN+FR mode, English shows first with French below. A new user starts in their device's language."]],
  ["3.5","2026-10-12",["En mode FR+EN, les onglets s'affichent dans les deux langues. Bouton « Effacer mes infos personnelles » (matricule, nom, lettres) pour les appareils partagés. Note de confidentialité : rien n'est envoyé, tout reste sur l'appareil. Version installable renforcée (politique de sécurité du contenu).","In FR+EN mode, tabs show both languages. “Erase my personal info” button (service number, name, letters) for shared devices. Privacy note: nothing is sent, everything stays on the device. Installable version hardened (content security policy)."]],
@@ -3152,7 +3153,7 @@ function wipe35(){if(!confirm(U(["Effacer ton matricule, ton nom, tes initiales 
  S.leave={date:"",to:"Cmdt pon",dates:"",dest:"",transport:"",r1:"",r2:"",r3:"",unit:"",init:"",file:"5060-1 (Candidat)"};S.lt={sel:(S.lt&&S.lt.sel)||"comp",v:{}};save();go(current,true)}
 const _idPanel35=idPanel;idPanel=function(){return _idPanel35().replace(/<\/div>$/,`<div class="row" style="margin:8px 0 0"><button class="btn wipe35" style="font-size:13px;padding:4px 10px">🗑 ${U(["Effacer mes infos personnelles de cet appareil","Erase my personal info from this device"])}</button></div></div>`)};
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest(".wipe35");if(b){e.preventDefault();wipe35()}});
-const PRIV35=["🔒 Confidentialité : NavalOS n'a ni compte, ni serveur, ni suivi. Rien de ce que tu tapes (matricule, nom, lettres, progression) n'est envoyé : tout reste dans le navigateur de ton appareil. Sur un appareil partagé, utilise « Effacer mes infos personnelles » (onglet Rapports). N'y entre jamais d'information classifiée.","🔒 Privacy: NavalOS has no account, no server and no tracking. Nothing you type (service number, name, letters, progress) is sent anywhere: it all stays in your device's browser. On a shared device, use “Erase my personal info” (Reports tab). Never enter classified information."];
+const PRIV35=["🔒 Confidentialité : NavalOS n'a ni compte, ni serveur, ni suivi. Rien de ce que tu tapes (matricule, nom, lettres, progression) n'est envoyé : tout reste dans le navigateur de ton appareil. Seule exception : les questions que tu choisis d'envoyer en ligne depuis le Tuteur (Wikipédia, IA). Sur un appareil partagé, utilise « Effacer mes infos personnelles » (onglet Rapports). N'y entre jamais d'information classifiée.","🔒 Privacy: NavalOS has no account, no server and no tracking. Nothing you type (service number, name, letters, progress) is sent anywhere: it all stays in your device's browser. Only exception: questions you choose to send online from the Tutor (Wikipedia, AI). On a shared device, use “Erase my personal info” (Reports tab). Never enter classified information."];
 const _viewAbout35=viewAbout;viewAbout=function(){_viewAbout35();const d=document.querySelector("#view .disc29");if(d)d.insertAdjacentHTML("afterend",`<p class="disc29" style="border-left-color:var(--ok)">${L(PRIV35)}</p>`)};
 const _viewSrc35=viewSrc;viewSrc=function(){_viewSrc35();const d=document.querySelector("#view .disc29");if(d)d.insertAdjacentHTML("afterend",`<p class="disc29" style="border-left-color:var(--ok)">${L(PRIV35)}</p>`)};
 
@@ -3386,6 +3387,194 @@ const _viewReports38=viewReports;viewReports=function(){const isC=repSel==="cv";
  seg.querySelectorAll("button").forEach(b=>b.onclick=()=>{repSel=b.dataset.r;viewReports()})};
 // "Erase my personal info" also erases the résumé
 const _wipe38=wipe35;wipe35=function(){const before=S.leave;_wipe38();if(S.leave!==before){S.cv=null;save();if(current==="rep")viewReports()}};
+
+
+/* ============ v3.9 : Tuteur intelligent, proactif et en ligne (pour tous) ============ */
+// 1) Knowledge index over everything in NavalOS, with a link back to the right page
+const T39={msgs:[],quiz:null,busy:false,last:""};
+function idx39(){const d=[],P=x=>pair(x),strip=s=>String(s==null?"":s).replace(/<[^>]+>/g,"");
+ const add=(title,fr,en,go)=>d.push({title:P(title),fr:strip(fr),en:strip(en),go:go||null});
+ R.forEach(r=>{const tr=r.trap||["",""];add([`${r.fr} (${r.frA})`,`${r.en} (${r.enA})`],`${r.fr} (${r.frA}) = ${r.en} (${r.enA}). Armée/ARC : ${r.arFr} (${r.arA}). ${P(r.cat)[0]}. ${P(r.role)[0]} Insigne : ${P(r.look)[0]} ${P(tr)[0]}`,`${r.en} (${r.enA}) = ${r.fr} (${r.frA}). Army/RCAF: ${r.arEn} (${r.arA}). ${P(r.cat)[1]}. ${P(r.role)[1]} Insignia: ${P(r.look)[1]} ${P(tr)[1]}`,{v:"learn"})});
+ ["army","air"].forEach(k=>{const O=OTHER[k];if(O&&O.items)O.items.forEach(it=>{const n=byId[it[1]];add([it[2],it[3]],`${it[2]} (${it[4]}) — ${U(O.name)}. Équivalent Marine : ${n?n.fr+" ("+n.frA+")":"—"}.`,`${it[3]} (${it[4]}) — ${O.name[1]}. Navy equivalent: ${n?n.en+" ("+n.enA+")":"—"}.`,{v:"other"})})});
+ EO_LIST.forEach(e=>{const l=LESSONS[e.k];if(l)add([`OCOM ${e.k} — ${e.t[0]}`,`EO ${e.k} — ${e.t[1]}`],l.pts.map(p=>p[0]).join(" "),l.pts.map(p=>p[1]).join(" "),{v:"lesson",k:e.k})});
+ FACTS.concat(NAVQ,MANQ,FDQ,typeof LTQ!=="undefined"?LTQ:[]).forEach(f=>add(P(f.q),`${P(f.q)[0]} → ${P(f.o[0])[0]}. ${P(f.e)[0]}`,`${P(f.q)[1]} → ${P(f.o[0])[1]}. ${P(f.e)[1]}`));
+ CUSTOMS.forEach(c=>add(c[0],c[1][0],c[1][1],{v:"navy"}));
+ FLEET.forEach(f=>add(f[0],`${f[0][0]} (${f[1]}) : ${P(f[2])[0]}`,`${f[0][1]} (${f[1]}): ${P(f[2])[1]}`,{v:"navy"}));
+ TRADES.forEach(t=>add([t.fr,t.en],`${t.fr} (${t.ab}) : ${P(t.d)[0]} ${(t.t||[]).map(x=>x[0]).join(", ")}`,`${t.en} (${t.ab}): ${P(t.d)[1]} ${(t.t||[]).map(x=>x[1]).join(", ")}`,{v:"man"}));
+ HEROES.forEach(h=>add([h[0],h[0]],`${h[0]} — ${P(h[1])[0]}. ${P(h[2])[0]}`,`${h[0]} — ${P(h[1])[1]}. ${P(h[2])[1]}`,{v:"navy"}));
+ Object.keys(FLAGS).forEach(k=>add([`Pavillon ${k} (${FLAGS[k][0]})`,`Flag ${k} (${FLAGS[k][0]})`],FLAGS[k][1][0],FLAGS[k][1][1],{v:"navy"}));
+ FD.forEach(s=>add(s.t,s.pts.map(p=>P(p)[0]).join(" "),s.pts.map(p=>P(p)[1]).join(" "),{v:"first"}));
+ SHIP_VOCAB.forEach(v=>add([v[1],v[0]],`${v[1]} (${v[0]}) : ${v[2]}`,`${v[0]} (${v[1]}): ${v[3]}`,{v:"navy"}));
+ Object.keys(REPORTS).forEach(k=>{const r=REPORTS[k];add(r.t,`${r.t[0]} : ${P(r.when)[0]} Format : ${r.f.map(x=>P(x)[0]).join(", ")}.`,`${r.t[1]}: ${P(r.when)[1]} Format: ${r.f.map(x=>P(x)[1]).join(", ")}.`,{v:"rep",r:k})});
+ if(typeof RULES31!=="undefined")RULES31.forEach((r,i)=>add([`Règle de rédaction militaire ${i+1}`,`Military writing rule ${i+1}`],r[0],r[1],{v:"rep",r:"letters"}));
+ if(typeof CV38_TR!=="undefined")CV38_TR.forEach(t=>add([`CV : ${t[0][0]}`,`Résumé: ${t[0][1]}`],`Sur un CV civil, « ${t[0][0]} » devient : ${t[1][0]}.`,`On a civilian résumé, “${t[0][1]}” becomes: ${t[1][1]}.`,{v:"rep",r:"cv"}));
+ if(typeof INSP_PTS!=="undefined")INSP_PTS.forEach(p=>add([`Inspection : ${P(p.t)[0]}`,`Inspection: ${P(p.t)[1]}`],`Point ${p.n} de l'inspection de la tête aux pieds : ${P(p.t)[0]}.`,`Point ${p.n} of the head-to-toe inspection: ${P(p.t)[1]}.`,{v:"insp"}));
+ if(typeof D33T!=="undefined"){const T={hairOk:["Cheveux : ce qui est permis","Hair: what is allowed"],hairNo:["Cheveux : ce qui n'est pas permis","Hair: what is not allowed"],accOk:["Accessoires pour cheveux permis","Allowed hair accessories"],accNo:["Accessoires pour cheveux interdits","Hair accessories not allowed"],cer:["Cheveux longs en tenue de cérémonie (chignon, tresses)","Long hair in ceremonial dress (bun, braids)"],faceOk:["Barbe, moustache et pilosité faciale permises (2,5 cm)","Beard, moustache and facial hair allowed (2.5 cm)"],faceNo:["Barbe et pilosité faciale non permises","Beard and facial hair not allowed"]};
+  Object.keys(T).forEach(k=>{if(D33T[k])add(T[k],D33T[k][0],D33T[k][1],{v:"insp"})})}
+ return d}
+
+// 2) Language tools: accents, stop words, light stemming, FR/EN synonyms, typo tolerance
+const STOP39=new Set("le la les un une des de du d l et ou a au aux en dans sur pour par avec est sont c ce cet cette ces qui que qu quoi quel quelle quels quelles comment pourquoi quand combien je j tu il elle on nous vous me m te t se s mon ton son ma ta sa mes tes ses y ne n pas tres veut dire faire fait explique expliquer expliques moi peux peut dis svp stp entre etre avoir ai as quoi cest what is are the an of to in on for with how why when which who does do can could you me my your it its this that explain tell about please there was were be i we they them than then also et ou donc mais am im regle regles rule rules savoir know faut doit dois must should exemple example liste list quel quels svp".split(" "));
+const SYN39=[["babord","port","gauche","left"],["tribord","starboard","droite","right"],["grade","rank","galon"],["insigne","insignia","badge","epaulette"],["matelot","sailor"],["quart","watch"],["pavillon","flag","drapeau"],["navire","ship","bateau","vessel","batiment"],["fregate","frigate"],["salut","salute","saluer"],["tenue","dress","uniforme","uniform"],["conge","leave"],["proue","bow"],["poupe","stern"],["cuisine","galley","cambuse"],["officier","officer"],["maitre","petty"],["amiral","admiral"],["cloche","bell","coup"],["manoeuvrier","boatswain","bosn"],["sous-marin","submarine","sousmarin"],["ravitaillement","replenishment","ras"],["cheveux","hair","coiffure","chignon","tresse"],["barbe","beard","moustache","pilosite"],["lettre","letter","memo","correspondance","correspondence"],["cv","resume","curriculum"],["harcelement","harassment"],["ethique","ethics","ethos"],["exercice","drill"],["equivalent","equivalence","equivaut","equal","armee","army"],["aviation","rcaf","arc","air"],["metier","trade","occupation","job"],["rapport","report"],["inspection","inspect"],["date","dates","mois","month"],["heure","hour","time","horloge"],["pont","deck"],["quille","keel"],["mat","mast"],["coque","hull"],["passerelle","bridge"],["ancre","anchor"],["histoire","history","heros","hero"],["flotte","fleet"],["forme","fitness","sport","fit"],["coutume","custom","tradition"]];
+const stem39=w=>{if(w.length<=4)return w;return w.replace(/(ements|ement|ations|ation|euses|euse|eurs|eur|ies|es|s)$/,"").replace(/(au|eu)x$/,"$1")||w};
+const SYNMAP39=(()=>{const m={};SYN39.forEach(g=>{const st=g.map(x=>stem39(norm(x)));st.forEach(s=>{m[s]=(m[s]||[]).concat(st)})});return m})();
+const tok39=s=>norm(String(s||"")).replace(/[’']/g," ").split(/[^a-z0-9]+/).filter(w=>w&&!STOP39.has(w)).map(stem39).filter(w=>w.length>1||/\d/.test(w));
+function lev39(a,b,max){if(Math.abs(a.length-b.length)>max)return max+1;let p=Array.from({length:b.length+1},(_,i)=>i);for(let i=1;i<=a.length;i++){const c=[i];let mn=i;for(let j=1;j<=b.length;j++){c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));mn=Math.min(mn,c[j])}if(mn>max)return max+1;p=c}return p[b.length]}
+let I39=null;
+function brain39(){if(I39)return I39;const docs=idx39(),df={},vocab=new Set();
+ docs.forEach(d=>{d.tt=new Set(tok39(d.title[0]+" "+d.title[1]));d.bt=new Set(tok39(d.fr+" "+d.en));new Set([...d.tt,...d.bt]).forEach(t=>{df[t]=(df[t]||0)+1;vocab.add(t)})});
+ I39={docs,df,vocab:[...vocab],N:docs.length};return I39}
+function expand39(q){const B=brain39(),out=new Map(),base=tok39(q);
+ base.forEach(t=>{let ts=[t];if(!B.df[t]&&t.length>=5){let best=null,bd=9,bp=-1;const mx=t.length>=8?2:1,pre=(a,b)=>{let i=0;while(i<a.length&&a[i]===b[i])i++;return i};for(const v of B.vocab){if(v[0]!==t[0])continue;const dd=lev39(t,v,mx);if(dd>mx)continue;const pp=pre(t,v)-Math.abs(v.length-t.length)*0.1;if(dd<bd||(dd===bd&&pp>bp)){bd=dd;best=v;bp=pp}}if(best&&bd<=mx)ts=[best]}
+  ts.forEach(x=>{out.set(x,Math.max(out.get(x)||0,1));(SYNMAP39[x]||[]).forEach(s=>{if(!out.has(s))out.set(s,0.8)})})});return out}
+function search39(q,n){const B=brain39(),qt=expand39(q);if(!qt.size)return[];const base=[...qt].filter(x=>x[1]===1).map(x=>x[0]);
+ return B.docs.map(d=>{let s=0,hit=0;qt.forEach((w,t)=>{const idf=Math.log(1+B.N/((B.df[t]||0)+1));if(d.tt.has(t)){s+=w*idf*2.2;hit++}else if(d.bt.has(t)){s+=w*idf;hit++}});if(hit>1)s*=1+0.15*(hit-1);
+  const cov=base.length?base.filter(t=>d.tt.has(t)||d.bt.has(t)||(SYNMAP39[t]||[]).some(y=>d.tt.has(y)||d.bt.has(y))).length/base.length:0;return [s*(0.4+0.6*cov),d,cov]})
+  .filter(x=>x[0]>0).sort((a,b)=>b[0]-a[0]).slice(0,n||5).map(x=>Object.assign({score:x[0],cov:x[2],nb:base.length},x[1]))}
+// better context for the claude.ai AI tutor too
+const _retrieve39=retrieve;retrieve=function(q,n){const r=search39(q,n);return r.length?r.map(d=>({title:d.title[0],fr:d.fr,en:d.en})):_retrieve39(q,n)};
+
+// 3) Direct answers (intents): ranks, comparisons, flags, ship words, open a page
+const RK39=(()=>{const a=[],clean=s=>norm(s).replace(/\((e|ere|le|ne|trice|euse)\)/g,"").replace(/[().,]/g," ").replace(/\s+/g," ").trim();
+ const addN=(o,svc,names)=>{const ns=new Set(),raw={};names.forEach(n=>String(n||"").split("/").forEach(x=>{const c=clean(x);if(c){ns.add(c);raw[c]=(raw[c]||[]).concat(x.trim().replace(/[().]/g,""));if(/\s/.test(c)&&c.length<=6){const c2=c.replace(/\s/g,"");ns.add(c2);raw[c2]=(raw[c2]||[]).concat(x.trim().replace(/[().\s]/g,""))}}}));a.push({o,svc,ns:[...ns],raw})};
+ R.forEach(r=>addN(r,"navy",[r.fr,r.en,r.frA,r.enA]));
+ ["army","air"].forEach(k=>{if(OTHER[k]&&OTHER[k].items)OTHER[k].items.forEach(it=>addN({fr:it[2],en:it[3],frA:it[4],enA:it[4],nid:it[1],svc:k},k,[it[2],it[3],it[4]]))});return a})();
+function ranksIn39(q){const sq=" "+norm(q).replace(/\((e|ere|le|ne)\)/g,"").replace(/[().,?!;:]/g," ").replace(/\s+/g," ")+" ",found=[];let used=sq;
+ const cands=[];RK39.forEach(r=>r.ns.forEach(n=>{if(n.length<2)return;if(n.length<=3&&!/\d/.test(n)){const qq=q.replace(/[().]/g," ");if(!(r.raw[n]||[]).some(w=>w.length>1&&new RegExp("(^|[^A-Za-zÀ-ÿ])"+w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"([^A-Za-zÀ-ÿ]|$)").test(qq)))return}cands.push([n,r])}));
+ cands.sort((a,b)=>b[0].length-a[0].length).forEach(([n,r])=>{const k=" "+n+" ",i=used.indexOf(k);if(i>=0&&!found.some(f=>f.o===r.o)){found.push(r);used=used.slice(0,i)+" "+"#".repeat(n.length)+" "+used.slice(i+k.length)}});
+ return found.sort((a,b)=>sq.indexOf(" "+a.ns[0]+" ")-sq.indexOf(" "+b.ns[0]+" "))}
+const ordOf39=r=>ORD[r.o.nid||r.o.id];
+function rankCard39(r){const o=r.o;if(r.svc!=="navy"){const n=byId[o.nid];return L([`<b>${o.fr}</b> (${o.frA}) — ${OTHER[r.svc].name[0]}. Équivalent dans la Marine : <b>${n?n.fr+" ("+n.frA+")":"—"}</b>.`,`<b>${o.en}</b> (${o.enA}) — ${OTHER[r.svc].name[1]}. Navy equivalent: <b>${n?n.en+" ("+n.enA+")":"—"}</b>.`])}
+ const ord=ORD[o.id],ids=Object.keys(ORD),below=ord?ids.find(k=>ORD[k]===ord-1&&(ord<10||ord-1>=10)):null,above=ord?ids.find(k=>ORD[k]===ord+1):null,P=x=>pair(x||["",""]);
+ return L([`<b>${o.fr}</b> (${o.frA}) = <b>${o.en}</b> (${o.enA})<br>Armée / ARC : ${o.arFr} (${o.arA}) · ${P(o.cat)[0]}<br>${P(o.role)[0]}<br>Insigne : ${P(o.look)[0]}${o.trap?"<br>⚠️ "+P(o.trap)[0]:""}${below?`<br>Juste en dessous : ${byId[below].fr} · juste au-dessus : ${above?byId[above].fr:"—"}`:above?`<br>Juste au-dessus : ${byId[above].fr}`:""}`,
+  `<b>${o.en}</b> (${o.enA}) = <b>${o.fr}</b> (${o.frA})<br>Army / RCAF: ${o.arEn} (${o.arA}) · ${P(o.cat)[1]}<br>${P(o.role)[1]}<br>Insignia: ${P(o.look)[1]}${o.trap?"<br>⚠️ "+P(o.trap)[1]:""}${below?`<br>Just below: ${byId[below].en} · just above: ${above?byId[above].en:"—"}`:above?`<br>Just above: ${byId[above].en}`:""}`])}
+function intent39(q){const nq=" "+norm(q)+" ";
+ // open a page
+ const op=nq.match(/^\s*(ouvre|ouvrir|open|go to|aller a|va a|montre moi|show me)\s+(.+?)\s*$/);
+ if(op){const t=norm(op[2]);const k=Object.keys(TABS).find(k=>TABS[k].some(x=>norm(x).replace(/[^a-z ]/g,"").trim()&&t.includes(norm(x).replace(/[^a-z ]/g,"").trim())));if(k)return {html:L([`J'ouvre <b>${TABS[k][0]}</b>.`,`Opening <b>${TABS[k][1]}</b>.`]),go:{v:k},auto:true,conf:1}}
+ // ranks
+ const rs=ranksIn39(q);
+ if(rs.length>=2&&/(plus haut|plus eleve|superieur|higher|senior|outrank|compar|ou | or |vs|versus|difference|entre)/.test(nq)){const a=rs[0],b=rs[1],oa=ordOf39(a),ob=ordOf39(b);
+  if(oa&&ob){const nmA=r=>EN()?r.o.en:r.o.fr,res=oa===ob?L([`<b>${a.o.fr}</b> et <b>${b.o.fr}</b> sont au <b>même niveau</b> (grades équivalents).`,`<b>${a.o.en}</b> and <b>${b.o.en}</b> are the <b>same level</b> (equivalent ranks).`]):(()=>{const hi=oa>ob?a:b,lo=oa>ob?b:a;return L([`<b>${hi.o.fr}</b> est plus élevé que <b>${lo.o.fr}</b>.`,`<b>${hi.o.en}</b> is senior to <b>${lo.o.en}</b>.`])})();
+   const both=(oa>=10)!==(ob>=10)?"<br>"+L(["Rappel : tout officier, même Aspm, a préséance sur tout militaire du rang.","Reminder: every officer, even a Naval Cadet, is senior to every NCM."]):"";
+   return {html:res+both+"<hr style='border:0;border-top:1px solid var(--line);margin:8px 0'>"+rankCard39(a)+"<br><br>"+rankCard39(b),go:{v:"order"},conf:1,topic:nmA(a)+" "+nmA(b)}}}
+ if(rs.length>=1){const gen=new Set(tok39("equivalent armee army aviation rcaf arc insigne insignia grade rank role quoi what who qui signifie mean meaning definition abreviation abbreviation officier officer militaire rang ncm classe class marine navy navale naval difference entre plus haut haute bas eleve senior higher lower junior"));
+  const rn=new Set(rs.flatMap(r=>r.ns.flatMap(n=>tok39(n)))),left=tok39(q).filter(t=>!gen.has(t)&&!rn.has(t));
+  if(left.length){const hit=search39(q,3),card=rankCard39(rs[0]);return {html:L([`Voici ce que NavalOS sait sur ce grade. Pour « ${left.join(" ")} », ce n'est pas dans l'app : je cherche en ligne 👇`,`Here's what NavalOS knows about this rank. For “${left.join(" ")}”, it isn't in the app: searching online 👇`])+"<br><br>"+card,go:{v:rs[0].svc==="navy"?"learn":"other"},low:true,rel:hit.slice(0,2),conf:0.5,topic:EN()?rs[0].o.en:rs[0].o.fr}}
+  return {html:rankCard39(rs[0])+(rs[1]?"<br><br>"+rankCard39(rs[1]):""),go:{v:rs[0].svc==="navy"?"learn":"other"},conf:1,topic:EN()?rs[0].o.en:rs[0].o.fr}}
+ // flags
+ const fm=nq.match(/(pavillon|flag|drapeau)s?\s+([a-z])\b/)||nq.match(/(pavillon|flag|drapeau)s?\s+(alfa|alpha|bravo|charlie|delta|echo|foxtrot|golf|hotel|india|juliett?|kilo|lima|mike|november|oscar|papa|quebec|romeo|sierra|tango|uniform|victor|whiskey|x-?ray|yankee|zulu)\b/);
+ if(fm){let k=fm[2].length===1?fm[2].toUpperCase():Object.keys(FLAGS).find(x=>norm(FLAGS[x][0]).replace("alpha","alfa").startsWith(fm[2].replace("alpha","alfa").slice(0,4)));
+  if(k&&FLAGS[k])return {html:L([`<b>Pavillon ${k} (${FLAGS[k][0]})</b> : ${FLAGS[k][1][0]}`,`<b>Flag ${k} (${FLAGS[k][0]})</b>: ${FLAGS[k][1][1]}`]),go:{v:"navy"},conf:1,topic:"pavillon flag "+k}}
+ // ship vocabulary
+ const words=tok39(q),cue=/(c ?est quoi|qu ?est-ce|qu est ce|what is|what s|whats|define|definition|veut dire|mean|signifie|c est quoi)/.test(nq);if(cue||words.length<=1){for(const v of SHIP_VOCAB){const names=[v[0]].concat(v[1].split("/")).map(x=>norm(x).trim()).filter(Boolean);if(names.some(n=>nq.includes(" "+n+" ")||nq.includes(" la "+n+" ")||nq.includes(" le "+n+" ")))return {html:L([`<b>${v[1]}</b> (${v[0]}) : ${v[2]}`,`<b>${v[0]}</b> (${v[1]}): ${v[3]}`]),go:{v:"navy"},conf:1,topic:v[0]+" "+v[1]}}}
+ return null}
+
+// 4) The tutor's answer: direct answer, or best NavalOS passages, + proactive next steps
+function answer39(q){const it=intent39(q);const hits=search39(q,4);
+ if(it){it.rel=hits.filter(h=>!it.html.includes(h.title[0])).slice(0,2);return it}
+ const cutA=s=>s.length>500?s.slice(0,500).replace(/\s\S*$/,"")+"…":s;
+ if(!hits.length||hits[0].score<2||hits[0].cov<0.5||(hits[0].nb>=2&&hits[0].cov<0.75)){const h0=hits[0],near=h0&&h0.score>=6?`<br><br><span class="muted">${U(["Le plus proche dans NavalOS :","Closest in NavalOS:"])}</span><br><b>${U(h0.title)}</b><br>${L([cutA(h0.fr),cutA(h0.en)])}`:"";
+  return {html:L(["Je n'ai pas de réponse sûre à ça dans NavalOS. Je cherche en ligne pour toi 👇 et tu peux demander à une IA en un clic.","I don't have a reliable answer to that in NavalOS. I'm searching online for you 👇 and you can ask an AI in one tap."])+near,low:true,go:near?h0.go:null,rel:hits.slice(near?1:0,3),conf:0,topic:h0?h0.title[0]:q}}
+ const h=hits[0],cut0=s=>s.length>700?s.slice(0,700).replace(/\s\S*$/,"")+"…":s,cut=(s,t)=>cut0(s.startsWith(t)?s.slice(t.length).replace(/^\s*/,""):s);
+ return {html:`<b>${U(h.title)}</b><br>${L([cut(h.fr,h.title[0]),cut(h.en,h.title[1])])}`,go:h.go,rel:hits.slice(1,4),conf:Math.min(1,h.score/6),topic:h.title[0]}}
+function prompt39(q,forAI){const ctx=search39(q,3).map(d=>"- "+(EN()?d.en:d.fr).slice(0,350)).join("\n");
+ return EN()?`${q}\n\n(Context: I'm a Royal Canadian Navy Naval Reserve recruit. Answer clearly and simply, cite official Canadian sources when possible (canada.ca, forces.ca).${ctx&&forAI?"\nNotes from my study app NavalOS:\n"+ctx:""})`
+  :`${q}\n\n(Contexte : je suis une recrue de la Réserve navale de la Marine royale canadienne. Réponds en français, clairement et simplement, en citant des sources officielles canadiennes si possible (canada.ca, forces.ca).${ctx&&forAI?"\nNotes de mon application d'étude NavalOS :\n"+ctx:""})`}
+function online39(q){const e=encodeURIComponent,full=e(prompt39(q,true)),short=e(prompt39(q,false)),gq=e(q+" site:canada.ca OR site:forces.ca");
+ const A=(href,label,title)=>`<a class="btn" href="${href}" target="_blank" rel="noopener noreferrer" title="${title||""}" style="text-decoration:none;font-size:13.5px;padding:5px 10px">${label} ↗</a>`;
+ return `<div class="row" style="margin:8px 0 0;gap:6px"><button class="btn gold wk39" data-q="${esc29(q)}" style="font-size:13.5px;padding:5px 10px">🌐 ${U(["Wikipédia","Wikipedia"])}</button>${A("https://www.perplexity.ai/search?q="+short,"Perplexity",U(["Recherche web avec sources","Web search with sources"]))}${A("https://chatgpt.com/?q="+full,"ChatGPT")}${A("https://claude.ai/new?q="+full,"Claude")}${A("https://copilot.microsoft.com/?q="+full,"Copilot")}${A("https://www.google.com/search?q="+gq,U(["Sources officielles","Official sources"]))}</div>`}
+async function wiki39(q){const lang=EN()?"en":"fr",base=`https://${lang}.wikipedia.org`,ctl=new AbortController(),tm=setTimeout(()=>ctl.abort(),9000);
+ try{const kw=tok39(q).length?norm(q).split(/[^a-z0-9]+/).filter(w=>w&&!STOP39.has(w)).join(" "):q;
+  const s=await fetch(`${base}/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(kw)}&srlimit=3&format=json&origin=*`,{signal:ctl.signal,referrerPolicy:"no-referrer"}).then(r=>r.json());
+  const hs=(s.query&&s.query.search)||[];if(!hs.length)return {none:true};
+  const t=hs[0].title,sum=await fetch(`${base}/api/rest_v1/page/summary/${encodeURIComponent(t.replace(/ /g,"_"))}`,{signal:ctl.signal,referrerPolicy:"no-referrer"}).then(r=>r.json());
+  return {title:sum.title||t,text:sum.extract||"",url:(sum.content_urls&&sum.content_urls.desktop&&sum.content_urls.desktop.page)||`${base}/wiki/${encodeURIComponent(t)}`,more:hs.slice(1).map(h=>({t:h.title,u:`${base}/wiki/${encodeURIComponent(h.title.replace(/ /g,"_"))}`}))}}
+ catch(e){return {err:true}}finally{clearTimeout(tm)}}
+async function wikiInto39(btn){const q=btn.dataset.q,box=document.createElement("div");box.className="wk39box";box.style.cssText="margin-top:8px;border-left:3px solid var(--gold);padding:6px 10px;background:var(--surface);border-radius:8px";
+ box.textContent=U(["Recherche sur Wikipédia…","Searching Wikipedia…"]);btn.closest(".b39").appendChild(box);btn.disabled=true;const w=await wiki39(q);
+ if(w.err){box.textContent=U(["Recherche en ligne impossible ici (pas d'Internet ou bloquée). Essaie un des boutons IA.","Online search isn't possible here (offline or blocked). Try one of the AI buttons."]);return}
+ if(w.none){box.textContent=U(["Rien trouvé sur Wikipédia. Essaie Perplexity ou une IA.","Nothing found on Wikipedia. Try Perplexity or an AI."]);return}
+ box.innerHTML=`<b>${esc29(w.title)}</b> <span class="muted" style="font-size:12px">· Wikipédia (${U(["source non officielle","unofficial source"])})</span><div style="margin-top:4px">${esc29(w.text)}</div><div style="margin-top:4px;font-size:13.5px"><a href="${esc29(w.url)}" target="_blank" rel="noopener noreferrer">${U(["Lire l'article","Read the article"])} ↗</a>${w.more.map(m=>` · <a href="${esc29(m.u)}" target="_blank" rel="noopener noreferrer">${esc29(m.t)}</a>`).join("")}</div>`;
+ const m=T39.msgs.slice().reverse().find(x=>x.q===q&&x.role==="bot");if(m)m.wiki=box.innerHTML}
+
+// 5) Mini quiz on the topic (proactive check of understanding)
+function quiz39(topic){const pool=FACTS.concat(NAVQ,MANQ,FDQ,typeof LTQ!=="undefined"?LTQ:[]).filter(f=>f&&f.q&&f.o&&f.o.length>1);
+ let pick=[];if(topic){const qt=expand39(topic);pick=pool.map(f=>{const t=new Set(tok39(pair(f.q).join(" ")+" "+pair(f.e||"").join(" ")));let s=0;qt.forEach((w,k)=>{if(t.has(k))s+=w});return [s+Math.random()*0.1,f]}).filter(x=>x[0]>=1).sort((a,b)=>b[0]-a[0]).slice(0,3).map(x=>x[1])}
+ while(pick.length<3){const f=pool[Math.floor(Math.random()*pool.length)];if(!pick.includes(f))pick.push(f)}
+ T39.quiz={qs:pick.map(f=>{const opts=f.o.map((o,i)=>({o,ok:i===0})).sort(()=>Math.random()-.5);return {f,opts,picked:null}}),i:0,score:0}}
+function quizHTML39(){const Z=T39.quiz;if(!Z)return"";if(Z.i>=Z.qs.length){const n=Z.qs.length;return `<div class="panel" id="qz39"><b>🎯 ${U(["Résultat","Score"])} : ${Z.score}/${n}</b><p style="margin:6px 0">${Z.score===n?L(["Parfait ! Tu maîtrises. Veux-tu un autre sujet ?","Perfect! You've got it. Want another topic?"]):L(["Bien essayé : relis les explications ci-dessus, puis refais un essai.","Good try: reread the explanations above, then try again."])}</p><div class="row" style="margin:0"><button class="btn gold" id="qzAgain39">${U(["Encore 3 questions","3 more questions"])}</button><button class="btn" id="qzEnd39">${U(["Fermer","Close"])}</button></div></div>`}
+ const q=Z.qs[Z.i],f=q.f;return `<div class="panel" id="qz39"><div class="muted" style="font-size:13px">🎯 ${U(["Question","Question"])} ${Z.i+1}/${Z.qs.length}</div><b>${L(pair(f.q))}</b><div style="display:grid;gap:6px;margin-top:8px">${q.opts.map((o,i)=>`<button class="btn qo39" data-i="${i}" ${q.picked!==null?"disabled":""} style="text-align:left;${q.picked!==null&&o.ok?"border-color:var(--ok);background:rgba(46,139,87,.15)":""}${q.picked===i&&!o.ok?"border-color:var(--bad);background:rgba(198,40,40,.12)":""}">${L(pair(o.o))}</button>`).join("")}</div>
+ ${q.picked!==null?`<div class="explain" style="margin-top:8px">${q.opts[q.picked].ok?"✅ ":"❌ "}${f.e?L(pair(f.e)):""}</div><div class="row"><button class="btn gold" id="qzNext39">${U(["Suivante","Next"])} →</button></div>`:""}</div>`}
+
+// 6) Chat
+const SUG39=[["Qui est plus haut : Ltv ou Capc ?","Who is senior: Lt(N) or LCdr?"],["Quelle est la différence entre Mat 1 et Matc ?","What's the difference between S1 and MS?"],["Que veut dire le pavillon Bravo ?","What does flag Bravo mean?"],["C'est quoi la poupe ?","What is the stern?"],["Comment saluer sur le quarterdeck ?","How do I salute on the quarterdeck?"],["Explique-moi les petits quarts","Explain the dog watches"],["Comment faire le rapport du senior ?","How do I give the senior report?"],["Quelles sont les frégates de classe Halifax ?","What are the Halifax-class frigates?"],["Que fait un manœuvrier ?","What does a Boatswain do?"],["Quelles sont les règles pour la barbe ?","What are the beard rules?"],["Comment écrire la date dans une note de service ?","How do I write the date in a memo?"],["Équivalent Armée de Maître de 2e classe","Army equivalent of Petty Officer 2nd Class"],["Qu'est-ce que le harcèlement selon les FAC ?","What is harassment under CAF rules?"],["Comment traduire mon expérience militaire sur un CV ?","How do I translate military experience on a résumé?"]];
+function ask39(q){q=String(q||"").trim();if(!q)return;T39.last=q;T39.msgs.push({role:"user",text:q});const a=answer39(q);a.role="bot";a.q=q;T39.msgs.push(a);
+ if(T39.msgs.length>40)T39.msgs=T39.msgs.slice(-40);
+ if(a.auto&&a.go){openGo39(a.go);return}
+ viewTutor();if(a.low){const b=[...document.querySelectorAll(".wk39")].pop();if(b)wikiInto39(b)}}
+function openGo39(g){if(!g)return;if(g.v==="lesson"&&g.k){curLesson=g.k;LQ={};go("lesson");return}if(g.v==="rep"&&g.r){repSel=g.r;go("rep");return}go(g.v)}
+const goLabel39=g=>!g?"":g.v==="lesson"?U(["Ouvrir la leçon","Open the lesson"]):U(["Ouvrir","Open"])+" : "+U(TABS[g.v]||["NavalOS","NavalOS"]);
+function bot39(m,i,last){const plain=(m.html||"").replace(/<br\s*\/?>/g,". ").replace(/<[^>]+>/g," ").replace(/\s+/g," ");
+ return `<div class="b39" data-i="${i}" style="justify-self:start;max-width:94%;background:var(--surface2);border-radius:12px;padding:10px 12px;line-height:1.45">${m.html}
+ ${m.rel&&m.rel.length?`<div style="margin-top:8px;font-size:13.5px"><span class="muted">${U(["Voir aussi","See also"])} :</span> ${m.rel.map(r=>`<button class="btn rl39" data-t="${esc29(U(r.title))}" style="font-size:12.5px;padding:3px 8px;margin:2px">${esc29(U(r.title)).slice(0,70)}</button>`).join("")}</div>`:""}
+ <div class="row" style="margin:8px 0 0;gap:6px">${m.go&&!m.auto?`<button class="btn go39" data-i="${i}" style="font-size:13.5px;padding:5px 10px">📖 ${goLabel39(m.go)}</button>`:""}${canSpeak?`<button class="btn sp39" data-t="${esc29(plain)}" style="font-size:13.5px;padding:5px 10px">🔊</button>`:""}<button class="btn qz39" data-t="${esc29(m.topic||m.q||"")}" style="font-size:13.5px;padding:5px 10px">🎯 ${U(["Teste-moi","Quiz me"])}</button></div>
+ ${last||m.low?online39(m.q||""):""}${m.wiki?`<div class="wk39box" style="margin-top:8px;border-left:3px solid var(--gold);padding:6px 10px;background:var(--surface);border-radius:8px">${m.wiki}</div>`:""}</div>`}
+function greet39(){const t=typeof myTradeObj==="function"&&myTradeObj(),day=Math.floor(Date.now()/864e5),sug=[0,1,2,3].map(k=>SUG39[(day*3+k*5)%SUG39.length]);
+ const f=FACTS.concat(NAVQ)[day%FACTS.concat(NAVQ).length],P=pair;
+ return `<div class="b39" style="background:var(--surface2);border-radius:12px;padding:10px 12px;max-width:94%">${L(["👋 Salut ! Je suis ton tuteur NavalOS. Pose-moi n'importe quelle question : grades, pavillons, coutumes, navires, rapports, lettres, CV, inspection… Je réponds tout de suite avec le contenu de NavalOS, même hors ligne. Si je ne sais pas, je cherche en ligne et je prépare ta question pour une IA.","👋 Hi! I'm your NavalOS tutor. Ask me anything: ranks, flags, customs, ships, reports, letters, résumé, inspection… I answer instantly from NavalOS, even offline. If I don't know, I search online and prepare your question for an AI."])}
+ ${t?`<p style="margin:8px 0 0">${L([`🎯 Pour ton métier (${t.fr}) : commence par ton plan dans Révision, ou demande-moi « Que fait un ${t.fr.split(" /")[0].toLowerCase()} ? »`,`🎯 For your trade (${t.en}): start with your plan in Review, or ask me “What does a ${t.en} do?”`])}</p>`:""}
+ <div class="explain" style="margin-top:8px">💡 <b>${U(["Le savais-tu ?","Did you know?"])}</b> ${L([P(f.q)[0]+" → "+P(f.o[0])[0],P(f.q)[1]+" → "+P(f.o[0])[1]])}</div>
+ <div class="muted" style="margin-top:8px;font-size:13px">${U(["Essaie :","Try:"])}</div><div class="row" style="margin-top:2px;gap:6px">${sug.map(s=>`<button class="btn ex39" style="font-size:13.5px;padding:5px 10px">${esc29(U(s))}</button>`).join("")}<button class="btn gold qz39" data-t="" style="font-size:13.5px;padding:5px 10px">🎯 ${U(["Teste-moi (3 questions)","Quiz me (3 questions)"])}</button></div></div>`}
+function brainView39(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ $("#view").innerHTML=`<h2>${L(["Tuteur ✨","Tutor ✨"])}</h2>
+ <p class="lead">${L(["Ton tuteur répond instantanément avec tout le contenu de NavalOS (même hors ligne), te propose des quiz, et va en ligne quand il faut : Wikipédia en direct, ou ta question préparée pour Perplexity, ChatGPT, Claude ou Copilot en un clic.","Your tutor answers instantly from all of NavalOS (even offline), quizzes you, and goes online when needed: live Wikipedia, or your question prepared for Perplexity, ChatGPT, Claude or Copilot in one tap."])}</p>
+ <div class="panel" id="tChat39" style="display:grid;gap:10px">${greet39()}${T39.msgs.map((m,i)=>m.role==="user"?`<div style="justify-self:end;max-width:88%;background:var(--gold);color:#1A1405;border-radius:12px;padding:10px 12px;white-space:pre-wrap">${esc29(m.text)}</div>`:bot39(m,i,i===T39.msgs.length-1)).join("")}</div>
+ ${quizHTML39()}
+ <div class="row" style="position:sticky;bottom:0;background:var(--bg);padding:8px 0;z-index:2"><textarea id="tIn39" rows="2" placeholder="${U(["Pose ta question… (ex. Qui est plus haut : Ltv ou Capc ?)","Ask your question… (e.g. Who is senior: Lt(N) or LCdr?)"])}" style="flex:1 1 240px;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font:15px var(--sans)"></textarea>
+ ${SR?`<button class="btn" id="mic39" title="${U(["Parler","Speak"])}">🎤</button>`:""}<button class="btn gold" id="tGo39">${U(["Demander","Ask"])}</button>${T39.msgs.length?`<button class="btn" id="tClr39">${U(["Effacer","Clear"])}</button>`:""}</div>
+ <p class="muted" style="font-size:12.5px">${L(["Les réponses viennent de NavalOS ; il peut se tromper : ton cours, ton cahier et ton instructeur font foi. Les boutons en ligne envoient ta question au service choisi (Wikipédia, IA) : n'y mets jamais d'information personnelle, PROTÉGÉE ou classifiée. La conversation n'est pas enregistrée.","Answers come from NavalOS; it can be wrong: your course, binder and instructor are the authority. The online buttons send your question to the chosen service (Wikipedia, AI): never include personal, PROTECTED or classified information. The chat isn't saved."])}</p>
+ <details class="panel" style="margin-top:6px"><summary style="cursor:pointer"><b>${U(["Copilot avec ton compte MDN/FAC","Copilot with your DND/CAF account"])}</b></summary>${copilotBox()}</details>`;
+ bind39();if(typeof bindCopilot==="function")bindCopilot(()=>($("#tIn39")&&$("#tIn39").value)||T39.last||"");
+ const ch=$("#tChat39");if(T39.msgs.length&&ch){const lastB=ch.lastElementChild;if(lastB)lastB.scrollIntoView({block:"nearest"})}}
+function bind39(){const go2=()=>{const v=$("#tIn39").value;$("#tIn39").value="";ask39(v)};
+ $("#tGo39").onclick=go2;$("#tIn39").onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();go2()}};
+ if($("#tClr39"))$("#tClr39").onclick=()=>{T39.msgs=[];T39.quiz=null;viewTutor()};
+ document.querySelectorAll(".ex39").forEach(b=>b.onclick=()=>ask39(b.textContent));
+ document.querySelectorAll(".rl39").forEach(b=>b.onclick=()=>ask39(b.dataset.t));
+ document.querySelectorAll(".go39").forEach(b=>b.onclick=()=>openGo39(T39.msgs[+b.dataset.i].go));
+ document.querySelectorAll(".sp39").forEach(b=>b.onclick=()=>speak(b.dataset.t,EN()?"en-CA":"fr-CA"));
+ document.querySelectorAll(".wk39").forEach(b=>b.onclick=()=>wikiInto39(b));
+ document.querySelectorAll(".qz39").forEach(b=>b.onclick=()=>{quiz39(b.dataset.t);viewTutor();const z=$("#qz39");if(z)z.scrollIntoView({block:"center"})});
+ document.querySelectorAll(".qo39").forEach(b=>b.onclick=()=>{const Z=T39.quiz,q=Z.qs[Z.i];if(q.picked!==null)return;q.picked=+b.dataset.i;if(q.opts[q.picked].ok)Z.score++;viewTutor();const z=$("#qz39");if(z)z.scrollIntoView({block:"center"})});
+ if($("#qzNext39"))$("#qzNext39").onclick=()=>{T39.quiz.i++;viewTutor();const z=$("#qz39");if(z)z.scrollIntoView({block:"center"})};
+ if($("#qzAgain39"))$("#qzAgain39").onclick=()=>{quiz39(T39.last);viewTutor()};if($("#qzEnd39"))$("#qzEnd39").onclick=()=>{T39.quiz=null;viewTutor()};
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(SR&&$("#mic39"))$("#mic39").onclick=()=>{try{const r=new SR();r.lang=EN()?"en-CA":"fr-CA";r.interimResults=false;r.maxAlternatives=1;$("#mic39").textContent="⏺";r.onresult=e=>{const t=e.results[0][0].transcript;$("#tIn39").value=t;ask39(t)};r.onend=()=>{const m=$("#mic39");if(m)m.textContent="🎤"};r.onerror=()=>{const m=$("#mic39");if(m)m.textContent="🎤"};r.start()}catch(e){}}}
+
+// 7) Smarter Claude tutor on claude.ai (answers almost anything, proactive), + online row
+tutorPrompt=function(question){const rk=ranksIn39(question).slice(0,3).map(r=>"- "+rankCard39(r).replace(/<br\s*\/?>/g,". ").replace(/<[^>]+>/g,"").replace(/\s+/g," ")),ctx=rk.concat(retrieve(question,8).map(d=>"- "+(EN()?d.en:d.fr).slice(0,700))).join("\n"),lang=EN()?"English":"French (Québec, tutoiement)";
+ return `You are the NavalOS Tutor: an expert, warm and proactive study coach for Canadian Armed Forces members, mainly Royal Canadian Navy Naval Reserve recruits (École navale, Québec; PO/OREN 001). You can help with almost any question: ranks, customs, seamanship, ships, navy history, drill, dress and inspection, reports and military writing, CAF careers and trades, résumés, fitness, study methods, French/English, and general knowledge. Answer in ${lang}.
+Method:
+1. If the NavalOS excerpts below cover the question, use them first.
+2. Otherwise answer from your general knowledge, and say briefly that it's general knowledge to confirm with official sources (canada.ca, forces.ca, DAOD, QR&O, unit orders, the course binder, the instructor).
+3. Be accurate. If unsure, say so. Never invent regulations, numbers, phone numbers, names or dates.
+4. Format: the direct answer in the first sentence, then the key points (short list if useful), a memory trick when it helps, and END with one proactive line: a quick check question for the recruit OR the next topic worth studying. Under 220 words unless asked for more. No markdown headings.
+5. Never ask for personal information. If a question involves classified or PROTECTED information, refuse that part and point to the chain of command.
+NavalOS excerpts:
+${ctx||"(nothing relevant found)"}`};
+
+const _viewTutor39=viewTutor;viewTutor=function(){
+ if(SAMPLE){_viewTutor39();const q=($("#tIn")&&$("#tIn").value)||(TUT.msgs.filter(m=>m.role==="user").slice(-1)[0]||{}).content||"";
+  $("#view").insertAdjacentHTML("beforeend",`<div class="panel b39" style="margin-top:12px"><b>🌐 ${U(["Aller plus loin en ligne","Go further online"])}</b><p class="muted" style="font-size:13px;margin:4px 0">${L(["Envoie ta dernière question, toute préparée, à un autre service.","Send your last question, ready to go, to another service."])}</p>${online39(q||U(["Marine royale canadienne","Royal Canadian Navy"]))}</div>`);
+  document.querySelectorAll(".wk39").forEach(b=>b.onclick=()=>wikiInto39(b));return}
+ brainView39()};
+// From a lesson or a missed review card, the tutor explains (everyone, not only claude.ai)
+const _viewLesson39=viewLesson;viewLesson=function(){_viewLesson39();if(SAMPLE)return;const e=EO_LIST.find(x=>x.k===curLesson);if(!e)return;
+ $("#view").insertAdjacentHTML("beforeend",`<div class="row"><button class="btn" id="askL39">🧭 ${U(["Demander au tuteur","Ask the tutor"])}</button></div>`);
+ $("#askL39").onclick=()=>{go("tutor");ask39(U([`OCOM ${e.k} ${e.t[0]}`,`EO ${e.k} ${e.t[1]}`]))}};
+const _viewReview39=viewReview;viewReview=function(){_viewReview39();if(SAMPLE||!RV||RV.picked===null||RV.i>=RV.queue.length)return;const q=RV.q;if(RV.picked===q.ans)return;
+ const fb=$("#fb");if(!fb||$("#askR39"))return;fb.insertAdjacentHTML("beforeend",`<div class="row" style="margin-top:6px"><button class="btn" id="askR39">🧭 ${U(["Explique-moi autrement","Explain it differently"])}</button></div>`);
+ $("#askR39").onclick=()=>{const qq=L(q.q).replace(/<[^>]+>/g," ").replace(/\s+/g," ");go("tutor");ask39(qq)}};
 
 /* ============ ROUTER ============ */
 const VIEWS={about:viewAbout,fb:viewFb,more:viewMore,insp:viewInsp,rep:viewReports,fit:viewFit,path:viewPath,drill:viewDrill,first:viewFirst,tutor:viewTutor,audio:viewAudio,review:viewReview,exam:viewExam,other:viewOther,lesson:viewLesson,learn:viewLearn,table:viewTable,flash:viewFlash,quiz:viewQuiz,order:viewOrder,course:viewCourse,navy:viewNavy,man:viewMan,src:viewSrc};
