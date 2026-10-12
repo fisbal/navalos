@@ -182,6 +182,7 @@ ol.pts li::before{content:counter(p);position:absolute;left:14px;top:9px;font-fa
 .lnk29,.skp29{margin:6px 0 4px;padding-left:20px}.lnk29 li,.skp29 li{margin:4px 0}.lnk29 a{color:var(--gold)}
 .sel29{width:100%;max-width:480px;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font:15px var(--sans)}
 .welc29,.plan29{border-color:var(--gold)}
+.d33card{background:#fff;color:#0E1828;border-radius:14px;overflow:hidden;border:1px solid var(--line);margin:10px 0;box-shadow:0 4px 14px rgba(0,0,0,.08)}.d33band{background:linear-gradient(90deg,#0B1B33,#16243B);color:#fff;padding:10px 14px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:14px}.d33band span{color:#C9A43A;font-weight:700}.d33cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}.d33col{padding:12px 14px}.d33col+.d33col{border-top:1px solid #E3E7ED}@media(min-width:760px){.d33col+.d33col{border-top:0;border-left:1px solid #E3E7ED}}.d33col h4{margin:0 0 6px;font-size:18px}.d33col.ok h4{color:#2E8B57}.d33col.no h4{color:#C62828}.d33rule{font-size:13.5px;line-height:1.45;color:#3B4656;background:#F6F8FB;border-left:4px solid #C9A43A;padding:8px 10px;border-radius:6px;margin:4px 0 10px}.d33grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}figure.d33t{margin:0;text-align:center}figure.d33t svg{width:100%;display:block}figure.d33t figcaption{font-size:12.5px;margin-top:3px;color:#3B4656;font-weight:600;line-height:1.25}
 .segno{width:100%;height:auto}
 @media print{.tabbar,.top .tools,#pgbar,#storeWarn,.row,button,.tabarrow,#toast{display:none!important}body{background:#fff!important;color:#000!important}.panel,.ocard{break-inside:avoid;box-shadow:none!important}a{color:#000}.wrap{max-width:none}}
 </style>
@@ -658,9 +659,10 @@ const LESSONS={
 
 /* ============ STORAGE ============ */
 const KEY="navalos.v1";
-const APP_VERSION="3.2",CONTENT_DATE="2026-10-11";
+const APP_VERSION="3.3",CONTENT_DATE="2026-10-11";
 const ONLINE_URL="https://claude.ai/artifact/4F2zWfYVFgg7cK4XfHdmkA";
-const CHANGELOG=[["3.2","2026-10-12",["Inspection illustrée : silhouette de la tête aux pieds avec 10 points à toucher, et les affiches de l'unité (cheveux autorisés et non autorisés, accessoires, cérémonies, pilosité faciale, ordres de tenue) à agrandir d'un toucher.","Illustrated inspection: head-to-toe figure with 10 tappable points, plus the unit posters (allowed and not allowed hair, accessories, ceremonies, facial hair, orders of dress) that enlarge with a tap."]],
+const CHANGELOG=[["3.3","2026-10-12",["Inspection : les affiches de la politique sur la tenue sont redessinées en illustrations nettes et bilingues (cheveux, accessoires, cérémonies, pilosité faciale), avec des visages variés. L'affiche originale reste accessible d'un toucher.","Inspection: the dress policy posters are redrawn as crisp bilingual illustrations (hair, accessories, ceremonies, facial hair), with diverse faces. The original poster is still one tap away."]],
+ ["3.2","2026-10-12",["Inspection illustrée : silhouette de la tête aux pieds avec 10 points à toucher, et les affiches de l'unité (cheveux autorisés et non autorisés, accessoires, cérémonies, pilosité faciale, ordres de tenue) à agrandir d'un toucher.","Illustrated inspection: head-to-toe figure with 10 tappable points, plus the unit posters (allowed and not allowed hair, accessories, ceremonies, facial hair, orders of dress) that enlarge with a tap."]],
  ["3.1","2026-10-12",["Grades : 4 jeux pour mémoriser plus vite (chrono 60 s, paires, équivalences, qui est plus haut ?) avec les grades de la Marine, de l'Armée et de l'ARC ; les onglets Cartes, Quiz et Classement restent toujours visibles. Rapports : 9 lettres administratives selon les règles de rédaction des FAC (congé pour raisons familiales, entrevue avec le commandant, cours, note explicative, changement de renseignements, libération, mutation, remboursement, remerciement) et les règles de rédaction. Demande de congé : matricule en cases (A12 345 678), dates en AAAA / MM / JJ, initiales, n° de dossier, enregistrement en fichier texte.","Ranks: 4 games to memorize faster (60-second sprint, pairs, equivalents, who's senior?) with Navy, Army and RCAF ranks; the Flashcards, Quiz and Ranking tabs always stay visible. Reports: 9 administrative letters following CAF writing rules (compassionate leave, CO interview, course, explanation, change of personal information, release, transfer, reimbursement, appreciation) plus the writing rules. Leave request: service number in boxes (A12 345 678), dates as YYYY / MM / DD, initials, file number, save as text file."]],
  ["3.0.3","2026-10-11",["À la première ouverture, NavalOS s'ouvre sur la page de présentation (À propos), avec un bouton Commencer. Ensuite, l'app s'ouvre directement sur ta révision. L'onglet À propos est maintenant le premier.","On first launch, NavalOS opens on the introduction page (About), with a Get started button. After that, the app opens straight to your review. The About tab now comes first."]],
  ["3.0.2","2026-10-11",["Remarques : envoi direct par Gmail ou Outlook (travail ou personnel), même sans application de courriel installée. Correctif d'affichage de la version installable.","Feedback: send directly through Gmail or Outlook (work or personal), even without an email app installed. Display fix for the installable version."]],
@@ -2997,6 +2999,123 @@ const _viewInsp32=viewInsp;viewInsp=function(){_viewInsp32();
  after(find(/ordres de tenue|orders of dress/i),`<div style="margin-top:10px">${dFig(["dress-ord-cer","dress-ord-mess","dress-ord-serv","dress-ord-ops","dress-ord-mat"],["Source : affiche de l'unité, CF Orders of Dress (Instructions sur la tenue des FAC, A-AD-265-000/AG-001).","Source: unit poster, CF Orders of Dress (CAF Dress Instructions, A-AD-265-000/AG-001)."])}</div>`);
  document.querySelectorAll("#view .zoom32").forEach(i=>i.onclick=()=>zoom32(i.src));
  const bindPts=()=>document.querySelectorAll("#ifig32 .ipt").forEach(e=>e.onclick=()=>{const n=+e.dataset.n;INSP_SEL=INSP_SEL===n?null:n;const f=$("#ifig32");f.outerHTML=inspFigure();bindPts()});bindPts()};
+
+
+/* ============ v3.3 : illustrations vectorielles de la politique sur la tenue ============ */
+/* ---- NavalOS dress illustrations (flat vector, diverse portraits) ---- */
+const SKINS=[["#F3D6BC","#E2B997"],["#E9C4A0","#D4A57F"],["#C99872","#B07E59"],["#A8714C","#8E5B39"],["#7A4B2E","#653C23"],["#5A3622","#472A1A"]];
+const HAIRC={blk:"#16110E",dbr:"#2B211B",brn:"#5A3A22",bld:"#C9A35A",red:"#8E3B1E",gry:"#8C8C8C"};
+const NV="#16243B",NV2="#0E1828",GD="#C9A43A";
+function dPortrait(o){o=Object.assign({sk:1,hc:"dbr",hair:"short",beard:null,mous:null,head:null},o);
+ const [sk,sk2]=SKINS[o.sk],hc=HAIRC[o.hc]||o.hc,s=[];
+ // hair behind shoulders (long styles)
+ if(o.hair==="long"||o.hair==="cover")s.push(`<path d="M34 44c-4 28-2 52 6 74h40c8-22 10-46 6-74z" fill="${hc}"/>`);
+ if(o.hair==="pony")s.push(`<path d="M80 40c10 8 12 30 8 52-1 6-6 8-8 4 2-18 0-36-6-48z" fill="${hc}"/>`);
+ if(o.hair==="braid")s.push(`<path d="M78 46c8 10 8 24 6 44" stroke="${hc}" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M79 56l7 3M80 66l7 3M80 76l7 3M80 86l6 3" stroke="${hc}" stroke-width="2" opacity=".5"/><path d="M78 56l7-3M79 66l7-3M79 76l7-3" stroke="#000" stroke-width="1" opacity=".25"/>`);
+ // shoulders
+ s.push(`<path d="M16 124c4-24 22-33 44-35 22 2 40 11 44 35z" fill="${NV}"/><path d="M48 90l12 18 12-18" fill="#fff"/><path d="M57 94h6l-1 14h-4z" fill="#111"/><path d="M40 92l20 30 20-30" fill="none" stroke="${NV2}" stroke-width="2.5"/>`);
+ if(o.hair==="long")s.push(`<path d="M30 96c4-6 8-8 12-8l-2 26zM90 96c-4-6-8-8-12-8l2 26z" fill="${hc}"/>`);
+ s.push(`<rect x="52" y="74" width="16" height="18" rx="4" fill="${sk2}"/>`);
+ if(o.hair==="bun"||o.hair==="pins")s.push(`<circle cx="60" cy="20" r="10" fill="${hc}"/><path d="M53 17c4-3 10-3 14 0" stroke="#000" stroke-opacity=".25" stroke-width="1.5" fill="none"/>`);
+ if(o.hair==="messy")s.push(`<circle cx="60" cy="21" r="10" fill="${hc}"/><path d="M54 14c-6-6-10-2-12 2M66 13c5-6 10-3 12 1M62 11c0-6 4-8 7-8" stroke="${hc}" stroke-width="2" fill="none"/>`);
+ if(o.hair==="slip")s.push(`<ellipse cx="84" cy="64" rx="10" ry="12" fill="${hc}"/>`);
+ if(o.hair==="locs")s.push(`<ellipse cx="60" cy="19" rx="13" ry="10" fill="${hc}"/><path d="M50 16q5 6 0 10M56 12q5 8 0 14M63 12q5 8 0 14M70 16q4 5 0 9" stroke="#000" stroke-opacity=".35" stroke-width="1.6" fill="none"/>`);
+ s.push(`<ellipse cx="37" cy="52" rx="5" ry="8" fill="${sk2}"/><ellipse cx="83" cy="52" rx="5" ry="8" fill="${sk2}"/><ellipse cx="60" cy="50" rx="22" ry="27" fill="${sk}"/>`);
+ const cap=`<path d="M38 46c-1-16 9-25 22-25s23 9 22 25c-3-7-8-11-12-12-6 3-15 4-24 1-4 2-7 6-8 11z" fill="${hc}"/>`;
+ const sleek=`<path d="M38 48c-1-17 9-26 22-26s23 9 22 26c-4-9-12-13-22-13s-18 4-22 13z" fill="${hc}"/><path d="M48 26c6-2 18-2 24 0" stroke="#fff" stroke-opacity=".15" stroke-width="2" fill="none"/>`;
+ const H={short:cap,buzz:`<path d="M39 44c0-14 9-22 21-22s21 8 21 22c-5-6-12-9-21-9s-16 3-21 9z" fill="${hc}" opacity=".75"/>`,bald:"",
+  afro:`<path d="M34 46c-4-18 8-30 26-30s30 12 26 30c-4-8-10-12-26-12s-22 4-26 12z" fill="${hc}"/><path d="M40 30c3-3 6-4 9-4M70 26c3 1 6 3 8 6" stroke="#000" stroke-opacity=".3" stroke-width="2" fill="none"/>`,
+  bun:sleek,pins:sleek,pony:sleek,braid:sleek,messy:sleek,slip:sleek,locs:sleek,beretbun:sleek,
+  long:`<path d="M37 52c-2-20 9-30 23-30s25 10 23 30c-4-10-12-16-23-16s-19 6-23 16z" fill="${hc}"/>`,
+  cover:`<path d="M37 52c-2-20 9-30 23-30s25 10 23 30l-6 14c0-14-6-26-17-26-10 0-16 8-18 20 0 6 1 12 3 16l-6-6c-2-6-2-12-2-18z" fill="${hc}"/><path d="M44 40c4 10 4 20 2 30l10-6c2-10 0-20-4-26z" fill="${hc}"/>`,
+  fringe:`<path d="M37 52c-2-20 9-30 23-30s25 10 23 30c-2-4-4-6-6-6l-2 10c-4-4-8-6-15-6s-11 2-15 6l-2-10c-2 0-4 2-6 6z" fill="${hc}"/>`,
+  turban:`<path d="M36 44c0-18 11-28 24-28s24 10 24 28c-6-4-14-6-24-6s-18 2-24 6z" fill="#3A4A68"/><path d="M40 34c8-6 32-6 40 0M38 40c10-5 34-5 44 0" stroke="#55678C" stroke-width="2.5" fill="none"/>`,
+  hijab:`<path d="M34 50c0-20 11-32 26-32s26 12 26 32v40c-6 6-14 8-26 8s-20-2-26-8z" fill="#1C2433"/><ellipse cx="60" cy="54" rx="19" ry="23" fill="${sk}"/>`};
+ s.push(H[o.hair]||"");
+ if(o.hair==="pins")s.push(`<path d="M50 14l-10-8M70 14l10-8M60 10v-10" stroke="#C62828" stroke-width="2.4" stroke-linecap="round"/>`);
+ if(o.hair==="messy")s.push(`<path d="M40 52c-4 8-4 16-2 22M80 50c4 8 5 16 2 24" stroke="${hc}" stroke-width="2" fill="none"/>`);
+ if(o.head==="beret")s.push(`<path d="M34 38c2-12 16-18 30-17 14 1 24 7 26 16-6 5-14 6-24 5-12 0-24 0-32-4z" fill="#111"/><path d="M35 40c8 3 40 4 54-1" stroke="#000" stroke-width="3"/><circle cx="46" cy="33" r="4" fill="${GD}"/>`);
+ if(o.head==="cap")s.push(`<ellipse cx="60" cy="27" rx="27" ry="7" fill="#111"/><path d="M38 27c1-10 10-15 22-15s21 5 22 15z" fill="#111"/><path d="M42 30c8 5 28 5 36 0l-2 5c-8 3-24 3-32 0z" fill="#000"/><circle cx="60" cy="20" r="4" fill="${GD}"/>`);
+ const browc=o.hc==="gry"?"#777":hc;
+ if(o.hair!=="fringe"&&o.hair!=="cover")s.push(`<path d="M47 45h8M65 45h8" stroke="${browc}" stroke-width="2.4" stroke-linecap="round"/>`);
+ if(o.hair!=="cover")s.push(`<circle cx="51" cy="51" r="2.1" fill="#1a1a1a"/>`);s.push(`<circle cx="69" cy="51" r="2.1" fill="#1a1a1a"/><path d="M60 54v8h-3" stroke="${sk2}" stroke-width="2" fill="none" stroke-linecap="round"/>`);
+ const B={full:`<path d="M38 52c0 18 9 30 22 30s22-12 22-30c-3 6-6 9-9 10-4-2-8-3-13-3s-9 1-13 3c-3-1-6-4-9-10z" fill="${hc}"/>`,
+  short:`<path d="M38 54c1 15 9 25 22 25s21-10 22-25c-2 4-5 7-8 8-4-2-9-3-14-3s-10 1-14 3c-3-1-6-4-8-8z" fill="${hc}" opacity=".85"/>`,
+  goatee:`<path d="M52 70c0 7 4 11 8 11s8-4 8-11c-3 2-5 2-8 2s-5 0-8-2z" fill="${hc}"/>`,
+  chin:`<path d="M38 52c1 14 9 24 22 24s21-10 22-24l-3 2c-2 12-9 18-19 18s-17-6-19-18z" fill="${hc}"/>`,
+  sideburns:`<path d="M38 44v16l4 2v-18zM82 44v16l-4 2v-18z" fill="${hc}"/>`,
+  long:`<path d="M38 52c0 30 9 52 22 52s22-22 22-52c-3 6-6 9-9 10-4-2-8-3-13-3s-9 1-13 3c-3-1-6-4-9-10z" fill="${hc}"/>`,
+  asym:`<path d="M60 64c-6 0-11 2-14 4-3-2-6-6-8-12 0 14 8 26 22 26z" fill="${hc}"/>`,
+  neck:`<path d="M44 74c4 10 10 22 16 30 6-8 12-20 16-30-5 4-10 6-16 6s-11-2-16-6z" fill="${hc}"/>`};
+ if(o.beard)s.push(B[o.beard]);
+ if(o.lips)s.push(`<path d="M54 68c4 2 8 2 12 0" stroke="#A0524A" stroke-width="2.4" fill="none" stroke-linecap="round"/>`);else s.push(`<path d="M54 68c4 2 8 2 12 0" stroke="#7A4434" stroke-width="2" fill="none" stroke-linecap="round"/>`);
+ const M={std:`<path d="M48 64c4-3 8-3 12-1 4-2 8-2 12 1-4 3-8 3-12 2-4 1-8 1-12-2z" fill="${hc}"/>`,
+  pencil:`<path d="M50 64c6-2 14-2 20 0" stroke="${hc}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`,
+  handle:`<path d="M60 63c-5-3-11-2-14 2-2 3-1 7 2 7-2-3 1-6 4-6 3 0 6-1 8-3zM60 63c5-3 11-2 14 2 2 3 1 7-2 7 2-3-1-6-4-6-3 0-6-1-8-3z" fill="${hc}"/>`,
+  handleLong:`<path d="M60 63c-7-4-16-3-22 2-4 4-6 10-2 12-1-5 3-9 8-9 6-1 12-2 16-5zM60 63c7-4 16-3 22 2 4 4 6 10 2 12 1-5-3-9-8-9-6-1-12-2-16-5z" fill="${hc}"/>`,
+  walrus:`<path d="M45 62c5-3 10-3 15-1 5-2 10-2 15 1-1 8-5 11-15 9-10 2-14-1-15-9z" fill="${hc}"/>`};
+ if(o.mous)s.push(M[o.mous]);
+ if(o.measure)s.push(`<path d="M${o.measure[0]} ${o.measure[1]}v${o.measure[2]}" stroke="#D2302F" stroke-width="2.4"/><path d="M${o.measure[0]-4} ${o.measure[1]+5}l4-5 4 5M${o.measure[0]-4} ${o.measure[1]+o.measure[2]-5}l4 5 4-5" stroke="#D2302F" stroke-width="2.4" fill="none"/>`);
+ if(o.line)s.push(`<path d="M24 ${o.line}h72" stroke="#D2302F" stroke-width="2.4" stroke-dasharray="5 3"/>`);
+ return s.join("")}
+function dBack(o){o=Object.assign({sk:1,hc:"dbr",st:"bun"},o);const [sk,sk2]=SKINS[o.sk],hc=HAIRC[o.hc],s=[];
+ s.push(`<path d="M16 124c4-24 22-33 44-35 22 2 40 11 44 35z" fill="${NV}"/><path d="M40 92c8 4 32 4 40 0" stroke="${NV2}" stroke-width="3" fill="none"/><rect x="52" y="72" width="16" height="20" rx="4" fill="${sk2}"/>`,
+  `<ellipse cx="37" cy="50" rx="5" ry="8" fill="${sk2}"/><ellipse cx="83" cy="50" rx="5" ry="8" fill="${sk2}"/><ellipse cx="60" cy="48" rx="23" ry="28" fill="${hc}"/><path d="M44 30c8-6 24-6 32 0M42 44c10-6 26-6 36 0" stroke="#fff" stroke-opacity=".12" stroke-width="2" fill="none"/>`);
+ const E='stroke="#fff" stroke-opacity=".35" stroke-width="1.6"';const T={bun:`<circle cx="60" cy="72" r="12" fill="${hc}" ${E}/><path d="M50 72c6-5 14-5 20 0M52 77c5-3 11-3 16 0" stroke="#fff" stroke-opacity=".25" stroke-width="1.4" fill="none"/><path d="M52 70c5-4 11-4 16 0" stroke="#000" stroke-opacity=".3" stroke-width="1.5" fill="none"/>`,
+  braid:`<path d="M60 70v44" stroke="#fff" stroke-opacity=".35" stroke-width="13" stroke-linecap="round"/><path d="M60 70v44" stroke="${hc}" stroke-width="11" stroke-linecap="round"/>${[76,84,92,100,108].map(y=>`<path d="M55 ${y}l5 4 5-4" stroke="#000" stroke-opacity=".3" stroke-width="1.5" fill="none"/>`).join("")}`,
+  double:`<path d="M53 70v42M67 70v42" stroke="#fff" stroke-opacity=".35" stroke-width="11" stroke-linecap="round"/><path d="M53 70v42M67 70v42" stroke="${hc}" stroke-width="9" stroke-linecap="round"/>${[78,88,98,108].map(y=>`<path d="M49 ${y}l4 3 4-3M63 ${y}l4 3 4-3" stroke="#000" stroke-opacity=".3" stroke-width="1.3" fill="none"/>`).join("")}`,
+  multi:`${[46,53,60,67,74].map(x=>`<path d="M${x} 62q${(60-x)/3} 22 ${(60-x)*0.7} 52" stroke="#fff" stroke-opacity=".35" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M${x} 62q${(60-x)/3} 22 ${(60-x)*0.7} 52" stroke="${hc}" stroke-width="5" fill="none" stroke-linecap="round"/>`).join("")}`};
+ s.push(T[o.st]);return s.join("")}
+function dBadge(ok){return `<g transform="translate(96 4)"><circle cx="10" cy="10" r="10" fill="${ok?"#2E8B57":"#C62828"}"/>${ok?'<path d="M5 10l3.5 3.5L15 7" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round"/>':'<path d="M6 6l8 8M14 6l-8 8" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>'}</g>`}
+let D33ID=0;
+function dTile(inner,ok,cap){const id="dc"+(++D33ID);return `<figure class="d33t"><svg viewBox="0 0 120 124" aria-hidden="true"><defs><clipPath id="${id}"><circle cx="60" cy="62" r="58"/></clipPath></defs><circle cx="60" cy="62" r="58" fill="${ok?"#EAF5EE":"#FBECEC"}"/><g clip-path="url(#${id})">${inner}</g>${ok===null?"":dBadge(ok)}</svg><figcaption>${cap}</figcaption></figure>`}
+const ACC_ICON={
+ elastic:`<circle cx="60" cy="62" r="22" fill="none" stroke="#1a1a1a" stroke-width="6"/><circle cx="60" cy="62" r="14" fill="none" stroke="#1a1a1a" stroke-width="5"/>`,
+ net:`<circle cx="60" cy="62" r="24" fill="#1a1a1a" opacity=".12"/><circle cx="60" cy="62" r="24" fill="none" stroke="#1a1a1a" stroke-width="2.5"/><path d="M40 50l40 26M38 64l36 22M46 42l36 24M40 74l28-38M50 84l30-40M60 86l22-30" stroke="#1a1a1a" stroke-width="1.4"/>`,
+ scrunch:`<path d="M60 36c8 0 10 6 16 8s10 8 8 14 4 10 0 16-10 6-14 10-12 4-18 0-10-4-14-8-8-10-6-16-2-12 2-16 8-6 12-8 6-8 14-8z" fill="#1a1a1a"/><circle cx="60" cy="62" r="9" fill="#fff"/>`,
+ bobby:`<path d="M40 38l36 44M50 34l34 42" stroke="#1a1a1a" stroke-width="3.5" stroke-linecap="round"/><path d="M50 34q-6 4 -10 4" stroke="#1a1a1a" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M56 42l4 2M62 50l4 2M68 58l4 2" stroke="#1a1a1a" stroke-width="2"/>`,
+ snap:`<path d="M38 44c0-8 10-8 12 0l6 34c1 6-8 8-10 2z" fill="#1a1a1a"/><path d="M64 44c0-8 10-8 12 0l6 34c1 6-8 8-10 2z" fill="#1a1a1a"/><ellipse cx="45" cy="56" rx="2.5" ry="8" fill="#fff"/><ellipse cx="71" cy="56" rx="2.5" ry="8" fill="#fff"/>`,
+ barrette:`<rect x="30" y="54" width="60" height="14" rx="7" fill="#1a1a1a"/><path d="M36 61h48" stroke="#fff" stroke-opacity=".35" stroke-width="2"/><circle cx="84" cy="61" r="3" fill="#888"/>`,
+ bandana:`<path d="M30 46h60l-30 40z" fill="#1a1a1a"/><path d="M30 46c-6 2-8 8-6 12M90 46c6 2 8 8 6 12" stroke="#1a1a1a" stroke-width="4" fill="none"/>`,
+ bow:`<path d="M60 62l-26-16v32zM60 62l26-16v32z" fill="#1a1a1a"/><rect x="54" y="56" width="12" height="12" rx="3" fill="#1a1a1a"/><path d="M58 68l-6 14M62 68l6 14" stroke="#1a1a1a" stroke-width="4"/>`,
+ claw:`<path d="M34 50c8-8 44-8 52 0l-4 6c-8-4-36-4-44 0z" fill="#1a1a1a"/>${[40,48,56,64,72,80].map(x=>`<path d="M${x} 54c-2 10 2 20 6 24" stroke="#1a1a1a" stroke-width="5" fill="none" stroke-linecap="round"/>`).join("")}`,
+ headband:`<path d="M34 80c-4-30 8-46 26-46s30 16 26 46" stroke="#1a1a1a" stroke-width="8" fill="none" stroke-linecap="round"/>`,
+ flower:`${[0,72,144,216,288].map(a=>`<ellipse cx="60" cy="46" rx="9" ry="14" fill="#1a1a1a" transform="rotate(${a} 60 62)"/>`).join("")}<circle cx="60" cy="62" r="7" fill="#555"/>`};
+function dIcon(k,ok,cap){return dTile(`<g transform="translate(60 62) scale(1.45) translate(-60 -62)">${ACC_ICON[k]}</g>`,ok,cap)}
+
+// ---- Illustrated dress cards (bilingual), replacing the photographed posters in Inspection
+const D33={
+ hairOk:[[{sk:0,hc:"brn",hair:"short"},["Courts","Short"]],[{sk:4,hc:"blk",hair:"bun",lips:1},["Chignon","Bun"]],[{sk:2,hc:"blk",hair:"pony",lips:1},["Queue de cheval","Ponytail"]],[{sk:1,hc:"red",hair:"braid",lips:1},["Tresse","Braid"]],
+  [{sk:5,hc:"blk",hair:"locs",lips:1},["Locks attachées","Locs tied back"]],[{sk:3,hc:"blk",hair:"afro"},["Volume court","Short volume"]],[{sk:5,hc:"blk",hair:"buzz"},["Très courts","Close-cropped"]],[{sk:1,hc:"bld",hair:"beretbun",head:"beret",lips:1},["Béret bien porté","Beret worn correctly"]]],
+ hairNo:[[{sk:1,hc:"brn",hair:"slip",lips:1},["Chignon qui glisse","Slipping bun"]],[{sk:3,hc:"dbr",hair:"messy",lips:1},["Mèches lâches","Loose strands"]],[{sk:0,hc:"bld",hair:"pins",lips:1},["Épingles qui dépassent","Protruding pins"]],[{sk:2,hc:"blk",hair:"fringe",lips:1},["Toupet sous les sourcils","Fringe below the eyebrows"]],
+  [{sk:4,hc:"blk",hair:"long",lips:1,line:90},["Détachés sous le col","Loose below the collar"]],[{sk:1,hc:"red",hair:"cover",lips:1},["Couvrent le visage","Covering the face"]]],
+ accOk:[["elastic",["Élastiques","Hair elastics"]],["net",["Filet à cheveux","Hair net"]],["scrunch",["Chouchou uni","Plain scrunchie"]],["bobby",["Pinces bobby","Bobby pins"]],["snap",["Pinces à pression","Snap clips"]],["barrette",["Barrette","Barrette"]]],
+ accNo:[["bandana",["Bandeau, foulard","Bandana, head wrap"]],["bow",["Nœud décoratif","Decorative bow"]],["claw",["Grosse pince crabe","Jumbo claw clip"]],["headband",["Serre-tête","Headband"]],["flower",["Fleur décorative","Decorative flower"]]],
+ cer:[[{sk:1,hc:"brn",st:"bun"},["1. En chignon","1. In a bun"]],[{sk:4,hc:"blk",st:"braid"},["2. Tresse simple","2. Single braid"]],[{sk:2,hc:"dbr",st:"double"},["3. Tresses doubles centrées vers l'arrière","3. Double braids centred at the back"]],[{sk:5,hc:"blk",st:"multi"},["4. Tresses multiples ou locks tirées au centre du dos","4. Multiple braids or locs pulled to the centre of the back"]]],
+ faceOk:[[{sk:1,hc:"dbr",beard:"full"},["Barbe courte","Short beard"]],[{sk:4,hc:"blk",beard:"goatee",mous:"std"},["Bouc + moustache","Goatee + moustache"]],[{sk:2,hc:"blk",beard:"short",hair:"turban"},["Barbe (turban)","Beard (turban)"]],[{sk:0,hc:"red",mous:"std"},["Moustache","Moustache"]],
+  [{sk:5,hc:"blk",beard:"chin",hair:"buzz"},["Collier","Chin strap"]],[{sk:3,hc:"dbr",mous:"handle"},["Guidon ≤ 2,5 cm","Handlebar ≤ 2.5 cm"]],[{sk:2,hc:"brn",beard:"sideburns"},["Favoris","Sideburns"]],[{sk:0,hc:"gry",mous:"pencil",hair:"bald"},["Moustache fine","Pencil moustache"]]],
+ faceNo:[[{sk:1,hc:"dbr",beard:"long",measure:[88,76,30]},["Barbe > 2,5 cm","Beard > 2.5 cm"]],[{sk:3,hc:"blk",mous:"handleLong",head:"beret"},["Guidon trop long","Handlebar too long"]],[{sk:0,hc:"brn",beard:"asym"},["Non symétrique","Not symmetrical"]],[{sk:5,hc:"blk",beard:"neck",measure:[86,80,24]},["Poils trop longs au menton","Chin hair too long"]],
+  [{sk:2,hc:"dbr",mous:"walrus",head:"beret"},["Moustache > 2,5 cm","Moustache > 2.5 cm"]],[{sk:4,hc:"blk",beard:"long",mous:"std",head:"cap",measure:[88,76,30]},["Barbe trop longue","Beard too long"]]]};
+const D33T={hairOk:["Les cheveux ne couvrent pas le visage. Attachés s'ils tombent sous le bas du col, à la nuque. Ils n'empêchent pas le port correct de la coiffure. Quelle que soit la coiffure, elle doit être soignée et refléter une image positive.","Hair does not cover the face. Tied back if it falls below the bottom of the collar at the nape. It does not prevent wearing the headdress correctly. Whatever the hairstyle, it must be neat and project a positive image."],
+ hairNo:["Les cheveux doivent être soignés et bien rangés : pas de chignon qui glisse, pas de mèches lâches, pas d'épingles qui dépassent. Le toupet ne couvre pas le visage et ne tombe pas sous les sourcils. Attachés s'ils tombent sous la partie inférieure du col.","Hair must be neat and tidy: no slipping bun, no loose strands, no protruding pins. The fringe does not cover the face or fall below the eyebrows. Tied back if it falls below the bottom of the collar."],
+ accOk:["Accessoires de la couleur des cheveux, discrets.","Discreet accessories matching the hair colour."],accNo:["Exemples affichés à l'unité.","Examples posted at the unit."],
+ cer:["Les cheveux qui s'étendent sous le col de la tunique de service doivent être attachés dans l'un de ces styles. Si la coiffure ou le type de cheveux ne le permet pas, le membre en discute avec sa chaîne de commandement pour trouver une coiffure possible.","Hair extending below the service dress jacket collar must be secured in one of these styles. If the hairstyle or hair type does not allow it, the member discusses it with the chain of command to find a workable style."],
+ faceOk:["Tous les styles de pilosité faciale et de favoris sont autorisés : coupés selon des lignes épurées, bien entretenus et symétriques, jusqu'à 2,5 cm (1 po) de longueur ou de volume. Les moustaches en guidon ne dépassent pas 2,5 cm.","All facial hair and sideburn styles are allowed: cut along clean lines, well maintained and symmetrical, up to 2.5 cm (1 in) in length or bulk. Handlebar moustaches do not exceed 2.5 cm."],
+ faceNo:["Exemples de pilosité (poils du visage) qui dépasse 2,5 cm (1 po) de longueur, ou qui n'est pas symétrique ou entretenue.","Examples of facial hair longer than 2.5 cm (1 in), or not symmetrical or maintained."]};
+function d33Card(band,cols){return `<div class="d33card"><div class="d33band"><b>${U(["Politique sur la tenue — Chapitre 2","Dress policy — Chapter 2"])}</b><span>${U(band)}</span></div><div class="d33cols">${cols.map(c=>`<div class="d33col ${c[0]}"><h4>${c[1]}</h4><div class="d33rule">${L(c[2])}</div><div class="d33grid">${c[3]}</div></div>`).join("")}</div></div>`}
+const P33=(arr,ok)=>arr.map(x=>dTile(dPortrait(x[0]),ok,U(x[1]))).join(""),I33=(arr,ok)=>arr.map(x=>dIcon(x[0],ok,U(x[1]))).join("");
+const BAND24=["Changements · juin 2024","June 2024 changes"];
+function d33Hair(){return d33Card(BAND24,[["ok","✓ "+U(["Cheveux autorisés","Hair allowed"]),D33T.hairOk,P33(D33.hairOk,true)],["no","✗ "+U(["Cheveux non autorisés","Hair not allowed"]),D33T.hairNo,P33(D33.hairNo,false)]])
+ +d33Card(BAND24,[["ok","✓ "+U(["Accessoires autorisés","Allowed accessories"]),D33T.accOk,I33(D33.accOk,true)],["no","✗ "+U(["Accessoires non autorisés","Accessories not allowed"]),D33T.accNo,I33(D33.accNo,false)]])}
+function d33Cer(){return d33Card(["Cérémonies · pas de changement","Ceremonies · no change"],[["neu",U(["Cheveux sous le col de la tunique","Hair below the jacket collar"]),D33T.cer,D33.cer.map(x=>dTile(dBack(x[0]),true,U(x[1]))).join("")]])}
+function d33Face(){return d33Card(BAND24,[["ok","✓ "+U(["Pilosité faciale autorisée","Facial hair allowed"]),D33T.faceOk,P33(D33.faceOk,true)],["no","✗ "+U(["Pilosité faciale non autorisée","Facial hair not allowed"]),D33T.faceNo,P33(D33.faceNo,false)]])}
+const _viewInsp33=viewInsp;viewInsp=function(){_viewInsp33();
+ const swap=(key,html,origKeys)=>{const img=[...document.querySelectorAll("#view .zoom32")].find(i=>i.src===DRESS_IMG[key]);if(!img)return;const grid=img.closest("div");
+  const wrap=document.createElement("div");wrap.innerHTML=html+`<div class="row" style="margin:6px 0 0"><button class="btn d33orig" data-k="${origKeys.join(",")}" style="font-size:13.5px;padding:5px 12px">🖼 ${U(["Voir l'affiche originale","See the original poster"])}</button></div>`;grid.replaceWith(wrap)};
+ swap("dress-hair-ok",d33Hair(),["dress-hair-ok","dress-hair-no","dress-acc"]);
+ swap("dress-ceremony",d33Cer(),["dress-ceremony"]);
+ swap("dress-facial",d33Face(),["dress-facial"]);
+ document.querySelectorAll("#view .d33orig").forEach(b=>b.onclick=()=>{const ks=b.dataset.k.split(",");let i=0;const show=()=>{zoom32(DRESS_IMG[ks[i]]);const o=$("#zoom32");if(ks.length>1){o.onclick=e=>{if(e.target.tagName==="BUTTON"||++i>=ks.length){o.remove();return}o.remove();show()}}};show()})};
 
 /* ============ ROUTER ============ */
 const VIEWS={about:viewAbout,fb:viewFb,more:viewMore,insp:viewInsp,rep:viewReports,fit:viewFit,path:viewPath,drill:viewDrill,first:viewFirst,tutor:viewTutor,audio:viewAudio,review:viewReview,exam:viewExam,other:viewOther,lesson:viewLesson,learn:viewLearn,table:viewTable,flash:viewFlash,quiz:viewQuiz,order:viewOrder,course:viewCourse,navy:viewNavy,man:viewMan,src:viewSrc};
