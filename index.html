@@ -663,9 +663,10 @@ const LESSONS={
 
 /* ============ STORAGE ============ */
 const KEY="navalos.v1";
-const APP_VERSION="3.6",CONTENT_DATE="2026-10-11";
+const APP_VERSION="3.7",CONTENT_DATE="2026-10-11";
 const ONLINE_URL="https://claude.ai/artifact/4F2zWfYVFgg7cK4XfHdmkA";
-const CHANGELOG=[["3.6","2026-10-12",["L'anglais passe en premier : boutons EN, FR, EN+FR ; en mode EN+FR, l'anglais s'affiche d'abord et le français dessous. Un nouvel utilisateur démarre dans la langue de son appareil.","English comes first: EN, FR, EN+FR buttons; in EN+FR mode, English shows first with French below. A new user starts in their device's language."]],
+const CHANGELOG=[["3.7","2026-10-12",["En mode EN+FR, tous les titres (métiers, grades, termes, rapports, tuteur) s'affichent en anglais d'abord, avec le français en dessous.","In EN+FR mode, all titles (trades, ranks, terms, reports, tutor) now show English first, with French below."]],
+ ["3.6","2026-10-12",["L'anglais passe en premier : boutons EN, FR, EN+FR ; en mode EN+FR, l'anglais s'affiche d'abord et le français dessous. Un nouvel utilisateur démarre dans la langue de son appareil.","English comes first: EN, FR, EN+FR buttons; in EN+FR mode, English shows first with French below. A new user starts in their device's language."]],
  ["3.5","2026-10-12",["En mode FR+EN, les onglets s'affichent dans les deux langues. Bouton « Effacer mes infos personnelles » (matricule, nom, lettres) pour les appareils partagés. Note de confidentialité : rien n'est envoyé, tout reste sur l'appareil. Version installable renforcée (politique de sécurité du contenu).","In FR+EN mode, tabs show both languages. “Erase my personal info” button (service number, name, letters) for shared devices. Privacy note: nothing is sent, everything stays on the device. Installable version hardened (content security policy)."]],
  ["3.4","2026-10-12",["La Marine → La flotte : photos des navires (frégate Halifax, Harry DeWolf, sous-marin Victoria, Kingston, Orca, Protecteur) et une galerie à faire glisser, tirées de l'affiche officielle « Fleet Vessels ».","The Navy → The fleet: ship photos (Halifax frigate, Harry DeWolf, Victoria submarine, Kingston, Orca, Protecteur) and a swipeable gallery, from the official “Fleet Vessels” poster."]],
  ["3.3","2026-10-12",["Inspection : les affiches de la politique sur la tenue sont redessinées en illustrations nettes et bilingues (cheveux, accessoires, cérémonies, pilosité faciale), avec des visages variés. L'affiche originale reste accessible d'un toucher.","Inspection: the dress policy posters are redrawn as crisp bilingual illustrations (hair, accessories, ceremonies, facial hair), with diverse faces. The original poster is still one tap away."]],
@@ -703,7 +704,7 @@ const pair=a=>Array.isArray(a)?a:[a,a];
 function L(a){a=pair(a);if(S.lang==="en")return a[1];if(S.lang==="bi"&&a[0]!==a[1])return `${a[1]}<span class="alt">${a[0]}</span>`;return a[0]}
 // Short interface labels: one language only (FR in bilingual mode)
 function U(a){a=pair(a);return S.lang==="en"||S.lang==="bi"?a[1]:a[0]}
-const EN=()=>S.lang==="en";
+const EN=()=>S.lang!=="fr"; // v3.7: EN+FR = English primary
 const C=()=>EN()?": ":" : "; // colon spacing: English vs French typography
 const nm=r=>EN()?r.en:r.fr;              // primary name
 const ab=r=>EN()?r.enA:r.frA;            // primary abbreviation
@@ -712,7 +713,7 @@ const army=r=>S.lang==="en"?`${r.arEn} (${r.arA})`:S.lang==="bi"?`${r.arEn} — 
 const grpName={off:["Officiers","Officers"],ncm:["Militaires du rang","NCMs"],appt:["Nominations supérieures","Senior appointments"],music:["Musique","Music"]};
 const TABS={review:["Révision","Review"],first:["Premier jour","First day"],insp:["Inspection","Inspection"],rep:["Rapports","Reports"],fit:["Forme 🏃","Fitness 🏃"],path:["Parcours","Career path"],drill:["Drill 🎬","Drill 🎬"],tutor:["Tuteur ✨","Tutor ✨"],learn:["Grades","Ranks"],table:["Équivalences","Equivalents"],flash:["Cartes","Flashcards"],quiz:["Quiz","Quiz"],order:["Classement","Ranking"],course:["Cours OREN","Course (PO/EO)"],other:["Autres éléments","Other elements"],navy:["La Marine","The Navy"],audio:["Écoute 🔊","Listen 🔊"],man:["Métiers","Trades"],src:["Sources","Sources"]};
 function applyLang(){
- document.documentElement.lang=S.lang==="en"?"en":"fr";
+ document.documentElement.lang=S.lang==="fr"?"fr":"en";
  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===S.lang));
  document.querySelectorAll("#tabs button").forEach(b=>b.textContent=U(TABS[b.dataset.v]));
  document.getElementById("tagline").textContent=U(["Marine royale canadienne · l'aide-mémoire de tous les marins","Royal Canadian Navy · the memory aid for every sailor"]);
@@ -1235,7 +1236,7 @@ function viewMan(){
   } else {
    const list=TRADES.filter(t=>tradeCat==="all"||t.c===tradeCat);
    body=`<p class="lead">${L(["Les métiers actuels de la MRC (forces.ca, octobre 2026). Touche une carte pour les tâches. Choisis « C'est mon métier » pour l'épingler en haut.","Current RCN trades (forces.ca, October 2026). Tap a card for its duties. Choose “This is my trade” to pin it at the top."])}</p>
-   ${mine?`<div class="panel" style="margin-bottom:12px;cursor:pointer" id="pin"><span class="muted">${U(["Mon métier","My trade"])}</span><div class="rk" style="font-family:var(--serif);font-size:24px;font-weight:700">${EN()?mine.en:mine.fr}</div><div class="muted">${mine.ab}</div></div>`:""}
+   ${mine?`<div class="panel" style="margin-bottom:12px;cursor:pointer" id="pin"><span class="muted">${U(["Mon métier","My trade"])}</span><div class="rk" style="font-family:var(--serif);font-size:24px;font-weight:700">${EN()?mine.en:mine.fr}${S.lang==="bi"?`<span class="alt" style="font-size:15px;font-weight:500">${mine.fr}</span>`:""}</div><div class="muted">${mine.ab}</div></div>`:""}
    <div class="seg" role="group" id="tcat"><button aria-pressed="${tradeCat==="all"}" data-c="all">${U(["Tous","All"])}</button>${Object.keys(TRADE_CATS).map(k=>`<button aria-pressed="${k===tradeCat}" data-c="${k}">${U(TRADE_CATS[k])}</button>`).join("")}</div>
    <div class="ocards">${list.map(t=>`<button class="ocard" data-t="${t.id}" style="text-align:left;cursor:pointer;font:inherit;color:inherit${S.myTrade===t.id?";border-color:var(--gold)":""}"><div class="oname">${EN()?t.en:t.fr}</div><div class="osub">${EN()?t.fr:t.en} · ${t.ab}</div><div style="font-size:14px;margin-top:6px">${L(t.d)}</div><div class="oeq">${resBadge(t)}</div></button>`).join("")}</div>`;
   }
@@ -2015,11 +2016,11 @@ function viewPath(){
  const mine=S.myTrade&&TRADES.find(t=>t.id===S.myTrade);
  $("#view").innerHTML=`<h2>${L(["Parcours : du premier jour à ton métier","Career path: from day one to your trade"])}</h2>
  <p class="lead">${L(["Les grandes étapes d'une carrière dans la Marine, selon forces.ca et canada.ca (octobre 2026). Les durées et les lieux changent : ton recruteur, ta division et ton cahier font foi.","The main steps of a Navy career, per forces.ca and canada.ca (October 2026). Durations and locations change: your recruiter, your division and your binder are the authority."])}</p>
- ${mine?`<div class="panel" style="margin-bottom:14px"><div class="muted">${U(["Mon métier","My trade"])}</div><div class="rk" style="font-family:var(--serif);font-size:26px;font-weight:700">${EN()?mine.en:mine.fr}</div>
+ ${mine?`<div class="panel" style="margin-bottom:14px"><div class="muted">${U(["Mon métier","My trade"])}</div><div class="rk" style="font-family:var(--serif);font-size:26px;font-weight:700">${EN()?mine.en:mine.fr}${S.lang==="bi"?`<span class="alt" style="font-size:15px;font-weight:500">${mine.fr}</span>`:""}</div>
   ${TRAIN[mine.id]?`<p style="margin:6px 0 10px">${L(TRAIN[mine.id][0])}</p>`:""}<h3 style="margin-top:6px">${L(["Comment utiliser NavalOS pour ton métier","How to use NavalOS for your trade"])}</h3>${planHTML(mine)}</div>`
  :`<div class="panel" style="margin-bottom:14px">${L(["Choisis ton métier dans l'onglet Métiers (« C'est mon métier ») pour voir ton plan d'étude personnalisé ici.","Choose your trade in the Trades tab (“This is my trade”) to see your personal study plan here."])} <button class="btn gold gopl" data-go="man" style="margin-left:6px">${U(["Choisir","Choose"])} →</button></div>`}
  <div class="seg" id="pseg"><button aria-pressed="${pathSel==="ncm"}" data-p="ncm">${U(["Militaires du rang","NCMs"])}</button><button aria-pressed="${pathSel==="off"}" data-p="off">${U(["Officiers","Officers"])}</button><button aria-pressed="${pathSel==="trades"}" data-p="trades">${U(["Formation par métier","Training by trade"])}</button></div>
- ${pathSel==="trades"?`<div class="ocards">${TRADES.map(t=>`<div class="ocard"><div class="oname">${EN()?t.en:t.fr}</div><div class="osub">${U(TRADE_CATS[t.c])} · ${t.ab}</div><div style="font-size:14px;margin-top:6px">${TRAIN[t.id]?L(TRAIN[t.id][0]):L(["Détails de formation : voir la fiche du métier sur forces.ca.","Training details: see the trade's page on forces.ca."])}</div>
+ ${pathSel==="trades"?`<div class="ocards">${TRADES.map(t=>`<div class="ocard"><div class="oname">${EN()?t.en:t.fr}${S.lang==="bi"?`<span class="alt" style="font-size:15px;font-weight:500">${t.fr}</span>`:""}</div><div class="osub">${U(TRADE_CATS[t.c])} · ${t.ab}</div><div style="font-size:14px;margin-top:6px">${TRAIN[t.id]?L(TRAIN[t.id][0]):L(["Détails de formation : voir la fiche du métier sur forces.ca.","Training details: see the trade's page on forces.ca."])}</div>
    <details style="margin-top:6px"><summary style="cursor:pointer;color:var(--gold);font-size:14px">${U(["Plan NavalOS","NavalOS plan"])}</summary>${planHTML(t)}</details></div>`).join("")}</div>`
  :`<div class="tl">${(pathSel==="off"?PATH_OFF:PATH_NCM).map((s,i)=>`<div><b>${i+1}. ${L(s[0])}</b>${L(s[1])}</div>`).join("")}</div>
    ${pathSel==="ncm"?`<div class="panel" style="margin-top:10px"><b>${U(["Pas sûr de ton choix ?","Not sure yet?"])}</b><br>${L(NEP_INFO)}</div>`:""}`}
@@ -2501,7 +2502,7 @@ const _viewReview29=viewReview;viewReview=function(){const dash=!RV;_viewReview2
   <p style="margin:8px 0 6px"><b>${U(["Quel est ton métier ?","What is your trade?"])}</b> ${L(["NavalOS te montrera seulement ce qui compte pour toi.","NavalOS will show you only what matters for you."])}</p>${tradePicker("pick29")}</div>`}
  else if(t){const fam=familyOf(t),plan=planList(t).slice(0,4);
   html=`<div class="panel plan29"><div class="qhead" style="margin:0"><span class="muted">${U(["Mon plan","My plan"])}</span><button class="btn" id="chg29" style="padding:3px 10px;font-size:13px">${U(["Changer de métier","Change trade"])}</button></div>
-  <div class="rk" style="font-family:var(--serif);font-size:22px;font-weight:700">${EN()?t.en:t.fr}</div>
+  <div class="rk" style="font-family:var(--serif);font-size:22px;font-weight:700">${EN()?t.en:t.fr}${S.lang==="bi"?`<span class="alt" style="font-size:15px;font-weight:500">${t.fr}</span>`:""}</div>
   <ol class="pts">${plan.map(p=>`<li>${L([p[0],p[1]])} <button class="btn gopl" data-go="${p[2]}" style="padding:3px 10px;font-size:13px;margin-left:6px">${U(["Ouvrir","Open"])} →</button></li>`).join("")}</ol>
   <details><summary style="cursor:pointer;color:var(--gold)">${U(["À laisser de côté pour l'instant","Leave aside for now"])}</summary>${skipHTML(t)}</details>
   ${TLINKS[t.id]?`<details><summary style="cursor:pointer;color:var(--gold)">${U(["Liens officiels de ton métier","Official links for your trade"])}</summary>${linksHTML(t.id)}</details>`:""}
@@ -2694,7 +2695,7 @@ function rankPool(scope){const p=[];
  if(scope==="all"||scope==="navy")R.forEach(r=>{if(ORD[r.id]&&IMG[r.img])p.push({svc:"navy",img:r.img,fr:r.fr,en:r.en,frA:r.frA,enA:r.enA,ord:ORD[r.id],nid:r.id})});
  ["army","air"].forEach(k=>{if((scope==="all"||scope===k)&&OTHER[k])OTHER[k].items.forEach(it=>{if(ORD[it[1]]&&IMG[it[0]]&&!p.find(x=>x.img===it[0]))p.push({svc:k,img:it[0],fr:it[2],en:it[3],frA:it[4],enA:it[4],ord:ORD[it[1]],nid:it[1]})})});
  return p}
-const gName=x=>EN()?x.en:S.lang==="bi"?`${x.en} / ${x.fr}`:x.fr;
+const gName=x=>S.lang==="bi"?`${x.en} / ${x.fr}`:EN()?x.en:x.fr;
 const gImg=(x,h)=>`<img src="${IMG[x.img]}" alt="" style="height:${h||90}px;max-width:100%;object-fit:contain;display:block;margin:0 auto">`;
 if(!S.gbest)S.gbest={};
 let GM={g:"chrono",scope:"navy",st:null};let GT=null;
