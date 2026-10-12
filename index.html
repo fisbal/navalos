@@ -659,7 +659,7 @@ const LESSONS={
 
 /* ============ STORAGE ============ */
 const KEY="navalos.v1";
-const APP_VERSION="3.4",CONTENT_DATE="2026-10-11";
+const APP_VERSION="3.4.1",CONTENT_DATE="2026-10-11";
 const ONLINE_URL="https://claude.ai/artifact/4F2zWfYVFgg7cK4XfHdmkA";
 const CHANGELOG=[["3.4","2026-10-12",["La Marine → La flotte : photos des navires (frégate Halifax, Harry DeWolf, sous-marin Victoria, Kingston, Orca, Protecteur) et une galerie à faire glisser, tirées de l'affiche officielle « Fleet Vessels ».","The Navy → The fleet: ship photos (Halifax frigate, Harry DeWolf, Victoria submarine, Kingston, Orca, Protecteur) and a swipeable gallery, from the official “Fleet Vessels” poster."]],
  ["3.3","2026-10-12",["Inspection : les affiches de la politique sur la tenue sont redessinées en illustrations nettes et bilingues (cheveux, accessoires, cérémonies, pilosité faciale), avec des visages variés. L'affiche originale reste accessible d'un toucher.","Inspection: the dress policy posters are redrawn as crisp bilingual illustrations (hair, accessories, ceremonies, facial hair), with diverse faces. The original poster is still one tap away."]],
@@ -2642,7 +2642,7 @@ ${startBtn}
   <div style="flex:1 1 220px"><p style="margin-top:0"><b>${GH_URL.replace("https://","")}</b></p><p class="muted" style="font-size:14px">${L(["Ouvre l'appareil photo du téléphone et vise le code. Ensuite, installe NavalOS sur l'écran d'accueil.","Open the phone camera and point it at the code. Then install NavalOS on the home screen."])}</p><div class="row" style="margin:0">${shareBtn()}<button class="btn gopl" data-go="fb">✉ ${U(["Envoyer une remarque","Send feedback"])}</button></div></div></div>
  <div class="panel" style="margin-top:12px"><b>📲 ${U(["Installer","Install"])}</b>${installHTML()}</div>
  <h3>${L(["Important","Important"])}</h3><p class="disc29">${L(DISCLAIMER)}</p>
- <p class="muted" style="font-size:14px">${L([`Conçu par Martin B., Réserve navale (NCSM Montcalm). Projet personnel non officiel, non affilié au ministère de la Défense nationale ni aux Forces armées canadiennes. Version ${APP_VERSION}, contenu vérifié le ${CONTENT_DATE}.`,`Created by Martin B., Naval Reserve (HMCS Montcalm). Unofficial personal project, not affiliated with the Department of National Defence or the Canadian Armed Forces. Version ${APP_VERSION}, content checked ${CONTENT_DATE}.`])}</p>
+ <p class="muted" style="font-size:14px">${L([`Conçu par nous. Vos critiques constructives sont les bienvenues : utilisez le bouton ✉ Remarque. Projet personnel non officiel, non affilié au ministère de la Défense nationale ni aux Forces armées canadiennes. Version ${APP_VERSION}, contenu vérifié le ${CONTENT_DATE}.`,`Created by us. Your constructive feedback is welcome: use the ✉ Feedback button. Unofficial personal project, not affiliated with the Department of National Defence or the Canadian Armed Forces. Version ${APP_VERSION}, content checked ${CONTENT_DATE}.`])}</p>
  <details><summary style="cursor:pointer;color:var(--gold)">${U(["Nouveautés","What's new"])}</summary><ul class="skp29">${CHANGELOG.slice(0,5).map(c=>`<li><b>${c[0]}</b> (${c[1]}) — ${L(c[2])}</li>`).join("")}</ul></details>${startBtn.replace('id="ab30go"','id="ab30go2"')}`;
  bindPlan();bindInstall();["#ab30go","#ab30go2"].forEach(id=>{const b=$(id);if(b)b.onclick=()=>go("review")})}
 
