@@ -658,9 +658,10 @@ const LESSONS={
 
 /* ============ STORAGE ============ */
 const KEY="navalos.v1";
-const APP_VERSION="3.0.3",CONTENT_DATE="2026-10-11";
+const APP_VERSION="3.1",CONTENT_DATE="2026-10-11";
 const ONLINE_URL="https://claude.ai/artifact/4F2zWfYVFgg7cK4XfHdmkA";
-const CHANGELOG=[["3.0.3","2026-10-11",["À la première ouverture, NavalOS s'ouvre sur la page de présentation (À propos), avec un bouton Commencer. Ensuite, l'app s'ouvre directement sur ta révision. L'onglet À propos est maintenant le premier.","On first launch, NavalOS opens on the introduction page (About), with a Get started button. After that, the app opens straight to your review. The About tab now comes first."]],
+const CHANGELOG=[["3.1","2026-10-12",["Grades : 4 jeux pour mémoriser plus vite (chrono 60 s, paires, équivalences, qui est plus haut ?) avec les grades de la Marine, de l'Armée et de l'ARC ; les onglets Cartes, Quiz et Classement restent toujours visibles. Rapports : 9 lettres administratives selon les règles de rédaction des FAC (congé pour raisons familiales, entrevue avec le commandant, cours, note explicative, changement de renseignements, libération, mutation, remboursement, remerciement) et les règles de rédaction. Demande de congé : matricule en cases (A12 345 678), dates en AAAA / MM / JJ, initiales, n° de dossier, enregistrement en fichier texte.","Ranks: 4 games to memorize faster (60-second sprint, pairs, equivalents, who's senior?) with Navy, Army and RCAF ranks; the Flashcards, Quiz and Ranking tabs always stay visible. Reports: 9 administrative letters following CAF writing rules (compassionate leave, CO interview, course, explanation, change of personal information, release, transfer, reimbursement, appreciation) plus the writing rules. Leave request: service number in boxes (A12 345 678), dates as YYYY / MM / DD, initials, file number, save as text file."]],
+ ["3.0.3","2026-10-11",["À la première ouverture, NavalOS s'ouvre sur la page de présentation (À propos), avec un bouton Commencer. Ensuite, l'app s'ouvre directement sur ta révision. L'onglet À propos est maintenant le premier.","On first launch, NavalOS opens on the introduction page (About), with a Get started button. After that, the app opens straight to your review. The About tab now comes first."]],
  ["3.0.2","2026-10-11",["Remarques : envoi direct par Gmail ou Outlook (travail ou personnel), même sans application de courriel installée. Correctif d'affichage de la version installable.","Feedback: send directly through Gmail or Outlook (work or personal), even without an email app installed. Display fix for the installable version."]],
  ["3.0","2026-10-11",["Progression neutre : 8 niveaux (Découverte à Référence) au lieu d'un grade. Mon étape de carrière : choisis ton grade (Mat 3 à PM 1re classe, ou officier) et NavalOS adapte tes priorités (QEL, QIL, QAL, QSL). Page À propos avec code QR. Enregistrer la page (fichier lisible hors ligne) ou l'imprimer en PDF. Bouton Remarques pour écrire au créateur.","Neutral progress: 8 levels (Discovery to Master) instead of a rank. My career stage: choose your rank (S3 to CPO1, or officer) and NavalOS adapts your priorities (PLQ, ILQ, ALQ, SLQ). About page with QR code. Save the page (offline file) or print it to PDF. Feedback button to write to the creator."]],
  ["2.9","2026-10-09",["Choisis ton métier dès l'accueil : plan personnalisé, mode focus (seuls les onglets utiles s'affichent ; le reste est dans ☰ Tout), ce que tu peux laisser de côté, et liens officiels de ton métier. 13 métiers communs aux FAC ajoutés (musicien, renseignement, cyber, imagerie, police militaire, santé, aumônier, affaires publiques) avec leur formation. Tuteur pour tous : recherche dans NavalOS (hors ligne) et envoi vers Copilot (compte MDN/FAC). Installation sur iPhone expliquée pas à pas, et bouton Partager. Avertissement : NavalOS est un aide-mémoire qui ne remplace ni le cours ni les manuels.","Choose your trade from the home page: personal plan, focus mode (only useful tabs shown; the rest under ☰ All), what to leave aside, and official links for your trade. 13 CAF-wide trades added (musician, intelligence, cyber, imagery, military police, health, chaplain, public affairs) with their training. Tutor for everyone: NavalOS search (offline) and hand-off to Copilot (DND/CAF account). Step-by-step iPhone install and a Share button. Disclaimer: NavalOS is a memory aid that replaces neither the course nor the manuals."]],
@@ -2669,6 +2670,268 @@ const _viewReview30=viewReview;viewReview=function(){const dash=!RV;_viewReview3
  const anchor=document.querySelector("#view .plan29")||document.querySelector("#view h2 + .panel");if(!anchor)return;
  anchor.insertAdjacentHTML("afterend",stageHTML());bindPlan();
  const r=$("#rk30");if(r)r.onchange=()=>{S.myRank=r.value||null;save();viewReview()}};
+
+
+/* ============ v3.1 : jeux des grades (3 armées), lettres administratives, formulaire de congé détaillé ============ */
+// ---- Always keep the rank-learning tools visible (even in focus mode)
+["learn","table","flash","quiz","order"].forEach(k=>{if(!FOCUS_BASE.includes(k))FOCUS_BASE.push(k)});
+TAB_DESC.learn=["Grades et insignes + jeux pour les mémoriser (Marine, Armée, ARC)","Ranks and insignia + games to memorize them (Navy, Army, RCAF)"];
+
+// ---- Rank pool across the three services
+const ORD={s3:1,s2:2,s1:3,ms:4,po2:5,po1:6,cpo2:7,cpo1:8,ncdt:10,aslt:11,slt:12,ltn:13,lcdr:14,cdr:15,captn:16,cmdre:17,radm:18,vadm:19,adm:20};
+const SVC={navy:["Marine","Navy"],army:["Armée","Army"],air:["ARC","RCAF"]};
+function rankPool(scope){const p=[];
+ if(scope==="all"||scope==="navy")R.forEach(r=>{if(ORD[r.id]&&IMG[r.img])p.push({svc:"navy",img:r.img,fr:r.fr,en:r.en,frA:r.frA,enA:r.enA,ord:ORD[r.id],nid:r.id})});
+ ["army","air"].forEach(k=>{if((scope==="all"||scope===k)&&OTHER[k])OTHER[k].items.forEach(it=>{if(ORD[it[1]]&&IMG[it[0]]&&!p.find(x=>x.img===it[0]))p.push({svc:k,img:it[0],fr:it[2],en:it[3],frA:it[4],enA:it[4],ord:ORD[it[1]],nid:it[1]})})});
+ return p}
+const gName=x=>EN()?x.en:S.lang==="bi"?`${x.fr} / ${x.en}`:x.fr;
+const gImg=(x,h)=>`<img src="${IMG[x.img]}" alt="" style="height:${h||90}px;max-width:100%;object-fit:contain;display:block;margin:0 auto">`;
+if(!S.gbest)S.gbest={};
+let GM={g:"chrono",scope:"navy",st:null};let GT=null;
+function stopGT(){if(GT){clearInterval(GT);GT=null}}
+const GAMES={chrono:["⏱ Chrono 60 s","⏱ 60-second sprint"],pairs:["🧩 Paires","🧩 Pairs"],eq:["🔁 Équivalences","🔁 Equivalents"],high:["⬆️ Qui est plus haut ?","⬆️ Who's senior?"]};
+function gameShell(){return `<h3 id="games31">${L(["🎮 Jeux pour mémoriser les grades","🎮 Games to memorize the ranks"])}</h3>
+ <p class="lead" style="margin-top:0">${L(["Quelques minutes de jeu par jour fixent les insignes dans ta mémoire. Les bonnes réponses sur les grades de la Marine comptent aussi dans ta maîtrise.","A few minutes of play a day locks the insignia into memory. Correct answers on Navy ranks also count toward your mastery."])}</p>
+ <div class="seg" id="gsel">${Object.keys(GAMES).map(k=>`<button aria-pressed="${GM.g===k}" data-g="${k}">${U(GAMES[k])}</button>`).join("")}</div>
+ ${GM.g==="eq"||GM.g==="high"?"":`<div class="seg" id="gscope" style="margin-top:6px">${["navy","army","air","all"].map(k=>`<button aria-pressed="${GM.scope===k}" data-s="${k}">${k==="all"?U(["Les 3 armées","All 3 services"]):U(SVC[k])}</button>`).join("")}</div>`}
+ <div class="panel" id="gbox" style="margin-top:10px"></div>`}
+function bindGameShell(){document.querySelectorAll("#gsel button").forEach(b=>b.onclick=()=>{stopGT();GM.g=b.dataset.g;GM.st=null;rerenderGames()});
+ document.querySelectorAll("#gscope button").forEach(b=>b.onclick=()=>{stopGT();GM.scope=b.dataset.s;GM.st=null;rerenderGames()});renderGame()}
+function rerenderGames(){const a=$("#games31");if(!a)return;let n=a;const box=document.createElement("div");box.innerHTML=gameShell();
+ const parent=a.parentNode;const sib=[];while(n&&n.id!=="gbox"){sib.push(n);n=n.nextElementSibling}if(n)sib.push(n);sib.forEach(e=>e.remove());[...box.children].forEach(c=>parent.appendChild(c));bindGameShell()}
+function opts4(pool,ans,sameSvc){let c=pool.filter(x=>x.img!==ans.img&&x.ord!==ans.ord&&(!sameSvc||x.svc===ans.svc));c=shuffle(c);const out=[ans];for(const x of c){if(out.length>=4)break;if(!out.find(o=>o.ord===x.ord))out.push(x)}return shuffle(out)}
+function bestKey(){return GM.g+"-"+(GM.g==="eq"||GM.g==="high"?"x":GM.scope)}
+function renderGame(){const box=$("#gbox");if(!box)return;const g=GM.g,pool=rankPool(GM.scope);
+ const best=S.gbest[bestKey()];
+ if(g==="chrono"){const st=GM.st;
+  if(!st||st.done){box.innerHTML=`<p style="margin-top:0">${L(["Identifie un maximum d'insignes en 60 secondes.","Identify as many insignia as you can in 60 seconds."])} ${best!=null?`<b>${U(["Record","Best"])} : ${best}</b>`:""}</p>${st&&st.done?`<div class="rk" style="font-family:var(--serif);font-size:26px">${st.ok} ${U(["bonnes réponses","correct"])}${st.newBest?" 🏆":""}</div><p class="muted">${st.ok+st.ko} ${U(["questions","questions"])} · ${st.ko} ${U(["erreurs","mistakes"])}</p>`:""}<div class="row"><button class="btn gold" id="gstart">▶ ${U(["Commencer","Start"])}</button></div>`;
+   $("#gstart").onclick=()=>{GM.st={ok:0,ko:0,t:60,q:null};nextChrono();GT=setInterval(()=>{if(!$("#gbox")){stopGT();return}GM.st.t--;const t=$("#gtime");if(t)t.textContent=GM.st.t;if(GM.st.t<=0){stopGT();endChrono()}},1000);renderGame()};return}
+  const q=st.q;box.innerHTML=`<div class="qhead" style="margin:0"><span>⏱ <b id="gtime">${st.t}</b> s</span><span>✓ ${st.ok} · ✗ ${st.ko}</span></div>
+   <div style="margin:10px 0">${gImg(q.a,110)}<div class="muted" style="text-align:center;font-size:13px;margin-top:4px">${U(SVC[q.a.svc])}</div></div>
+   <div class="ocards">${q.o.map((x,i)=>`<button class="ocard gopt" data-i="${i}" style="cursor:pointer;font:inherit;color:inherit;text-align:center">${gName(x)}</button>`).join("")}</div><div id="gfb" class="muted" style="min-height:1.4em;text-align:center"></div>`;
+  document.querySelectorAll(".gopt").forEach(b=>b.onclick=()=>{const x=q.o[+b.dataset.i],ok=x.img===q.a.img;if(ok)st.ok++;else st.ko++;if(q.a.svc==="navy")bump(q.a.nid,ok);
+   if(ok)nextChrono(),renderGame();else{b.style.borderColor="var(--bad)";document.querySelectorAll(".gopt").forEach(e=>{if(q.o[+e.dataset.i].img===q.a.img)e.style.borderColor="var(--ok)";e.disabled=true});$("#gfb").textContent=gName(q.a);setTimeout(()=>{if(GM.st&&!GM.st.done){nextChrono();renderGame()}},900)}});return}
+ if(g==="pairs"){let st=GM.st;
+  if(!st){const pk=pick(pool.filter((x,i,a)=>a.findIndex(y=>y.ord===x.ord)===i),6);const tiles=shuffle(pk.map((x,i)=>({k:i,t:"img",x})).concat(pk.map((x,i)=>({k:i,t:"name",x}))));st=GM.st={tiles,sel:null,done:new Set(),moves:0,t0:Date.now(),end:null}}
+  box.innerHTML=`<p style="margin-top:0">${L(["Associe chaque insigne à son nom. Touche un insigne, puis le nom qui lui correspond.","Match each insignia with its name. Tap an insignia, then its name."])} ${best!=null?`<b>${U(["Record","Best"])} : ${best} s</b>`:""}</p>
+   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px">${st.tiles.map((t,i)=>{const d=st.done.has(t.k),s=st.sel===i;return `<button class="ptile" data-i="${i}" ${d?"disabled":""} style="min-height:96px;border:2px solid ${d?"var(--ok)":s?"var(--gold)":"var(--line)"};border-radius:10px;background:var(--surface);color:var(--text);cursor:pointer;padding:6px;font:13px var(--sans);opacity:${d?.55:1}">${t.t==="img"?gImg(t.x,72):gName(t.x)}</button>`}).join("")}</div>
+   <div class="qhead" style="margin-top:10px"><span>${U(["Coups","Moves"])} : ${st.moves}</span><span>${st.done.size}/6</span></div>
+   ${st.end?`<div class="rk" style="font-family:var(--serif);font-size:24px">✓ ${st.end} s${st.newBest?" 🏆":""}</div>`:""}<div class="row"><button class="btn" id="gre">↻ ${U(["Nouvelle partie","New game"])}</button></div>`;
+  document.querySelectorAll(".ptile").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,t=st.tiles[i];if(st.sel===null){st.sel=i;renderGame();return}
+   const a=st.tiles[st.sel];if(st.sel===i){st.sel=null;renderGame();return}
+   if(a.t===t.t){st.sel=i;renderGame();return}st.moves++;
+   if(a.k===t.k){st.done.add(t.k);if(t.x.svc==="navy")bump(t.x.nid,true);st.sel=null;if(st.done.size===6){st.end=Math.round((Date.now()-st.t0)/1000);const k=bestKey();if(S.gbest[k]==null||st.end<S.gbest[k]){S.gbest[k]=st.end;st.newBest=true;save()}}renderGame()}
+   else{b.style.borderColor="var(--bad)";setTimeout(()=>{st.sel=null;renderGame()},500)}});
+  $("#gre").onclick=()=>{GM.st=null;renderGame()};return}
+ if(g==="eq"){const all=rankPool("all");let st=GM.st;
+  if(!st||st.next){const from=pick(["navy","army","air"],1)[0];const to=pick(["navy","army","air"].filter(s=>s!==from),1)[0];
+   const fp=all.filter(x=>x.svc===from),tp=all.filter(x=>x.svc===to);let a=pick(fp,1)[0],tries=0;while(!tp.find(x=>x.ord===a.ord)&&tries++<30)a=pick(fp,1)[0];
+   const ans=tp.find(x=>x.ord===a.ord);const o=opts4(tp,ans,true);st=GM.st={a,ans,o,to,n:(st?st.n:0),ok:(st?st.ok:0),picked:null}}
+  box.innerHTML=`<p style="margin-top:0">${L(["Trouve le grade équivalent dans l'autre armée.","Find the equivalent rank in the other service."])} <b>${st.ok}/${st.n}</b></p>
+   <div style="text-align:center">${gImg(st.a,96)}<div class="rk" style="font-family:var(--serif);font-size:20px;margin-top:6px">${gName(st.a)}</div><div class="muted">${U(SVC[st.a.svc])} → ${U(SVC[st.to])} ?</div></div>
+   <div class="ocards" style="margin-top:10px">${st.o.map((x,i)=>`<button class="ocard gopt" data-i="${i}" style="cursor:pointer;font:inherit;color:inherit;text-align:center;${st.picked!==null?(x===st.ans?"border-color:var(--ok)":i===st.picked?"border-color:var(--bad)":""):""}" ${st.picked!==null?"disabled":""}>${gImg(x,64)}<div style="margin-top:4px;font-size:14px">${gName(x)}</div></button>`).join("")}</div>
+   ${st.picked!==null?`<div class="row"><button class="btn gold" id="gnext">${U(["Suivant →","Next →"])}</button></div>`:""}`;
+  document.querySelectorAll(".gopt").forEach(b=>b.onclick=()=>{const i=+b.dataset.i,ok=st.o[i]===st.ans;st.picked=i;st.n++;if(ok)st.ok++;const nv=[st.a,st.ans].find(x=>x.svc==="navy");if(nv)bump(nv.nid,ok);renderGame()});
+  if($("#gnext"))$("#gnext").onclick=()=>{st.next=true;renderGame()};return}
+ if(g==="high"){const all=rankPool("all");let st=GM.st;
+  if(!st||st.next){const n=st?st.n:0,ok=st?st.ok:0;if(n>=10&&st.next){st.fin=true}
+   if(!(st&&st.fin)){let a=pick(all,1)[0],b=pick(all,1)[0],t=0;while((a.img===b.img)&&t++<20)b=pick(all,1)[0];st=GM.st={a,b,n,ok,picked:null}}}
+  if(st.fin){const k=bestKey();let nb=false;if(S.gbest[k]==null||st.ok>S.gbest[k]){S.gbest[k]=st.ok;nb=true;save()}
+   box.innerHTML=`<div class="rk" style="font-family:var(--serif);font-size:26px">${st.ok}/10${nb?" 🏆":""}</div><p class="muted">${U(["Record","Best"])} : ${S.gbest[k]}/10</p><div class="row"><button class="btn gold" id="gre">↻ ${U(["Rejouer","Play again"])}</button></div>`;$("#gre").onclick=()=>{GM.st=null;renderGame()};return}
+  const right=st.a.ord===st.b.ord?"eq":st.a.ord>st.b.ord?"a":"b";
+  const card=(x,k)=>`<button class="ocard hpick" data-k="${k}" style="cursor:pointer;font:inherit;color:inherit;text-align:center;${st.picked?(k===right?"border-color:var(--ok)":k===st.picked?"border-color:var(--bad)":""):""}" ${st.picked?"disabled":""}>${gImg(x,96)}<div style="margin-top:4px;font-size:14px">${st.picked?gName(x):""}</div><div class="muted" style="font-size:12px">${U(SVC[x.svc])}</div></button>`;
+  box.innerHTML=`<p style="margin-top:0">${L(["Lequel est le plus haut grade ? Les noms apparaissent après ta réponse.","Which is the higher rank? Names appear after you answer."])} <b>${st.ok}/${st.n}</b> · ${U(["manche","round"])} ${Math.min(st.n+1,10)}/10</p>
+   <div class="ocards">${card(st.a,"a")}${card(st.b,"b")}</div>
+   <div class="row" style="justify-content:center"><button class="btn hpick" data-k="eq" ${st.picked?"disabled":""} style="${st.picked&&right==="eq"?"border-color:var(--ok)":""}">= ${U(["Équivalents","Equivalent"])}</button>${st.picked?`<button class="btn gold" id="gnext">${U(["Suivant →","Next →"])}</button>`:""}</div>
+   ${st.picked&&right!=="eq"&&st.a.svc!==st.b.svc?"":""}`;
+  document.querySelectorAll(".hpick").forEach(b=>b.onclick=()=>{st.picked=b.dataset.k;st.n++;const ok=st.picked===right;if(ok)st.ok++;[st.a,st.b].forEach(x=>{if(x.svc==="navy")bump(x.nid,ok)});renderGame()});
+  if($("#gnext"))$("#gnext").onclick=()=>{st.next=true;renderGame()};return}}
+function nextChrono(){const pool=rankPool(GM.scope);const a=pick(pool,1)[0];GM.st.q={a,o:opts4(pool,a,GM.scope!=="all")}}
+function endChrono(){const st=GM.st;st.done=true;const k=bestKey();if(S.gbest[k]==null||st.ok>S.gbest[k]){S.gbest[k]=st.ok;st.newBest=st.ok>0;save()}renderGame()}
+const _viewLearn31=viewLearn;viewLearn=function(){stopGT();if(GM.g==="chrono"&&GM.st&&!GM.st.done)GM.st=null;_viewLearn31();$("#view").insertAdjacentHTML("beforeend",gameShell());bindGameShell()};
+const _go31=go;go=function(v,k){if(v!=="learn")stopGT();_go31(v,k)};
+
+// ---- Shared inputs: service number boxes and AAAA / MM / JJ dates
+const MOIS_FR=["janv","févr","mars","avr","mai","juin","juill","août","sept","oct","nov","déc"],MOIS_EN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const MOISL_FR=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"],MOISL_EN=["January","February","March","April","May","June","July","August","September","October","November","December"];
+function fmtD(v,lang,full){if(!v||!v.y||!v.m||!v.d)return null;const m=+v.m-1,d=+v.d;if(m<0||m>11||!d)return null;
+ if(full)return lang==="en"?`${d} ${MOISL_EN[m]} ${v.y}`:`le ${d}${d===1?"er":""} ${MOISL_FR[m]} ${v.y}`;
+ const yy=String(v.y).slice(-2);return lang==="en"?`${d} ${MOIS_EN[m]} ${yy}`:`${d} ${MOIS_FR[m]} ${yy}`}
+const box31="background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:8px;font:15px var(--sans);text-align:center";
+function dateIn(store,key,label){const v=(store==="leave"?S.leave:S.lt.v)[key]||{};const p=(part,ph,n)=>`<input inputmode="numeric" maxlength="${n}" data-dt="${store}|${key}|${part}" value="${v[part]||""}" placeholder="${ph}" style="${box31};width:${n===4?70:52}px">`;
+ return `<label style="display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--muted)">${label}<span style="display:flex;gap:4px;align-items:center">${p("y",U(["AAAA","YYYY"]),4)}/${p("m","MM",2)}/${p("d",U(["JJ","DD"]),2)}</span></label>`}
+function snParts(){const s=(S.rep.sn||"").replace(/\s/g,"");return [s.slice(0,1),s.slice(1,3),s.slice(3,6),s.slice(6,9)]}
+function snIn(){const p=snParts(),n=[1,2,3,3],ph=["A","12","345","678"];return `<label style="display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--muted)">${U(["Matricule","Service number"])}<span style="display:flex;gap:4px">${n.map((k,i)=>`<input data-sn="${i}" maxlength="${k}" ${i?'inputmode="numeric"':""} value="${p[i]||""}" placeholder="${ph[i]}" style="${box31};width:${k===1?40:k===2?50:62}px;text-transform:uppercase">`).join("")}</span></label>`}
+function txtIn(store,key,label,w,ph){const v=store==="rep"?S.rep[key]:store==="leave"?S.leave[key]:S.lt.v[key];
+ return `<label style="display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--muted);flex:1 1 ${w||170}px">${label}<input data-tx="${store}|${key}" value="${(v||"").replace(/"/g,"&quot;")}" placeholder="${(ph||"").replace(/"/g,"&quot;")}" style="${box31};text-align:left"></label>`}
+function rankSel(){return `<label style="display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--muted);flex:1 1 170px">${U(["Grade","Rank"])}<select data-tx="rep|rank" style="${box31};text-align:left">${["s3","s2","s1","ms","po2","po1","cpo2","cpo1","ncdt","aslt","slt","ltn"].map(id=>`<option value="${id}" ${S.rep.rank===id?"selected":""}>${nm(byId[id])}</option>`).join("")}</select></label>`}
+function idPanel(){return `<div class="panel"><b>${U(["Ton identification","Your identification"])}</b> <span class="muted" style="font-size:13px">${U(["(sert à toutes les lettres)","(used by every letter)"])}</span>
+ <div class="row" style="margin-top:6px">${snIn()}${rankSel()}${txtIn("rep","init",U(["Initiales","Initials"]),90,"J.M.")}${txtIn("rep","name",U(["Nom de famille","Last name"]),160)}</div>
+ <div class="row">${txtIn("rep","trade",U(["Numéro et nom du métier","Trade number and name"]),220,"00105, Manœuvrier")}${txtIn("rep","pos",U(["Poste / fonction","Position"]),200,U(["Candidat(e), section R0XXX","Candidate, section R0XXX"]))}</div>
+ <p class="muted" style="font-size:12.5px;margin:6px 0 0">${L(["Ton vrai matricule reste dans ce navigateur, il n'est envoyé nulle part. Sur un appareil partagé, garde l'exemple.","Your real service number stays in this browser and is never sent. On a shared device, keep the example."])}</p></div>`}
+function bindInputs(refresh){
+ document.querySelectorAll("[data-sn]").forEach(e=>e.oninput=()=>{e.value=e.dataset.sn==="0"?e.value.toUpperCase().replace(/[^A-Z]/g,""):e.value.replace(/\D/g,"");const p=[...document.querySelectorAll("[data-sn]")].map(x=>x.value);S.rep.sn=p.every(x=>!x)?"":`${p[0]}${p[1]} ${p[2]} ${p[3]}`.trim();save();if(e.value.length>=+e.maxLength){const nx=document.querySelector(`[data-sn="${+e.dataset.sn+1}"]`);if(nx)nx.focus()}refresh()});
+ document.querySelectorAll("[data-dt]").forEach(e=>e.oninput=()=>{e.value=e.value.replace(/\D/g,"");const [st,k,p]=e.dataset.dt.split("|");const o=st==="leave"?S.leave:S.lt.v;o[k]=Object.assign({},o[k]||{},{[p]:e.value});save();if(e.value.length>=+e.maxLength){const all=[...document.querySelectorAll("[data-dt]")];const nx=all[all.indexOf(e)+1];if(nx)nx.focus()}refresh()});
+ document.querySelectorAll("[data-tx]").forEach(e=>{e.oninput=e.onchange=()=>{const [st,k]=e.dataset.tx.split("|");(st==="rep"?S.rep:st==="leave"?S.leave:S.lt.v)[k]=e.value;save();refresh()}})}
+async function saveTxt(name,text,msgEl){const d=new Date().toISOString().slice(0,10);const fn=`${name}-${d}.txt`;
+ if(typeof DLNS!=="undefined"&&DLNS){try{await DLNS.save({filename:fn,data:text});if(msgEl)msgEl.textContent=U(["✓ Enregistré.","✓ Saved."])}catch(e){}return}
+ try{const b=new Blob([text],{type:"text/plain"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=fn;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);if(msgEl)msgEl.textContent=U(["✓ Fichier téléchargé.","✓ File downloaded."])}catch(e){}}
+const sig31=()=>{const r=S.rep,rk=byId[r.rank]||byId.s3;return {init:r.init||"X.X.",name:(r.name||"NOM").toUpperCase(),rkA:EN()?rk.enA:rk.frA,sn:r.sn||"A12 345 678",trade:r.trade||(EN()?"00105, Boatswain":"00105, Manœuvrier"),pos:r.pos||""}};
+
+// ---- Leave request: same posted unit format, with separated fields
+["init","file"].forEach(k=>{if(S.leave[k]===undefined)S.leave[k]=k==="file"?"5060-1 (Candidat)":""});
+leaveText=function(){const l=S.leave,s=sig31(),rk=byId[S.rep.rank]||byId.s3;const reasons=[l.r1,l.r2,l.r3].filter(Boolean),lettr="abc";
+ const d=fmtD(l.d,"fr")||"JJ Mmm AA";const f=fmtD(l.dfrom,"fr"),t=fmtD(l.dto,"fr");const per=f&&t?`du ${f} au ${t}`:(l.dates?"du "+l.dates:"du [date de début] au [date de fin]");
+ return `PROTÉGÉ A
+
+Note de service
+
+${l.file||"5060-1 (Candidat)"}
+
+${d}
+
+${l.to||"Cmdt pon"}
+
+DEMANDE DE CONGÉ
+
+Réfs : A. ELRFC OPC Chap 7 para 7.5.3
+B. DOAD 5060-0
+
+1.  Je, ${s.sn}, ${rk.frA}, ${s.init} ${s.name}, ${S.rep.trade||"MÉTIER, 00XXX"}, demande un congé.
+
+2.  Je demande ce congé durant le week-end, ${per}, me permettant de me rendre ${l.dest||"[destination]"} en ${l.transport||"[moyen de transport]"} pour les raisons suivantes :
+
+${(reasons.length?reasons:["[raison détaillée 1]","[raison détaillée 2]","[raison détaillée 3]"]).map((x,i,a)=>`    ${lettr[i]}.  ${x}${i<a.length-2?" ;":i===a.length-2?" ; et":"."}`).join("\n\n")}
+
+3.  L'approbation de cette demande serait bénéfique pour moi et ma famille.
+
+Le candidat de ${l.unit||"R0XXX"},
+
+
+
+${s.init} ${s.name}
+${rk.frA}
+Candidat(e) ${l.unit||"R0XXX"}
+
+PROTÉGÉ A`};
+leaveHTML=function(){const f=(k,ph,w,p)=>txtIn("leave",k,ph,w,p);
+ return `<p>${L(["Modèle de note de service affiché à l'unité pour une demande de congé de fin de semaine. Remplis chaque case : le texte se construit en dessous. Les dates se saisissent en AAAA / MM / JJ ; la note les écrit selon la règle militaire (le mois en lettres, jamais en chiffres). Fais toujours vérifier ta note par ta chaîne de commandement.","Memo template posted at the unit for a weekend leave request (French format). Fill in each box: the text builds below. Dates are entered as YYYY / MM / DD; the memo writes them the military way (month in letters, never a number). Always have your memo checked by your chain of command."])}</p>
+ ${idPanel()}
+ <div class="panel" style="margin-top:10px"><b>${U(["La demande","The request"])}</b>
+ <div class="row" style="margin-top:6px">${dateIn("leave","d",U(["Date de la note","Memo date"]))}${f("file",U(["N° de dossier","File number"]),170,"5060-1 (Candidat)")}${f("to",U(["Destinataire","To"]),150,"Cmdt pon")}${f("unit",U(["N° de candidat / section","Candidate / section no."]),150,"R0XXX")}</div>
+ <div class="row">${dateIn("leave","dfrom",U(["Début du congé","Leave starts"]))}${dateIn("leave","dto",U(["Fin du congé","Leave ends"]))}</div>
+ <div class="row">${f("dest",U(["Destination (ex. à Montréal)","Destination (e.g. to Montréal)"]),220)}${f("transport",U(["Moyen de transport (ex. voiture)","Transport (e.g. car)"]),200)}</div>
+ <div class="row">${f("r1",U(["Raison 1","Reason 1"]),260)}${f("r2",U(["Raison 2","Reason 2"]),260)}${f("r3",U(["Raison 3","Reason 3"]),260)}</div></div>
+ <pre id="lvOut" style="white-space:pre-wrap;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:14px;font:14px/1.5 Georgia,serif;margin-top:12px"></pre>
+ <div class="row"><button class="btn gold" id="lvCopy">${U(["Copier le texte","Copy the text"])}</button><button class="btn" id="lvSave">⬇ ${U(["Enregistrer (.txt)","Save (.txt)"])}</button><span class="muted" id="lvMsg" style="align-self:center;font-size:14px"></span></div>
+ <p class="muted" style="font-size:13px">${L(["« PROTÉGÉ A » : document qui contient des renseignements personnels (nom + matricule). Ne le partage pas en dehors de la voie hiérarchique.","“PROTECTED A”: a document containing personal information (name + service number). Don't share it outside the chain of command."])}</p>`};
+bindLeave=function(){const out=()=>{const o=$("#lvOut");if(o)o.textContent=leaveText()};out();bindInputs(out);
+ $("#lvCopy").onclick=async()=>{const ok=await copyText(leaveText());$("#lvMsg").textContent=ok?U(["Copié.","Copied."]):U(["Sélectionne le texte et copie-le.","Select the text and copy it."])};
+ $("#lvSave").onclick=()=>saveTxt("Demande-conge",leaveText(),$("#lvMsg"))};
+
+// ---- Administrative letters (memo format per CAF staff-writing rules)
+if(!S.lt)S.lt={sel:"comp",v:{}};
+const P=(v,ph)=>v&&String(v).trim()?v:`[${ph}]`;
+const LT={
+ comp:{t:["Congé pour raisons familiales","Compassionate leave"],mk:"A",subj:["DEMANDE DE CONGÉ POUR RAISONS FAMILIALES","REQUEST FOR COMPASSIONATE LEAVE"],
+  refs:[["ORFC 16.17, Congé pour raisons familiales","QR&O 16.17, Compassionate Leave"],["Manuel des politiques des congés des FAC, chap 7","CF Leave Policy Manual, Ch 7"]],
+  f:[["d1","date",["Début","Starts"]],["d2","date",["Fin","Ends"]],["circ","t",["Circonstances (sans détail médical)","Circumstances (no medical detail)"]],["lieu","t",["Lieu pendant le congé","Location during leave"]],["tel","t",["Téléphone","Phone"]],["pj","t",["Pièce justificative","Supporting document"]]],
+  p:(v,en)=>en?[`I request compassionate leave from ${P(v._d1,"start date")} to ${P(v._d2,"end date")} inclusive.`,`This request is due to ${P(v.circ,"circumstances")}.`,`During this leave, I can be reached at ${P(v.lieu,"location")}, at ${P(v.tel,"phone")}.`,`${v.pj?`Enclosed is ${v.pj} in support of this request. `:""}I request your approval.`]
+   :[`Je demande un congé pour raisons familiales du ${P(v._d1,"date de début")} au ${P(v._d2,"date de fin")} inclusivement.`,`Cette demande est motivée par ${P(v.circ,"circonstances")}.`,`Pendant ce congé, je serai joignable à ${P(v.lieu,"lieu")}, au ${P(v.tel,"téléphone")}.`,`${v.pj?`Je joins ${v.pj} à l'appui de ma demande. `:""}Je sollicite votre approbation.`],
+  encl:v=>v.pj?1:0,note:["Si la demande contient un renseignement médical, la cote devient PROTÉGÉ B. En Réserve classe A, on demande souvent plutôt d'être excusé du rassemblement : vérifie avec ta division.","If the request contains medical information, the marking becomes PROTECTED B. In the Class A Reserve, members often ask instead to be excused from parade: check with your division."]},
+ co:{t:["Entrevue avec le commandant","Interview with the CO"],mk:"A",subj:["DEMANDE D'ENTREVUE AVEC LE COMMANDANT","REQUEST FOR INTERVIEW WITH THE COMMANDING OFFICER"],
+  refs:[["ORFC 19.12, Communication avec le commandant","QR&O 19.12, Communication with the Commanding Officer"]],
+  f:[["sujet","t",["Nature générale de l'affaire","General nature of the matter"]],["dispo","t",["Disponibilités","Availability"]]],
+  p:(v,en)=>en?[`In accordance with the reference, I request an interview with the Commanding Officer on a personal matter.`,`The matter concerns ${P(v.sujet,"general nature only")}.`,`I am available ${P(v.dispo,"days and times")}.`,`Thank you for considering this request.`]
+   :[`Conformément à la référence, je demande une entrevue avec le commandant au sujet d'une affaire personnelle.`,`L'affaire concerne ${P(v.sujet,"nature générale seulement")}.`,`Je suis disponible ${P(v.dispo,"jours et heures")}.`,`Je vous remercie de l'attention portée à cette demande.`],
+  note:["Indique seulement la nature générale : les détails se disent en entrevue. Selon ORFC 19.12, tout militaire peut, sur demande, voir son commandant pour une affaire personnelle.","Give only the general nature: details are for the interview. Under QR&O 19.12, any member may, on application, see the CO on a personal matter."]},
+ course:{t:["Participation à un cours","Request to attend a course"],mk:"A",subj:["DEMANDE DE PARTICIPATION À UN COURS","REQUEST TO ATTEND A COURSE"],refs:[],
+  f:[["cours","t",["Nom du cours","Course name"]],["serie","t",["N° de série","Serial"]],["lieu","t",["Lieu","Location"]],["d1","date",["Début","Starts"]],["d2","date",["Fin","Ends"]],["justif","t",["Ce que le cours t'apporte","What the course gives you"]],["dispo","t",["Disponibilité (employeur, études)","Availability (employer, school)"]]],
+  p:(v,en)=>en?[`I request to be loaded on the ${P(v.cours,"course name")} course, serial ${P(v.serie,"serial")}, in ${P(v.lieu,"location")} from ${P(v._d1,"start")} to ${P(v._d2,"end")}.`,`This course would ${P(v.justif,"benefit to career, trade or unit")}.`,`${P(v.dispo,"I am available for the full duration of the course")}.`,`I request your recommendation and approval.`]
+   :[`Je demande d'être chargé(e) sur le cours ${P(v.cours,"nom du cours")}, série ${P(v.serie,"n° de série")}, qui se donnera à ${P(v.lieu,"lieu")} du ${P(v._d1,"début")} au ${P(v._d2,"fin")}.`,`Ce cours me permettrait ${P(v.justif,"avantage pour la carrière, le métier ou l'unité")}.`,`${P(v.dispo,"Je suis disponible pour toute la durée du cours")}.`,`Je sollicite votre recommandation et votre approbation.`],
+  note:["Le chargement sur les cours passe par l'instruction de l'unité et la chaîne de commandement. Joins au besoin une lettre de ton employeur civil.","Course loading goes through unit training and the chain of command. Attach a letter from your civilian employer if needed."]},
+ expl:{t:["Note explicative (absence ou retard)","Explanation (absence or lateness)"],mk:"A",subj:["NOTE EXPLICATIVE","EXPLANATION"],refs:[],
+  f:[["type","sel",["Situation","Situation"],[["retard","Retard","Lateness"],["absence","Absence","Absence"]]],["de","date",["Date","Date"]],["heure","t",["Heure du rassemblement (ex. 1900)","Parade time (e.g. 1900)"]],["cause","t",["Cause (faits)","Cause (facts)"]],["avis","t",["Qui as-tu avisé et quand ?","Whom did you notify, and when?"]],["mesures","t",["Mesures pour éviter que ça se reproduise","Steps so it doesn't happen again"]]],
+  p:(v,en)=>{const abs=v.type==="absence";return en?[`On ${P(v._de,"date")}, I ${abs?"was absent from":"arrived late for"} the ${P(v.heure,"time")} parade.`,`This was due to ${P(v.cause,"facts")}.`,`${v.avis?`I notified ${v.avis}.`:"[Whom you notified and when.]"}`,`To prevent this from happening again, ${P(v.mesures,"measures taken")}.`]
+   :[`Le ${P(v._de,"date")}, ${abs?"j'ai été absent(e) au":"je me suis présenté(e) en retard au"} rassemblement de ${P(v.heure,"heure")}.`,`Cette situation est due à ${P(v.cause,"faits")}.`,`${v.avis?`J'ai avisé ${v.avis}.`:"[Qui tu as avisé et quand.]"}`,`Afin d'éviter que la situation se reproduise, ${P(v.mesures,"mesures prises")}.`]},
+  note:["Reste factuel, sans excuses ni émotion. Heure sur 24 heures (1900).","Stay factual, no excuses or emotion. 24-hour clock (1900)."]},
+ info:{t:["Changement de renseignements personnels","Change of personal information"],mk:"A",subj:["DEMANDE DE MISE À JOUR DES RENSEIGNEMENTS PERSONNELS","REQUEST TO UPDATE PERSONAL INFORMATION"],refs:[],
+  f:[["elem","t",["Élément (adresse, état civil, personne à aviser…)","Item (address, marital status, emergency contact…)"]],["ancien","t",["Ancienne information","Old information"]],["nouveau","t",["Nouvelle information","New information"]],["d1","date",["En vigueur le","Effective"]],["pj","t",["Document à l'appui","Supporting document"]]],
+  p:(v,en)=>en?[`I request that my personal information be updated: ${P(v.elem,"item")}.`,`Old information: ${P(v.ancien,"old")}. New information: ${P(v.nouveau,"new")}, effective ${P(v._d1,"date")}.`,`${v.pj?`Enclosed is ${v.pj}.`:"[Supporting document, if required.]"}`,`Thank you for having my records updated.`]
+   :[`Je demande la mise à jour de mes renseignements personnels : ${P(v.elem,"élément")}.`,`Ancienne information : ${P(v.ancien,"ancienne")}. Nouvelle information : ${P(v.nouveau,"nouvelle")}, en vigueur le ${P(v._d1,"date")}.`,`${v.pj?`Je joins ${v.pj}.`:"[Document à l'appui, au besoin.]"}`,`Je vous remercie de faire mettre mes dossiers à jour.`],
+  encl:v=>v.pj?1:0,note:["Adresse + nom + matricule = PROTÉGÉ A. Ta salle des rapports peut aussi avoir un formulaire à remplir.","Address + name + service number = PROTECTED A. Your orderly room may also have a form to fill in."]},
+ rel:{t:["Libération (Réserve)","Release (Reserve)"],mk:"A",subj:["DEMANDE DE LIBÉRATION VOLONTAIRE","REQUEST FOR VOLUNTARY RELEASE"],
+  refs:[["ORFC 15.01, article 4c) (sur demande – autres motifs)","QR&O 15.01, Item 4(c) (on request – other causes)"]],
+  f:[["d1","date",["Date de libération souhaitée","Requested release date"]],["motifs","t",["Motifs","Reasons"]]],
+  p:(v,en)=>en?[`In accordance with the reference, I request my voluntary release from the Canadian Armed Forces under Item 4(c).`,`I request that my release take effect on ${P(v._d1,"date")}.`,`My reasons are ${P(v.motifs,"reasons")}.`,`I will return my kit and attend all required release appointments.`,`Enclosed is the completed Res F form. I request your approval.`]
+   :[`Conformément à la référence, je demande ma libération volontaire des Forces armées canadiennes en vertu de l'article 4c).`,`Je demande que ma libération prenne effet le ${P(v._d1,"date")}.`,`Mes motifs sont les suivants : ${P(v.motifs,"motifs")}.`,`Je m'engage à remettre mon équipement et à me présenter aux rendez-vous de libération requis.`,`Je joins le formulaire Res F dûment rempli et je sollicite votre approbation.`],
+  encl:()=>1,enclTxt:["Formulaire Res F","Res F form"],note:["Parles-en d'abord à ta chaîne de commandement. Délai recommandé : 6 mois avant la date, au plus tard 30 jours avant.","Talk to your chain of command first. Recommended notice: 6 months before the date, no later than 30 days before."]},
+ xfer:{t:["Mutation / transfert","Transfer"],mk:"A",subj:["DEMANDE DE MUTATION","REQUEST FOR TRANSFER"],
+  refs:[["DOAD 5002-3, Transfert de composante et de sous-composante","DAOD 5002-3, Component and Sub-Component Transfer"]],
+  f:[["dest","t",["Unité ou composante visée","Target unit or component"]],["d1","date",["À compter du","Effective"]],["motifs","t",["Motifs (déménagement, emploi, carrière)","Reasons (move, job, career)"]],["accord","t",["Accord de l'unité d'accueil (si connu)","Gaining unit agreement (if known)"]]],
+  p:(v,en)=>en?[`I request a transfer to ${P(v.dest,"unit or component")} effective ${P(v._d1,"date")}.`,`My reasons are ${P(v.motifs,"reasons")}.`,`${v.accord?v.accord+".":"[Gaining unit agreement, if known.]"}`,`I request your recommendation and approval.`]
+   :[`Je demande ma mutation à ${P(v.dest,"unité ou composante")} à compter du ${P(v._d1,"date")}.`,`Mes motifs sont les suivants : ${P(v.motifs,"motifs")}.`,`${v.accord?v.accord+".":"[Accord de l'unité d'accueil, si connu.]"}`,`Je sollicite votre recommandation et votre approbation.`],
+  encl:()=>1,enclTxt:["Formulaire Res F","Res F form"],note:["Pour un changement d'unité de la Réserve, le formulaire Res F couvre aussi le transfert. La référence ne s'applique qu'à un changement de composante (ex. vers la Force régulière) : retire-la sinon.","For a change of Reserve unit, the Res F form also covers transfer. The reference only applies to a component change (e.g. to the Regular Force): remove it otherwise."]},
+ claim:{t:["Remboursement de frais","Claim for reimbursement"],mk:"A",subj:["DEMANDE DE REMBOURSEMENT","CLAIM FOR REIMBURSEMENT"],refs:[],
+  f:[["d1","date",["Date de la dépense","Expense date"]],["nature","t",["Nature de la dépense","Nature of the expense"]],["autor","t",["Autorisée au préalable par","Authorized in advance by"]],["montant","t",["Montant total ($)","Total amount ($)"]]],
+  p:(v,en)=>en?[`I request reimbursement of expenses incurred on ${P(v._d1,"date")} for ${P(v.nature,"nature")}, authorized in advance by ${P(v.autor,"authority")}.`,`The total amount is $${P(v.montant,"amount")}.`,`The original receipts are enclosed.`,`Thank you for processing this claim.`]
+   :[`Je demande le remboursement des frais engagés le ${P(v._d1,"date")} pour ${P(v.nature,"nature")}, autorisés au préalable par ${P(v.autor,"autorité")}.`,`Le montant total est de ${P(v.montant,"montant")} $.`,`Les reçus originaux sont joints.`,`Je vous remercie de traiter cette demande.`],
+  encl:()=>1,enclTxt:["Reçus originaux","Original receipts"],note:["Sans autorisation préalable, un remboursement est rarement accepté. Ta salle des rapports peut exiger un formulaire de demande précis.","Without prior authority, a claim is rarely accepted. Your orderly room may require a specific claim form."]},
+ thanks:{t:["Lettre de remerciement","Letter of appreciation"],letter:true,mk:null,subj:["",""],refs:[],
+  f:[["dest","t",["Destinataire (nom et adresse)","Addressee (name and address)"]],["motif","t",["Motif du remerciement","Reason for thanks"]],["impact","t",["Ce que ça a apporté","What it made possible"]]],
+  p:(v,en)=>en?[`On behalf of ${P(v._unit,"unit")}, I would like to thank you for ${P(v.motif,"reason")}.`,`${P(v.impact,"What it made possible")}.`,`Please accept our sincere thanks.`]
+   :[`Au nom de ${P(v._unit,"unité")}, je tiens à vous remercier pour ${P(v.motif,"motif")}.`,`${P(v.impact,"Ce que ça a permis")}.`,`Veuillez agréer l'expression de nos sincères remerciements.`],
+  note:["Pour une personne civile, on utilise la LETTRE (pas la note de service) : date complète, appel, paragraphes non numérotés, salutation. Elle est normalement signée par le commandant : tu peux en préparer l'ébauche.","To a civilian, use the LETTER (not the memo): full date, salutation, unnumbered paragraphs, complimentary close. It is normally signed by the CO: you can draft it."]}};
+function ltText(){const k=S.lt.sel,T=LT[k],en=EN(),v=Object.assign({},S.lt.v),s=sig31(),lg=en?"en":"fr";
+ T.f.filter(f=>f[1]==="date").forEach(f=>{v["_"+f[0]]=fmtD(v[f[0]],lg)});v._unit=S.lt.v.unit||(en?"HMCS Montcalm":"NCSM Montcalm");
+ const date=fmtD(v.date,lg,!!T.letter)||(T.letter?(en?"[DD Month YYYY]":"[le JJ mois AAAA]"):(en?"[DD Mmm YY]":"[JJ Mmm AA]"));
+ const paras=T.p(v,en);
+ if(T.letter){return `${en?"[Unit letterhead]":"[En-tête de l'unité]"}\n\n${date}\n\n${P(v.dest,en?"Name and address":"Nom et adresse")}\n\n${en?"Dear Sir or Madam,":"Madame, Monsieur,"}\n\n${paras.join("\n\n")}\n\n\n\n\n${s.init} ${s.name}\n${s.rkA}\n${s.pos||(en?"[Position]":"[Poste]")}`}
+ const mk=T.mk?(en?"PROTECTED "+T.mk:"PROTÉGÉ "+T.mk):"";const refs=T.refs.map(r=>en?r[1]:r[0]);
+ const refB=refs.length===0?"":refs.length===1?`${en?"Ref: ":"Réf : "}${refs[0]}\n\n`:`${en?"Refs: ":"Réfs : "}${refs.map((r,i)=>`${"ABCD"[i]}. ${r}`).join("\n")}\n\n`;
+ const to=(v.to||(en?"CO":"Cmdt"))+(v.thru?(en?` (through ${v.thru})`:` (par l'entremise de ${v.thru})`):"");
+ const n=T.encl?T.encl(v):0;const enclTxt=T.enclTxt?(en?T.enclTxt[1]:T.enclTxt[0]):(en?"supporting document":"document à l'appui");
+ return `${mk}\n\n${en?"Memorandum":"Note de service"}\n\n${v.file||(en?"[File no.]":"[N° de dossier]")}\n\n${date}\n\n${to}\n\n${en?T.subj[1]:T.subj[0]}\n\n${refB}${paras.map((x,i)=>`${i+1}.  ${x}`).join("\n\n")}\n\n\n\n\n${s.init} ${s.name}\n${s.rkA}\n${s.pos||(en?"[Position]":"[Poste]")}\n${n?`\n${en?"Encl: ":"Pièce jointe : "}${n} (${enclTxt})\n`:""}\n${mk}`}
+const RULES31=[["Cote de sécurité en MAJUSCULES, en haut ET en bas de chaque page. Nom + matricule ou adresse = PROTÉGÉ A ; renseignement médical = PROTÉGÉ B.","Security marking in CAPITALS, at the top AND bottom of every page. Name + service number or address = PROTECTED A; medical information = PROTECTED B."],
+ ["En-tête dans l'ordre : cote, n° de dossier (ex. 1000-1 (Pers)), date, destinataire, objet.","Heading order: marking, file number (e.g. 1000-1 (Pers)), date, addressee, subject."],
+ ["Date : jour, mois en lettres, année. Le mois n'est jamais un chiffre. Note de service : mois abrégé (11 oct 26) ; lettre : mois complet. Heures sur 24 h (1900).","Date: day, month in letters, year. The month is never a number. Memo: abbreviated month (11 Oct 26); letter: full month. 24-hour times (1900)."],
+ ["Destinataire désigné par sa fonction (Cmdt), jamais par son nom. La voie hiérarchique s'indique ainsi : « Cmdt (par l'entremise de l'O Div) ».","Addressee named by appointment (CO), never by name. Routing is shown as “CO (through Div O)”."],
+ ["OBJET en majuscules et souligné. Références : A., B., dans l'ordre où elles sont citées.","SUBJECT in capitals and underlined. References: A., B., in the order they are cited."],
+ ["Paragraphes numérotés 1., 2., sous-paragraphes a., b. Un seul paragraphe ne se numérote pas.","Paragraphs numbered 1., 2.; sub-paragraphs a., b. A single paragraph isn't numbered."],
+ ["Bloc de signature : 5 lignes pour signer, puis initiales et NOM, grade, poste. Ensuite : pièces jointes, liste de distribution.","Signature block: 5 lines to sign, then initials and SURNAME, rank, position. Then: enclosures, distribution list."],
+ ["Note de service = à l'interne (à ton commandant). Lettre = à l'externe ; au public : appel, salutation, paragraphes non numérotés, date complète.","Memo = internal (to your CO). Letter = external; to the public: salutation, closing, unnumbered paragraphs, full date."],
+ ["Style : clair, concis, factuel ; le but et l'action attendue doivent ressortir dès le premier paragraphe.","Style: clear, concise, factual; the purpose and the action expected must be clear from the first paragraph."]];
+function lettersHTML(){const k=S.lt.sel,T=LT[k];
+ const fld=f=>f[1]==="date"?dateIn("lt",f[0],U(f[2])):f[1]==="sel"?`<label style="display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--muted);flex:1 1 150px">${U(f[2])}<select data-tx="lt|${f[0]}" style="${box31};text-align:left">${f[3].map(o=>`<option value="${o[0]}" ${S.lt.v[f[0]]===o[0]?"selected":""}>${U([o[1],o[2]])}</option>`).join("")}</select></label>`:txtIn("lt",f[0],U(f[2]),f[0].length>4?260:200);
+ return `<p>${L(["Modèles de correspondance administrative selon les règles de rédaction des FAC. Choisis une lettre, remplis les cases, puis copie ou enregistre le texte. Ce sont des ébauches : suis toujours le format de ta salle des rapports et fais vérifier ta note par ta chaîne de commandement.","Administrative correspondence templates following CAF writing rules. Choose a letter, fill in the boxes, then copy or save the text. These are drafts: always follow your orderly room's format and have your memo checked by your chain of command."])}</p>
+ <details class="panel"><summary style="cursor:pointer"><b>📐 ${U(["Les règles de rédaction militaire","Military writing rules"])}</b></summary><ol class="pts">${RULES31.map(r=>`<li>${L(r)}</li>`).join("")}</ol>
+  <p class="muted" style="font-size:12.5px">${L(["Sources : Procédures d'état-major et de rédaction du MDN et des FC (A-AD-121), guides de rédaction du Collège des Forces canadiennes et du CMR, Manuel des politiques des congés des FAC, ORFC. Les intitulés français (Réf, Objet, Pièce jointe) peuvent varier selon l'unité.","Sources: Staff and Writing Procedures for DND and the CF (A-AD-121), Canadian Forces College and RMC writing guides, CF Leave Policy Manual, QR&O. French labels (Réf, Objet, Pièce jointe) may vary by unit."])}</p></details>
+ <label style="display:block;margin:10px 0 4px"><b>${U(["Choisis la lettre","Choose the letter"])}</b></label><select id="lt31" class="sel29">${Object.keys(LT).map(x=>`<option value="${x}" ${x===k?"selected":""}>${U(LT[x].t)}</option>`).join("")}</select>
+ <div style="margin-top:10px">${idPanel()}</div>
+ <div class="panel" style="margin-top:10px"><b>${U(T.t)}</b>
+  <div class="row" style="margin-top:6px">${dateIn("lt","date",U([T.letter?"Date de la lettre":"Date de la note",T.letter?"Letter date":"Memo date"]))}${T.letter?txtIn("lt","unit",U(["Unité","Unit"]),200,"NCSM Montcalm"):txtIn("lt","file",U(["N° de dossier","File number"]),170,"1000-1 (Pers)")+txtIn("lt","to",U(["Destinataire (fonction)","Addressee (appointment)"]),150,U(["Cmdt","CO"]))+txtIn("lt","thru",U(["Par l'entremise de (facultatif)","Through (optional)"]),170,U(["O Div","Div O"]))}</div>
+  <div class="row">${T.f.map(fld).join("")}</div></div>
+ <pre id="ltOut" style="white-space:pre-wrap;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:14px;font:14px/1.5 Georgia,serif;margin-top:12px"></pre>
+ <div class="row"><button class="btn gold" id="ltCopy">${U(["Copier le texte","Copy the text"])}</button><button class="btn" id="ltSave">⬇ ${U(["Enregistrer (.txt)","Save (.txt)"])}</button><span class="muted" id="ltMsg" style="align-self:center;font-size:14px"></span></div>
+ ${T.note?`<div class="explain">${L(T.note)}</div>`:""}
+ <p class="muted" style="font-size:13px">${L(["Dans le document final, souligne l'OBJET et place la cote à 2,5 cm du haut et du bas de la page.","In the final document, underline the SUBJECT and place the marking 2.5 cm from the top and bottom of the page."])}</p>`}
+function bindLetters(){const out=()=>{const o=$("#ltOut");if(o)o.textContent=ltText()};out();bindInputs(out);
+ $("#lt31").onchange=()=>{S.lt.sel=$("#lt31").value;save();viewReports()};
+ $("#ltCopy").onclick=async()=>{const ok=await copyText(ltText());$("#ltMsg").textContent=ok?U(["Copié.","Copied."]):U(["Sélectionne le texte et copie-le.","Select the text and copy it."])};
+ $("#ltSave").onclick=()=>saveTxt("Lettre-"+S.lt.sel,ltText(),$("#ltMsg"))}
+const _viewReports31=viewReports;viewReports=function(){const isL=repSel==="letters";if(isL)repSel="senior";_viewReports31();if(isL)repSel="letters";
+ const seg=$("#rseg");if(seg){seg.insertAdjacentHTML("beforeend",`<button aria-pressed="${isL}" data-r="letters">✉️ ${U(["Lettres administratives","Administrative letters"])}</button>`);
+  if(isL){seg.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.r==="letters"));let n=seg.nextElementSibling;while(n){const x=n.nextElementSibling;n.remove();n=x}seg.insertAdjacentHTML("afterend",lettersHTML());bindLetters()}
+  seg.querySelectorAll("button").forEach(b=>b.onclick=()=>{repSel=b.dataset.r;viewReports()})}};
+
+// ---- Review cards about correspondence
+const LTQ=[
+ {q:["Dans une note de service, comment écrit-on le mois ?","In a memo, how is the month written?"],o:[["En lettres, jamais en chiffres (11 oct 26)","In letters, never as a number (11 Oct 26)"],["En chiffres (2026-10-11)","As a number (2026-10-11)"],["Comme on veut","Any way you like"],["Seulement l'année","Year only"]],e:["Règle de rédaction des FAC : le mois n'est jamais un chiffre.","CAF writing rule: the month is never a number."]},
+ {q:["Où place-t-on la cote de sécurité (ex. PROTÉGÉ A) ?","Where does the security marking (e.g. PROTECTED A) go?"],o:[["En haut et en bas de chaque page","Top and bottom of every page"],["Seulement en haut","Top only"],["Dans l'objet","In the subject"],["Sous la signature","Under the signature"]],e:["En majuscules, en haut ET en bas.","In capitals, top AND bottom."]},
+ {q:["Comment désigne-t-on le destinataire d'une note de service ?","How is a memo's addressee named?"],o:[["Par sa fonction (Cmdt)","By appointment (CO)"],["Par son prénom","By first name"],["Par son matricule","By service number"],["Par son adresse","By address"]],e:["Jamais par le nom de la personne.","Never by the person's name."]},
+ {q:["Quel article des ORFC permet de demander à voir son commandant ?","Which QR&O article lets you ask to see your CO?"],o:["19.12","16.14","15.01","3.01"],e:["ORFC 19.12, Communication avec le commandant.","QR&O 19.12, Communication with the Commanding Officer."]},
+ {q:["Un renseignement médical dans une demande donne quelle cote ?","Medical information in a request gives which marking?"],o:[["PROTÉGÉ B","PROTECTED B"],["PROTÉGÉ A","PROTECTED A"],["NON CLASSIFIÉ","UNCLASSIFIED"],["SECRET","SECRET"]],e:["Nom + matricule = A ; médical = B.","Name + service number = A; medical = B."]}];
+LTQ.forEach(f=>{REPQ.push(f);CARDS.push({k:"lt-"+hash(f.q[0]),c:"rep",po:null,b:()=>{const o=shuffle(f.o.map((_,i)=>i));return {q:f.q,opts:o.map(i=>f.o[i]),ans:o.indexOf(0),exp:f.e}}})});
 
 /* ============ ROUTER ============ */
 const VIEWS={about:viewAbout,fb:viewFb,more:viewMore,insp:viewInsp,rep:viewReports,fit:viewFit,path:viewPath,drill:viewDrill,first:viewFirst,tutor:viewTutor,audio:viewAudio,review:viewReview,exam:viewExam,other:viewOther,lesson:viewLesson,learn:viewLearn,table:viewTable,flash:viewFlash,quiz:viewQuiz,order:viewOrder,course:viewCourse,navy:viewNavy,man:viewMan,src:viewSrc};
