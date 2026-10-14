@@ -215,6 +215,7 @@ nav.tabs button small.tb35{display:block;font-size:11px;font-weight:500;opacity:
   <nav class="tabs" role="tablist" id="tabs">
     <button role="tab" data-v="about"></button>
     <button role="tab" data-v="review" aria-selected="true"></button>
+    <button role="tab" data-v="index"></button>
     <button role="tab" data-v="first"></button>
     <button role="tab" data-v="insp"></button>
     <button role="tab" data-v="rep"></button>
@@ -663,9 +664,10 @@ const LESSONS={
 
 /* ============ STORAGE ============ */
 const KEY="navalos.v1";
-const APP_VERSION="3.9",CONTENT_DATE="2026-10-11";
+const APP_VERSION="4.0",CONTENT_DATE="2026-10-11";
 const ONLINE_URL="https://claude.ai/artifact/4F2zWfYVFgg7cK4XfHdmkA";
-const CHANGELOG=[["3.9","2026-10-12",["Tuteur intelligent pour tous : il comprend le français et l'anglais, les synonymes et les fautes de frappe, répond directement (grades, comparaisons, pavillons, vocabulaire, leçons, rapports, CV), propose des quiz et des sujets, lit ses réponses à voix haute, accepte la voix, cherche sur Wikipédia en direct et prépare ta question pour Perplexity, ChatGPT, Claude ou Copilot en un clic.","Smart tutor for everyone: it understands French and English, synonyms and typos, answers directly (ranks, comparisons, flags, vocabulary, lessons, reports, résumé), suggests quizzes and topics, reads answers aloud, accepts voice, searches Wikipedia live and prepares your question for Perplexity, ChatGPT, Claude or Copilot in one tap."]],
+const CHANGELOG=[["4.0","2026-10-14",["Nouvel onglet Index A–Z : tous les sujets de NavalOS (pages, grades, leçons, pavillons, coutumes, flotte, métiers, rapports, lettres, CV, inspection…) par thème ou de A à Z, avec recherche. Touche un sujet pour aller directement à la bonne page, à l'endroit exact.","New Index A–Z tab: every NavalOS topic (pages, ranks, lessons, flags, customs, fleet, trades, reports, letters, résumé, inspection…) by theme or A to Z, with search. Tap a topic to go straight to the right page, at the exact spot."]],
+ ["3.9","2026-10-12",["Tuteur intelligent pour tous : il comprend le français et l'anglais, les synonymes et les fautes de frappe, répond directement (grades, comparaisons, pavillons, vocabulaire, leçons, rapports, CV), propose des quiz et des sujets, lit ses réponses à voix haute, accepte la voix, cherche sur Wikipédia en direct et prépare ta question pour Perplexity, ChatGPT, Claude ou Copilot en un clic.","Smart tutor for everyone: it understands French and English, synonyms and typos, answers directly (ranks, comparisons, flags, vocabulary, lessons, reports, résumé), suggests quizzes and topics, reads answers aloud, accepts voice, searches Wikipedia live and prepares your question for Perplexity, ChatGPT, Claude or Copilot in one tap."]],
  ["3.8","2026-10-12",["Rapports → CV : un modèle de CV professionnel à remplir (civil ou FAC, anglais ou français, style Exécutif ou Classique), avec aperçu en direct, vérification, guide, tableau de traduction militaire → civil et téléchargement en PDF, Word ou texte. Toute première ouverture se fait en anglais ; ton choix de langue est ensuite gardé.","Reports → Résumé: a professional résumé template to fill in (civilian or CAF, English or French, Executive or Classic style), with live preview, checklist, guide, military → civilian translation table and download as PDF, Word or text. Every first launch is in English; your language choice is then kept."]],
  ["3.7","2026-10-12",["En mode EN+FR, tous les titres (métiers, grades, termes, rapports, tuteur) s'affichent en anglais d'abord, avec le français en dessous.","In EN+FR mode, all titles (trades, ranks, terms, reports, tutor) now show English first, with French below."]],
  ["3.6","2026-10-12",["L'anglais passe en premier : boutons EN, FR, EN+FR ; en mode EN+FR, l'anglais s'affiche d'abord et le français dessous. Un nouvel utilisateur démarre dans la langue de son appareil.","English comes first: EN, FR, EN+FR buttons; in EN+FR mode, English shows first with French below. A new user starts in their device's language."]],
@@ -3576,8 +3578,103 @@ const _viewReview39=viewReview;viewReview=function(){_viewReview39();if(SAMPLE||
  const fb=$("#fb");if(!fb||$("#askR39"))return;fb.insertAdjacentHTML("beforeend",`<div class="row" style="margin-top:6px"><button class="btn" id="askR39">🧭 ${U(["Explique-moi autrement","Explain it differently"])}</button></div>`);
  $("#askR39").onclick=()=>{const qq=L(q.q).replace(/<[^>]+>/g," ").replace(/\s+/g," ");go("tutor");ask39(qq)}};
 
+
+/* ============ v4.0 : Index A–Z — every topic, one tap to the right page ============ */
+TABS.index=["Index A–Z","Index A–Z"];
+TAB_DESC.index=["Tous les sujets de NavalOS de A à Z : touche un sujet pour aller directement à la bonne page.","Every NavalOS topic from A to Z: tap a topic to go straight to the right page."];
+if(typeof FOCUS_BASE!=="undefined"&&FOCUS_BASE.indexOf("index")<0)FOCUS_BASE.push("index");
+(function(){try{const s=document.createElement("style");s.textContent=`
+.ix40 .ixbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ix40 input{flex:1 1 240px;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:16px var(--sans)}
+.ix40 .cats{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;margin:10px 0;padding-bottom:4px;scrollbar-width:thin}.ix40 .cats button{flex:0 0 auto;white-space:nowrap}
+.ix40 .cats button{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:99px;padding:5px 11px;font:600 13px var(--sans);cursor:pointer}
+.ix40 .cats button[aria-pressed="true"]{background:var(--gold);color:#1A1405;border-color:var(--gold)}
+.ix40 .az{display:flex;flex-wrap:wrap;gap:3px;margin:6px 0 10px}
+.ix40 .az a{min-width:26px;text-align:center;padding:4px 0;border-radius:6px;background:var(--surface2);color:var(--text);font:700 13px var(--sans);text-decoration:none}
+.ix40 .az a.off{opacity:.3;pointer-events:none}
+.ix40 h3.lt{margin:14px 0 6px;color:var(--gold);font-size:20px;border-bottom:1px solid var(--line);padding-bottom:3px}
+.ix40 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px}
+.ix40 button.it{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:10px;padding:8px 10px;cursor:pointer;font:inherit}
+.ix40 button.it:hover{border-color:var(--gold)}
+.ix40 .it b{display:block;font-size:14.5px;line-height:1.3}
+.ix40 .it small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.ix40 details{margin:6px 0}.ix40 details summary{cursor:pointer;font-weight:700;padding:6px 0}
+.hl40{outline:3px solid var(--gold)!important;outline-offset:3px;border-radius:6px;animation:hl40 2.6s ease-out 1}
+@keyframes hl40{0%{box-shadow:0 0 0 0 rgba(212,175,85,.9)}60%{box-shadow:0 0 0 14px rgba(212,175,85,0)}100%{box-shadow:none}}`;document.head.appendChild(s)}catch(e){}})();
+
+const CAT40={pages:["Pages de l'app","App pages"],ranks:["Grades de la Marine","Navy ranks"],other:["Grades Armée et ARC","Army and RCAF ranks"],course:["Cours OREN (leçons)","OREN course (lessons)"],first:["Premier jour","First day"],customs:["Coutumes et traditions","Customs and traditions"],fleet:["La flotte","The fleet"],flags:["Pavillons","Flags"],vocab:["Vocabulaire du navire","Ship vocabulary"],history:["Histoire et héros","History and heroes"],trades:["Métiers","Trades"],reports:["Rapports, congé et lettres","Reports, leave and letters"],cv:["CV","Résumé"],insp:["Inspection et tenue","Inspection and dress"],quiz:["Questions de révision","Review questions"]};
+let IX40=null,ixQ="",ixCat="all",ixMode="theme";
+function items40(){if(IX40)return IX40;const a=[],P=x=>pair(x),strip=s=>String(s==null?"":s).replace(/<[^>]+>/g,"").trim();
+ const add=(cat,t,go,hl,ex)=>{t=P(t).map(strip);if(!t[0])return;a.push({cat,t,go,hl:hl||null,ex:ex||""})};
+ Object.keys(TAB_DESC).forEach(k=>{if(k!=="index"&&TABS[k])add("pages",TABS[k].map(x=>x.replace(/\s*[✨🏃🎬🔊]+\s*/g,"").trim()),{v:k},null,TAB_DESC[k].join(" "))});
+ R.forEach(r=>add("ranks",[`${r.fr} (${r.frA})`,`${r.en} (${r.enA})`],{v:"learn",rank:r.id},null,`${r.fr} ${r.en} ${r.frA} ${r.enA}`));
+ ["army","air"].forEach(k=>{const O=OTHER[k];if(O&&O.items)O.items.forEach(it=>add("other",[`${it[2]} — ${O.name[0]}`,`${it[3]} — ${O.name[1]}`],{v:"other"},[it[2],it[3]],it[4]))});
+ EO_LIST.forEach(e=>add("course",[`OCOM ${e.k} — ${e.t[0]}`,`EO ${e.k} — ${e.t[1]}`],{v:"lesson",k:e.k}));
+ FD.forEach(s=>add("first",s.t,{v:"first"},s.t));
+ CUSTOMS.forEach(c=>add("customs",c[0],{v:"navy"},c[0]));
+ FLEET.forEach(f=>add("fleet",f[0],{v:"navy"},f[0]));
+ Object.keys(FLAGS).forEach(k=>add("flags",[`Pavillon ${k} — ${FLAGS[k][0]}`,`Flag ${k} — ${FLAGS[k][0]}`],{v:"navy"},[FLAGS[k][0],FLAGS[k][0]],P(FLAGS[k][1]).join(" ")));
+ SHIP_VOCAB.forEach(v=>add("vocab",[`${v[1]} (${v[0]})`,`${v[0]} (${v[1]})`],{v:"navy"},[v[1].split(" /")[0],v[0]]));
+ HEROES.forEach(h=>add("history",[h[0],h[0]],{v:"navy"},[h[0],h[0]],P(h[1]).join(" ")));
+ TRADES.forEach(t=>add("trades",[t.fr,t.en],{v:"man",trade:t.id},[t.fr,t.en],t.ab));
+ Object.keys(REPORTS).forEach(k=>add("reports",REPORTS[k].t,{v:"rep",r:k}));
+ add("reports",["Demande de congé","Leave request"],{v:"rep",r:"leave"});
+ if(typeof LT!=="undefined")Object.keys(LT).forEach(k=>add("reports",[`Lettre : ${P(LT[k].t)[0]}`,`Letter: ${P(LT[k].t)[1]}`],{v:"rep",r:"letters",lt:k}));
+ add("reports",["Règles de rédaction militaire","Military writing rules"],{v:"rep",r:"letters"},["règles de rédaction militaire","Military writing rules"]);
+ add("cv",["Créer mon CV (civil ou FAC)","Build my résumé (civilian or CAF)"],{v:"rep",r:"cv"});
+ add("cv",["Traduire le militaire en civil sur un CV","Translate military into civilian on a résumé"],{v:"rep",r:"cv"},["Traduire le militaire en civil","Translate military into civilian"]);
+ add("cv",["Verbes d'action pour un CV","Action verbs for a résumé"],{v:"rep",r:"cv"},["Verbes d'action","Action verbs"]);
+ if(typeof INSP_PTS!=="undefined")INSP_PTS.forEach(p=>add("insp",[`Inspection ${p.n} : ${P(p.t)[0]}`,`Inspection ${p.n}: ${P(p.t)[1]}`],{v:"insp"},p.t));
+ [["Cheveux permis et non permis","Hair: allowed and not allowed"],["Accessoires pour cheveux","Hair accessories"],["Cheveux longs en tenue de cérémonie","Long hair in ceremonial dress"],["Barbe, moustache et pilosité faciale","Beard, moustache and facial hair"]].forEach(t=>add("insp",t,{v:"insp"},t[0].split(" ")[0]==="Barbe,"?["pilosité","facial hair"]:[t[0].split(" ")[0],t[1].split(" ")[0]]));
+ FACTS.concat(NAVQ,MANQ,FDQ).forEach(f=>add("quiz",P(f.q),{v:"tutor",ask:true}));
+ a.forEach(x=>{x.n=norm(x.t.join(" ")+" "+x.ex+" "+U(CAT40[x.cat]));x.tk=new Set(tok39(x.t.join(" ")+" "+x.ex))});
+ IX40=a;return a}
+function match40(x,q){if(!q)return true;const nq=norm(q).trim();if(x.n.includes(nq))return true;const ws=nq.split(/\s+/).filter(Boolean);
+ return ws.every(w=>{if(x.n.includes(w))return true;const t=stem39(w);if(x.tk.has(t))return true;return (SYNMAP39[t]||[]).some(s=>x.tk.has(s))})}
+function itemBtn40(x,i){const tt=U(x.t);return `<button class="it" data-i="${i}"><b>${esc29(tt)}</b>${S.lang==="bi"&&x.t[0]!==x.t[1]?`<i style="display:block;font-size:12px;opacity:.75">${esc29(x.t[0])}</i>`:""}<small>${x.cat==="quiz"?"🧭 "+U(["Réponse par le tuteur","Answer from the tutor"]):"📖 "+esc29(U(TABS[x.go.v==="lesson"?"course":x.go.v]||CAT40[x.cat]))}</small></button>`}
+function ixBody40(){const all=items40(),list=all.map((x,i)=>[x,i]).filter(([x])=>(ixCat==="all"||x.cat===ixCat)&&match40(x,ixQ));
+ const cats=Object.keys(CAT40).filter(c=>all.some(x=>x.cat===c));let body="";
+ if(!list.length)body=`<div class="explain">${L(["Aucun sujet trouvé. Essaie un autre mot, ou demande au tuteur.","No topic found. Try another word, or ask the tutor."])} <button class="btn gold" id="ixAsk">🧭 ${U(["Demander au tuteur","Ask the tutor"])}</button></div>`;
+ else if(ixMode==="az"){const key=x=>{const c=norm(U(x.t)).replace(/^[^a-z0-9]+/,"")[0]||"#";return /[a-z]/.test(c)?c.toUpperCase():"#"};
+  const sorted=list.slice().sort((a,b)=>U(a[0].t).localeCompare(U(b[0].t),EN()?"en":"fr",{sensitivity:"base"}));const groups={};sorted.forEach(p=>{const k=key(p[0]);(groups[k]=groups[k]||[]).push(p)});
+  const letters="#ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+  body=`<div class="az">${letters.map(l=>`<a href="#ix40-${l}" class="${groups[l]?"":"off"}" data-l="${l}">${l}</a>`).join("")}</div>`+letters.filter(l=>groups[l]).map(l=>`<h3 class="lt" id="ix40-${l}">${l}</h3><div class="grid">${groups[l].map(([x,i])=>itemBtn40(x,i)).join("")}</div>`).join("")}
+ else{const nq=norm(ixQ).trim(),best=nq?list.filter(([x])=>norm(x.t.join(" ")).includes(nq)&&x.cat!=="quiz").slice(0,6):[];
+  body=(best.length?`<details class="panel" open style="border-color:var(--gold)"><summary>⭐ ${U(["Meilleurs résultats","Best matches"])}</summary><div class="grid">${best.map(([x,i])=>itemBtn40(x,i)).join("")}</div></details>`:"")+cats.map(c=>{const g=list.filter(([x])=>x.cat===c);if(!g.length)return"";const open=ixQ||ixCat!=="all"||["pages","ranks","course"].includes(c);
+  return `<details class="panel" ${open?"open":""}><summary>${U(CAT40[c])} <span class="muted" style="font-weight:400">(${g.length})</span></summary><div class="grid">${g.map(([x,i])=>itemBtn40(x,i)).join("")}</div></details>`}).join("")}
+ $("#ixCount").textContent=`${list.length} ${U(["sujet(s)","topic(s)"])}`;$("#ixBody").innerHTML=body;
+ document.querySelectorAll(".ix40 .az a[data-l]").forEach(a=>a.onclick=e=>{e.preventDefault();const t=document.getElementById("ix40-"+a.dataset.l);if(t)t.scrollIntoView({behavior:"smooth",block:"start"})});
+ document.querySelectorAll(".ix40 button.it").forEach(b=>b.onclick=()=>open40(all[+b.dataset.i]));
+ if($("#ixAsk"))$("#ixAsk").onclick=()=>{const q=ixQ;go("tutor");if(typeof ask39==="function")ask39(q)}}
+function viewIndex(){const all=items40(),cats=Object.keys(CAT40).filter(c=>all.some(x=>x.cat===c));
+ $("#view").innerHTML=`<div class="ix40"><h2>${L(["Index A–Z","Index A–Z"])}</h2>
+ <p class="lead">${L(["Tous les sujets de NavalOS au même endroit. Tape un mot ou parcours la liste : touche un sujet pour aller directement à la bonne page.","Every NavalOS topic in one place. Type a word or browse the list: tap a topic to go straight to the right page."])}</p>
+ <div class="ixbar"><input id="ixIn" type="search" value="${esc29(ixQ)}" placeholder="${U(["Chercher un sujet… (ex. pavillon, Matc, barbe, congé)","Find a topic… (e.g. flag, MS, beard, leave)"])}" autocomplete="off">
+  <div class="seg" style="margin:0"><button aria-pressed="${ixMode==="theme"}" data-m="theme">${U(["Par thème","By theme"])}</button><button aria-pressed="${ixMode==="az"}" data-m="az">A–Z</button></div></div>
+ <div class="cats"><button aria-pressed="${ixCat==="all"}" data-c="all">${U(["Tout","All"])} (${all.length})</button>${cats.map(c=>`<button aria-pressed="${ixCat===c}" data-c="${c}">${U(CAT40[c])}</button>`).join("")}</div>
+ <div class="muted" id="ixCount" style="font-size:13px;margin-bottom:6px"></div>
+ <div id="ixBody"></div></div>`;
+ const inp=$("#ixIn");inp.oninput=()=>{ixQ=inp.value;ixBody40()};
+ document.querySelectorAll(".ix40 .seg button").forEach(b=>b.onclick=()=>{ixMode=b.dataset.m;document.querySelectorAll(".ix40 .seg button").forEach(x=>x.setAttribute("aria-pressed",x===b));ixBody40()});
+ document.querySelectorAll(".ix40 .cats button").forEach(b=>b.onclick=()=>{ixCat=b.dataset.c;document.querySelectorAll(".ix40 .cats button").forEach(x=>x.setAttribute("aria-pressed",x===b));ixBody40()});
+ ixBody40()}
+function open40(x){const g=x.go||{};
+ if(g.ask){go("tutor");if(typeof ask39==="function")ask39(U(x.t));return}
+ if(g.rank&&byId[g.rank]){learnGrp=byId[g.rank].g;learnSel=g.rank;go("learn");return}
+ if(g.trade){try{tradeSel=g.trade;manSec="trades"}catch(e){}}
+ if(g.v==="navy"){try{navySec="all"}catch(e){}}
+ if(g.lt&&S.lt){S.lt.sel=g.lt;save()}
+ if(g.v==="lesson"&&g.k){curLesson=g.k;LQ={};go("lesson")}else if(g.v==="rep"&&g.r){repSel=g.r;go("rep")}else go(g.v);
+ if(x.hl)setTimeout(()=>hl40(U(x.hl)),250)}
+function hl40(term){if(!term)return;const nt=norm(term).replace(/\s+/g," ").trim().slice(0,40);if(!nt)return;
+ const els=[...document.querySelectorAll("#view h2,#view h3,#view h4,#view summary,#view b,#view .oname,#view .rk,#view figcaption,#view .chip,#view li,#view td,#view .tl div,#view button,#view p")];
+ let best=null,bl=1e9;els.forEach(e=>{const t=norm(e.textContent||"").replace(/\s+/g," ");if(t.includes(nt)&&t.length<bl){best=e;bl=t.length}});
+ if(!best)return;let d=best.closest("details");while(d){d.open=true;d=d.parentElement&&d.parentElement.closest("details")}
+ const tgt=best.closest(".ocard,.chip,li,tr,.panel,figure,details")||best;tgt.scrollIntoView({behavior:"smooth",block:"center"});tgt.classList.add("hl40");setTimeout(()=>tgt.classList.remove("hl40"),2800)}
+// The tutor can also open the index: "index", "table des matières", "sommaire"
+
 /* ============ ROUTER ============ */
-const VIEWS={about:viewAbout,fb:viewFb,more:viewMore,insp:viewInsp,rep:viewReports,fit:viewFit,path:viewPath,drill:viewDrill,first:viewFirst,tutor:viewTutor,audio:viewAudio,review:viewReview,exam:viewExam,other:viewOther,lesson:viewLesson,learn:viewLearn,table:viewTable,flash:viewFlash,quiz:viewQuiz,order:viewOrder,course:viewCourse,navy:viewNavy,man:viewMan,src:viewSrc};
+const VIEWS={about:viewAbout,index:viewIndex,fb:viewFb,more:viewMore,insp:viewInsp,rep:viewReports,fit:viewFit,path:viewPath,drill:viewDrill,first:viewFirst,tutor:viewTutor,audio:viewAudio,review:viewReview,exam:viewExam,other:viewOther,lesson:viewLesson,learn:viewLearn,table:viewTable,flash:viewFlash,quiz:viewQuiz,order:viewOrder,course:viewCourse,navy:viewNavy,man:viewMan,src:viewSrc};
 let current="learn";
 function go(v,keepScroll){current=v;const tab=v==="lesson"?"course":v==="exam"?"review":v;document.querySelectorAll("#tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.v===tab));VIEWS[v]();if(!keepScroll)window.scrollTo({top:0});
  const sel=document.querySelector('#tabs button[aria-selected="true"]');if(sel)sel.scrollIntoView({inline:"nearest",block:"nearest"});setTimeout(tabArrows,350)}
