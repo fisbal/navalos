@@ -664,7 +664,7 @@ const LESSONS={
 
 /* ============ STORAGE ============ */
 const KEY="navalos.v1";
-const APP_VERSION="4.0",CONTENT_DATE="2026-10-11";
+const APP_VERSION="4.0.1",CONTENT_DATE="2026-10-11";
 const ONLINE_URL="https://claude.ai/artifact/4F2zWfYVFgg7cK4XfHdmkA";
 const CHANGELOG=[["4.0","2026-10-14",["Nouvel onglet Index A–Z : tous les sujets de NavalOS (pages, grades, leçons, pavillons, coutumes, flotte, métiers, rapports, lettres, CV, inspection…) par thème ou de A à Z, avec recherche. Touche un sujet pour aller directement à la bonne page, à l'endroit exact.","New Index A–Z tab: every NavalOS topic (pages, ranks, lessons, flags, customs, fleet, trades, reports, letters, résumé, inspection…) by theme or A to Z, with search. Tap a topic to go straight to the right page, at the exact spot."]],
  ["3.9","2026-10-12",["Tuteur intelligent pour tous : il comprend le français et l'anglais, les synonymes et les fautes de frappe, répond directement (grades, comparaisons, pavillons, vocabulaire, leçons, rapports, CV), propose des quiz et des sujets, lit ses réponses à voix haute, accepte la voix, cherche sur Wikipédia en direct et prépare ta question pour Perplexity, ChatGPT, Claude ou Copilot en un clic.","Smart tutor for everyone: it understands French and English, synonyms and typos, answers directly (ranks, comparisons, flags, vocabulary, lessons, reports, résumé), suggests quizzes and topics, reads answers aloud, accepts voice, searches Wikipedia live and prepares your question for Perplexity, ChatGPT, Claude or Copilot in one tap."]],
@@ -3606,7 +3606,7 @@ const CAT40={pages:["Pages de l'app","App pages"],ranks:["Grades de la Marine","
 let IX40=null,ixQ="",ixCat="all",ixMode="theme";
 function items40(){if(IX40)return IX40;const a=[],P=x=>pair(x),strip=s=>String(s==null?"":s).replace(/<[^>]+>/g,"").trim();
  const add=(cat,t,go,hl,ex)=>{t=P(t).map(strip);if(!t[0])return;a.push({cat,t,go,hl:hl||null,ex:ex||""})};
- Object.keys(TAB_DESC).forEach(k=>{if(k!=="index"&&TABS[k])add("pages",TABS[k].map(x=>x.replace(/\s*[✨🏃🎬🔊]+\s*/g,"").trim()),{v:k},null,TAB_DESC[k].join(" "))});
+ [...new Set(Object.keys(TAB_DESC).concat([...document.querySelectorAll("#tabs button")].map(b=>b.dataset.v),["fb"]))].forEach(k=>{if(k&&k!=="index"&&TABS[k])add("pages",TABS[k].map(x=>x.replace(/\s*[✨🏃🎬🔊]+\s*/g,"").trim()),{v:k},null,(TAB_DESC[k]||[]).join(" "))});
  R.forEach(r=>add("ranks",[`${r.fr} (${r.frA})`,`${r.en} (${r.enA})`],{v:"learn",rank:r.id},null,`${r.fr} ${r.en} ${r.frA} ${r.enA}`));
  ["army","air"].forEach(k=>{const O=OTHER[k];if(O&&O.items)O.items.forEach(it=>add("other",[`${it[2]} — ${O.name[0]}`,`${it[3]} — ${O.name[1]}`],{v:"other"},[it[2],it[3]],it[4]))});
  EO_LIST.forEach(e=>add("course",[`OCOM ${e.k} — ${e.t[0]}`,`EO ${e.k} — ${e.t[1]}`],{v:"lesson",k:e.k}));
