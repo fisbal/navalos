@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; media-src 'self' data: blob:; frame-src https://player.vimeo.com; connect-src 'self' https://fr.wikipedia.org https://en.wikipedia.org; worker-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; media-src 'self' data: blob:; frame-src https://player.vimeo.com; connect-src 'self' https://fr.wikipedia.org https://en.wikipedia.org https://api.anthropic.com; worker-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
 <meta name="author" content="Martin B.">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -666,9 +666,9 @@ const LESSONS={
 
 /* ============ STORAGE ============ */
 const KEY="navalos.v1";
-const APP_VERSION="4.3",CONTENT_DATE="2026-10-11";
+const APP_VERSION="4.4",CONTENT_DATE="2026-10-11";
 const ONLINE_URL="https://claude.ai/artifact/4F2zWfYVFgg7cK4XfHdmkA";
-const CHANGELOG=[["4.3","2026-10-24",["Nouvel onglet « Secourisme ⛑️ » : cours complet et illustré — Croix-Rouge (Dunant, Solferino, Conventions de Genève, CICR, FICR), les 7 Principes fondamentaux, les emblèmes (croix, croissant, cristal ; usage protecteur ou indicatif), Vérifier-Appeler-Secourir, ABC, AVDN, SAMPLE, OPQRST, signes et symptômes, RCR et DEA (adulte, enfant, bébé, mises à jour 2025), étouffement, urgences respiratoires, cœur et AVC (VITE), saignements et garrot, choc, brûlures, fractures, tête et colonne, diabète, convulsions, opioïdes, chaleur, froid, noyade, morsures. Termes d'examen ⭐ en cartes mémoire, jeu « Signe ou symptôme ? », 8 cas pratiques, banque de plus de 100 questions et examen blanc chronométré. Tout est dans l'Index et le tuteur.","New “First Aid ⛑️” tab: a complete illustrated course — the Red Cross (Dunant, Solferino, Geneva Conventions, ICRC, IFRC), the 7 Fundamental Principles, the emblems (cross, crescent, crystal; protective vs indicative use), Check-Call-Care, ABC, AVPU, SAMPLE, OPQRST, signs and symptoms, CPR and AED (adult, child, infant, 2025 updates), choking, breathing emergencies, heart attack and stroke (FAST), bleeding and tourniquets, shock, burns, fractures, head and spine, diabetes, seizures, opioids, heat, cold, drowning, bites. ⭐ exam terms as flashcards, a “Sign or symptom?” game, 8 scenarios, a bank of 100+ questions and a timed practice exam. Everything is in the Index and the tutor."]],["4.2","2026-10-19",["Nouvel onglet « Cahier & Lexique » : le Cahier d'exercices ÉN(Q) en version interactive — lexique bilingue (46 termes), Équipe de la Défense, ta chaîne de commandement, grades des 3 éléments, 20 questions d'histoire et 18 de sécurité/SIMDUT avec réponses modèles, liste des formations en ligne. Renvois aux pages du cahier ; tout est aussi dans l'Index et le tuteur.","New “Workbook & Glossary” tab: the ÉN(Q) workbook made interactive — bilingual glossary (46 terms), Defence Team, your chain of command, ranks of all 3 services, 20 history and 18 safety/WHMIS questions with model answers, online course checklist. Page references to the workbook; everything is also in the Index and the tutor."]],
+const CHANGELOG=[["4.4","2026-10-26",["Le tuteur « Demander à Claude » fonctionne partout avec votre propre clé, gardée sur cet appareil seulement. Boutons plus grands, faciles à toucher sur téléphone. Nouvelle app Android qui se met à jour seule, et apps Windows et Mac.","The Ask Claude tutor now works everywhere with your own key, kept on this device only. Bigger buttons that are easy to tap on phones. A new self-updating Android app, plus Windows and Mac apps."]],["4.3","2026-10-24",["Nouvel onglet « Secourisme ⛑️ » : cours complet et illustré — Croix-Rouge (Dunant, Solferino, Conventions de Genève, CICR, FICR), les 7 Principes fondamentaux, les emblèmes (croix, croissant, cristal ; usage protecteur ou indicatif), Vérifier-Appeler-Secourir, ABC, AVDN, SAMPLE, OPQRST, signes et symptômes, RCR et DEA (adulte, enfant, bébé, mises à jour 2025), étouffement, urgences respiratoires, cœur et AVC (VITE), saignements et garrot, choc, brûlures, fractures, tête et colonne, diabète, convulsions, opioïdes, chaleur, froid, noyade, morsures. Termes d'examen ⭐ en cartes mémoire, jeu « Signe ou symptôme ? », 8 cas pratiques, banque de plus de 100 questions et examen blanc chronométré. Tout est dans l'Index et le tuteur.","New “First Aid ⛑️” tab: a complete illustrated course — the Red Cross (Dunant, Solferino, Geneva Conventions, ICRC, IFRC), the 7 Fundamental Principles, the emblems (cross, crescent, crystal; protective vs indicative use), Check-Call-Care, ABC, AVPU, SAMPLE, OPQRST, signs and symptoms, CPR and AED (adult, child, infant, 2025 updates), choking, breathing emergencies, heart attack and stroke (FAST), bleeding and tourniquets, shock, burns, fractures, head and spine, diabetes, seizures, opioids, heat, cold, drowning, bites. ⭐ exam terms as flashcards, a “Sign or symptom?” game, 8 scenarios, a bank of 100+ questions and a timed practice exam. Everything is in the Index and the tutor."]],["4.2","2026-10-19",["Nouvel onglet « Cahier & Lexique » : le Cahier d'exercices ÉN(Q) en version interactive — lexique bilingue (46 termes), Équipe de la Défense, ta chaîne de commandement, grades des 3 éléments, 20 questions d'histoire et 18 de sécurité/SIMDUT avec réponses modèles, liste des formations en ligne. Renvois aux pages du cahier ; tout est aussi dans l'Index et le tuteur.","New “Workbook & Glossary” tab: the ÉN(Q) workbook made interactive — bilingual glossary (46 terms), Defence Team, your chain of command, ranks of all 3 services, 20 history and 18 safety/WHMIS questions with model answers, online course checklist. Page references to the workbook; everything is also in the Index and the tutor."]],
  ["4.1","2026-10-16",["App Android (APK) : NavalOS s'installe comme une vraie app Android, se met à jour toute seule avec le site, fonctionne hors ligne et enregistre les fichiers dans Téléchargements. Lien de téléchargement dans À propos et dans l'Index.","Android app (APK): NavalOS installs as a real Android app, updates itself with the site, works offline and saves files to Downloads. Download link in About and in the Index."]],
  ["4.0","2026-10-14",["Nouvel onglet Index A–Z : tous les sujets de NavalOS (pages, grades, leçons, pavillons, coutumes, flotte, métiers, rapports, lettres, CV, inspection…) par thème ou de A à Z, avec recherche. Touche un sujet pour aller directement à la bonne page, à l'endroit exact.","New Index A–Z tab: every NavalOS topic (pages, ranks, lessons, flags, customs, fleet, trades, reports, letters, résumé, inspection…) by theme or A to Z, with search. Tap a topic to go straight to the right page, at the exact spot."]],
  ["3.9","2026-10-12",["Tuteur intelligent pour tous : il comprend le français et l'anglais, les synonymes et les fautes de frappe, répond directement (grades, comparaisons, pavillons, vocabulaire, leçons, rapports, CV), propose des quiz et des sujets, lit ses réponses à voix haute, accepte la voix, cherche sur Wikipédia en direct et prépare ta question pour Perplexity, ChatGPT, Claude ou Copilot en un clic.","Smart tutor for everyone: it understands French and English, synonyms and typos, answers directly (ranks, comparisons, flags, vocabulary, lessons, reports, résumé), suggests quizzes and topics, reads answers aloud, accepts voice, searches Wikipedia live and prepares your question for Perplexity, ChatGPT, Claude or Copilot in one tap."]],
@@ -1540,6 +1540,10 @@ function speak(text,lang){if(!canSpeak)return;try{speechSynthesis.cancel();const
 const spk=(text,lang)=>canSpeak?`<button class="spk" data-say="${String(text).replace(/"/g,"&quot;")}" data-lang="${lang||""}" aria-label="${U(["Écouter","Listen"])}" title="${U(["Écouter","Listen"])}">🔊</button>`:"";
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest(".spk");if(b){e.stopPropagation();speak(b.dataset.say,b.dataset.lang||undefined)}},true);
 (()=>{const st=document.createElement("style");st.textContent=`.spk{background:none;border:1px solid var(--line);border-radius:999px;padding:1px 7px;margin-left:6px;cursor:pointer;font-size:13px;line-height:1.4;vertical-align:middle}
+/* Fits every screen: everything you tap is big enough for a finger on phones and tablets */
+button{min-height:32px}
+.lang button,.iconbtn{min-height:38px;min-width:38px}
+.spk{min-height:32px;min-width:32px;padding:3px 9px}
 .spk:hover{border-color:var(--gold)}.flag{display:block;border-radius:2px;box-shadow:0 0 0 1px var(--line)}
 .fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}.fcard{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px;text-align:center}
 .fcard b{display:block;margin-top:6px}.fcard small{display:block;color:var(--muted);font-size:13px;line-height:1.35;margin-top:4px}
@@ -3679,7 +3683,7 @@ function hl40(term){if(!term)return;const nt=norm(term).replace(/\s+/g," ").trim
 
 
 /* ============ v4.1 : Android app (APK) — download link, in-app detection, shell update notice ============ */
-const APK_URL=GH_URL+"NavalOS.apk",APK_LATEST="1.0";
+const APK_URL="https://github.com/fisbal/navalos/releases/latest/download/NavalOS.apk",APK_LATEST="1.1";
 const inApk41=()=>/NavalOSApp\//.test(navigator.userAgent||"");
 const apkVer41=()=>{const m=(navigator.userAgent||"").match(/NavalOSApp\/([\d.]+)/);return m?m[1]:null};
 const verLt41=(a,b)=>{const x=String(a).split(".").map(Number),y=String(b).split(".").map(Number);for(let i=0;i<Math.max(x.length,y.length);i++){const d=(x[i]||0)-(y[i]||0);if(d)return d<0}return false};
@@ -4534,6 +4538,40 @@ document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{S.lang=b.dat
 function applyTheme(){if(S.theme)document.documentElement.setAttribute("data-theme",S.theme);else document.documentElement.removeAttribute("data-theme")}
 $("#themeBtn").onclick=()=>{const dark=S.theme?S.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;S.theme=dark?"light":"dark";save();applyTheme()};
 applyTheme();applyLang();updMastery();go(S.onb||S.seenAbout?"review":"about");
+
+/* ============ v4.4 : Tuteur Claude avec ta propre clé / Claude tutor with your own key (every device) ============ */
+// Outside claude.ai the tutor used to be unavailable. Now anyone can paste their own Claude API key: it stays
+// in this browser (localStorage), is sent only to api.anthropic.com, and goes through the official SDK (vendor/).
+const CK44="navalos-claude-key",MODEL44="claude-opus-5-5";
+const key44=()=>{try{return localStorage.getItem(CK44)||""}catch(e){return ""}};
+let KEYSAMPLE=false;
+function keySample44(){return async(turns,opt={})=>{
+ const {default:Anthropic}=await import("./vendor/anthropic-sdk.mjs");
+ // The key is the user's own and stays in their browser, so calling the API from the page is what we want here.
+ const client=new Anthropic({apiKey:key44(),dangerouslyAllowBrowser:true});
+ let text="";
+ try{const st=client.messages.stream({model:MODEL44,max_tokens:2000,messages:turns},{signal:opt.signal});
+  st.on("text",d=>{text+=d;if(opt.onText)opt.onText({text})});
+  const fin=await st.finalMessage();
+  if(fin.stop_reason==="refusal")throw Object.assign(new Error("refusal"),{code:"refusal",text});
+  return {text:fin.content.map(b=>b.type==="text"?b.text:"").join("")}}
+ catch(e){if(e&&e.code)throw e;const st=e&&e.status;
+  if(e&&e.name==="APIUserAbortError")throw Object.assign(e,{code:"cancelled",text});
+  if(st===401||st===403){try{localStorage.removeItem(CK44)}catch(_){}KEYSAMPLE=false;SAMPLE=null;throw Object.assign(e,{code:"not_granted",text})}
+  if(st===429)throw Object.assign(e,{code:"rate_limited",text});
+  throw Object.assign(e||new Error("error"),{code:"error",text})}}}
+function useKey44(){if(!SAMPLE&&key44()){SAMPLE=keySample44();KEYSAMPLE=true;document.querySelectorAll(".askt").forEach(b=>b.style.display="")}}
+useKey44();
+const _viewTutor44=viewTutor;viewTutor=function(){_viewTutor44();
+ if(SAMPLE&&!KEYSAMPLE)return; // claude.ai: the page's own permission is used
+ const box=document.createElement("div");box.className="panel";box.style.marginTop="12px";
+ if(KEYSAMPLE){box.innerHTML=`<b>✨ ${U(["Tuteur Claude avec ta clé","Claude tutor with your key"])}</b><p class="muted" style="font-size:13px;margin:4px 0">${L(["Tes questions vont directement à Claude avec ta propre clé API, gardée seulement sur cet appareil. Le cahier OREN 001 et tes instructeurs font foi.","Your questions go straight to Claude with your own API key, kept on this device only. The PO 001 binder and your instructors are the authority."])}</p><div class="row"><button class="btn" id="k44off">${U(["Oublier ma clé","Forget my key"])}</button></div>`}
+ else{box.innerHTML=`<b>✨ ${U(["Utiliser Claude avec ta propre clé","Use Claude with your own key"])}</b><p class="muted" style="font-size:13px;margin:4px 0">${L(["Colle ta clé API Claude (console.anthropic.com) pour un tuteur IA complet sur tous tes appareils. Elle reste seulement sur cet appareil.","Paste your Claude API key (console.anthropic.com) for a full AI tutor on all your devices. It stays on this device only."])}</p><div class="row"><input id="k44" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…" style="flex:1 1 220px;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font:15px var(--sans)"><button class="btn gold" id="k44on">${U(["Activer","Turn on"])}</button></div>`}
+ $("#view").appendChild(box);
+ const on=$("#k44on"),off=$("#k44off");
+ if(on)on.onclick=()=>{const v=$("#k44").value.trim();if(!v)return;try{localStorage.setItem(CK44,v)}catch(e){}useKey44();viewTutor()};
+ if(off)off.onclick=()=>{try{localStorage.removeItem(CK44)}catch(e){}SAMPLE=null;KEYSAMPLE=false;TUT.msgs=[];viewTutor()}};
+
 </script>
 <script>if("serviceWorker" in navigator&&/^https?:$/.test(location.protocol)){navigator.serviceWorker.register("sw.js").catch(()=>{})}</script>
 </body>

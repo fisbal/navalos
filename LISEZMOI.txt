@@ -1,7 +1,8 @@
 NavalOS — version installable (téléphone et ordinateur)
 =======================================================
 
-Contenu : index.html (l'app), manifest.webmanifest, sw.js (mode hors ligne), 3 icônes.
+Contenu : index.html (l'app), manifest.webmanifest, sw.js (mode hors ligne), 3 icônes, vendor/ (tuteur Claude).
+android/ = l'app Android, src-tauri/ = les apps Windows et Mac, .github/workflows/build.yml = les construit toutes.
 
 Mettre en ligne gratuitement avec GitHub Pages (une seule fois, ~10 min)
 1. Va sur github.com et connecte-toi (ou crée un compte).
@@ -10,7 +11,13 @@ Mettre en ligne gratuitement avec GitHub Pages (une seule fois, ~10 min)
 4. Settings → Pages → Source : « Deploy from a branch » → Branch : main / (root) → Save.
 5. Attends 1 à 2 minutes. Ton adresse : https://TON-NOM-GITHUB.github.io/navalos/
 
-Installer sur le téléphone
+Apps à installer (Android, Windows, Mac)
+- Page des versions : https://github.com/fisbal/navalos/releases/latest
+  NavalOS.apk (Android), NavalOS-Setup.exe (Windows), NavalOS.dmg (Mac).
+- Elles se mettent à jour seules : Windows et Mac installent la nouvelle version et se rouvrent, Android la propose.
+- Chaque modification sur main construit et publie une nouvelle version automatiquement.
+
+Installer sur le téléphone (sans app)
 - Android (Chrome / Samsung Internet) : ouvre l'adresse → menu ⋮ → « Installer l'application » ou « Ajouter à l'écran d'accueil ».
 - iPhone (Safari) : bouton Partager → « Sur l'écran d'accueil ».
 - Ordinateur (Chrome / Edge) : icône d'installation dans la barre d'adresse.
@@ -20,5 +27,5 @@ Mises à jour : remplace index.html dans le dépôt GitHub par la nouvelle versi
 Au prochain lancement avec Internet, chaque appareil reçoit la nouvelle version automatiquement.
 
 Ta progression reste sur chaque appareil (code de sauvegarde dans l'onglet Sources pour la transférer).
-Le tuteur IA fonctionne seulement dans la version claude.ai.
+Le tuteur IA fonctionne partout avec ta propre clé Claude (console.anthropic.com), gardée sur l'appareil seulement.
 Projet d'étude personnel, non officiel : le cahier OREN 001 et les instructeurs font foi.

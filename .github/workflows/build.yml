@@ -1,0 +1,211 @@
+name: Build and release NavalOS
+
+# Every build of NavalOS ships everywhere at once:
+#   web      every page checked on phone, tablet, PC and Mac screens (GitHub Pages serves the repository root of main)
+#   android  the Android app (.apk), signed with the family key from GitHub secrets
+#   windows  the Windows installer (.exe) and .msi, made with Tauri
+#   mac      the Mac app (.dmg, Apple silicon and Intel), made with Tauri
+#   release  on main, a GitHub Release with all of them, the update file and the source code
+# Pull requests run the same builds as a check, without publishing.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  # One number for every platform, so a new version installs over the old one everywhere.
+  NAV_VERSION: 1.1.${{ github.run_number }}
+  PUBLISH: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+
+jobs:
+  web:
+    name: Web (every screen size)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Check phones, tablets, PCs and Macs
+        run: |
+          npx playwright install --with-deps chromium
+          npm run check:screens
+      - name: Keep the screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screens
+          path: screens/
+          if-no-files-found: ignore
+
+  android:
+    name: Android app
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      # The family key lives only in GitHub secrets. Pull requests build with the debug key and are never published.
+      - name: Restore the family key
+        env:
+          KEYSTORE_B64: ${{ secrets.NAVALOS_KEYSTORE_B64 }}
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > android/app/navalos.jks
+          elif [ "$PUBLISH" = "true" ]; then
+            echo "::error::NAVALOS_KEYSTORE_B64 is not set. Add the NavalOS secrets (Settings > Secrets and variables > Actions) before releasing."
+            exit 1
+          else
+            echo "::notice::No family key on this build: the APK is signed with the debug key and is not published."
+          fi
+      - name: Build the APK
+        working-directory: android
+        env:
+          NAVALOS_KEYSTORE_PASSWORD: ${{ secrets.NAVALOS_KEYSTORE_PASSWORD }}
+        run: gradle assembleRelease --no-daemon --stacktrace
+      - run: mkdir out && cp android/app/build/outputs/apk/release/app-release.apk out/NavalOS.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android
+          path: out/*
+
+  windows:
+    name: Windows app
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - run: npm ci
+      - run: npm version "$env:NAV_VERSION" --no-git-tag-version --allow-same-version
+      - name: Build the installers
+        shell: bash
+        env:
+          # Signs the update so installed apps trust it.
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          TAURI_SIGNING_PUBLIC_KEY: ${{ secrets.TAURI_SIGNING_PUBLIC_KEY }}
+        run: |
+          if [ -n "$TAURI_SIGNING_PRIVATE_KEY" ] && [ -n "$TAURI_SIGNING_PUBLIC_KEY" ]; then
+            npx tauri build --ci --config "{\"plugins\":{\"updater\":{\"pubkey\":\"$TAURI_SIGNING_PUBLIC_KEY\"}}}"
+          else
+            echo "::warning::TAURI_SIGNING_PRIVATE_KEY is not set; this build cannot update installed apps."
+            npx tauri build --ci --config '{"bundle":{"createUpdaterArtifacts":false}}'
+          fi
+      - name: Name the installers
+        shell: bash
+        run: |
+          mkdir out
+          cp src-tauri/target/release/bundle/nsis/*-setup.exe out/NavalOS-Setup.exe
+          cp src-tauri/target/release/bundle/msi/*.msi out/NavalOS.msi
+          if ls src-tauri/target/release/bundle/nsis/*-setup.exe.sig >/dev/null 2>&1; then
+            cp src-tauri/target/release/bundle/nsis/*-setup.exe.sig out/NavalOS-Setup.exe.sig
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: out/*
+
+  mac:
+    name: Mac app
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin,x86_64-apple-darwin
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - run: npm ci
+      - run: npm version "$NAV_VERSION" --no-git-tag-version --allow-same-version
+      - name: Build the Mac app (Apple silicon and Intel)
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          TAURI_SIGNING_PUBLIC_KEY: ${{ secrets.TAURI_SIGNING_PUBLIC_KEY }}
+        run: |
+          if [ -n "$TAURI_SIGNING_PRIVATE_KEY" ] && [ -n "$TAURI_SIGNING_PUBLIC_KEY" ]; then
+            npx tauri build --ci --target universal-apple-darwin --bundles app,dmg --config "{\"plugins\":{\"updater\":{\"pubkey\":\"$TAURI_SIGNING_PUBLIC_KEY\"}}}"
+          else
+            npx tauri build --ci --target universal-apple-darwin --bundles app,dmg --config '{"bundle":{"createUpdaterArtifacts":false}}'
+          fi
+          B=src-tauri/target/universal-apple-darwin/release/bundle
+          mkdir out
+          cp "$B"/dmg/*.dmg out/NavalOS.dmg
+          if ls "$B"/macos/*.app.tar.gz.sig >/dev/null 2>&1; then
+            cp "$B"/macos/*.app.tar.gz out/NavalOS-mac.app.tar.gz
+            cp "$B"/macos/*.app.tar.gz.sig out/NavalOS-mac.app.tar.gz.sig
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mac
+          path: out/*
+
+  release:
+    name: Publish (main only)
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: [web, android, windows, mac]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: '{android,windows,mac}'
+          path: out
+          merge-multiple: true
+      - name: Write latest.json for the Windows and Mac updater
+        run: |
+          if [ -f out/NavalOS-Setup.exe.sig ]; then
+            BASE="https://github.com/${{ github.repository }}/releases/download/v$NAV_VERSION"
+            jq -n --arg v "$NAV_VERSION" --arg sig "$(cat out/NavalOS-Setup.exe.sig)" --arg date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+              --arg url "$BASE/NavalOS-Setup.exe" \
+              '{version: $v, notes: "NavalOS \($v)", pub_date: $date, platforms: {"windows-x86_64": {signature: $sig, url: $url}}}' > out/latest.json
+            if [ -f out/NavalOS-mac.app.tar.gz.sig ]; then
+              jq --arg sig "$(cat out/NavalOS-mac.app.tar.gz.sig)" --arg url "$BASE/NavalOS-mac.app.tar.gz" \
+                '.platforms["darwin-aarch64"] = {signature: $sig, url: $url} | .platforms["darwin-x86_64"] = {signature: $sig, url: $url}' out/latest.json > out/l.json && mv out/l.json out/latest.json
+            fi
+            cat out/latest.json
+          fi
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ env.NAV_VERSION }}
+          target_commitish: ${{ github.sha }}
+          name: NavalOS ${{ env.NAV_VERSION }}
+          make_latest: true
+          body: |
+            **NavalOS** — a personal, unofficial study companion for the Royal Canadian Navy, by Martin B. Works offline, French and English.
+
+            - **Web**: https://fisbal.github.io/navalos/
+            - **Android**: NavalOS.apk (tap it, open the file, Install). Newer versions install over the old one and keep your progress.
+            - **Windows**: NavalOS-Setup.exe (or NavalOS.msi)
+            - **Mac** (Apple silicon and Intel): NavalOS.dmg. The first time: right-click NavalOS, then Open.
+            - Installed apps update themselves: Windows and Mac install the new version and reopen, Android offers it.
+            - Source code: the zip and tar.gz below
+          files: |
+            out/NavalOS*
+            out/latest.json
