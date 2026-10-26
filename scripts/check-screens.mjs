@@ -78,4 +78,4 @@ failures.push(...turned.problems);
 await browser.close();
 server.close();
 if (failures.length) { console.error([...new Set(failures)].join('\n')); console.error(`\n${failures.length} problems on ${pages} page views.`); process.exit(1); }
-console.log(`All screens fit: ${pages} page views (${Object.keys(sizes).length} sizes x 2 languages)., and pages re-fit when a phone or tablet turns (${turned.turns} turns) and pinch zooms.`);
+console.log(`All screens fit: ${pages} page views (${Object.keys(sizes).length} sizes x 2 languages), and pages re-fit when a phone or tablet turns (${turned.turns} turns) and pinch zooms.`);
