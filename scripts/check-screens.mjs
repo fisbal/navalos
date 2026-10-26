@@ -5,6 +5,8 @@ import { chromium } from 'playwright';
 import { createServer } from 'node:http';
 import { readFile, mkdir } from 'node:fs/promises';
 import { join, extname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { checkZoomRotationSettings, checkRotationAndPinch } from './zoom-rotation.mjs';
 
 const dir = resolve(process.argv[2] || '.');
 const shots = process.argv[3];
@@ -68,7 +70,12 @@ for (const [label, [width, height]] of Object.entries(sizes)) {
     await ctx.close();
   }
 }
+// Zoom and rotation, required in every app: nothing blocks pinch zoom or locks the orientation,
+// and a phone and a tablet turned sideways and back re-fit every time.
+failures.push(...checkZoomRotationSettings(fileURLToPath(new URL('..', import.meta.url))));
+const turned = await checkRotationAndPinch(browser, base, { prepare: async page => { await page.evaluate(() => { try { S.lang = 'fr'; save(); } catch (e) {} document.querySelectorAll('dialog[open]').forEach(d => d.close()); }); } });
+failures.push(...turned.problems);
 await browser.close();
 server.close();
 if (failures.length) { console.error([...new Set(failures)].join('\n')); console.error(`\n${failures.length} problems on ${pages} page views.`); process.exit(1); }
-console.log(`All screens fit: ${pages} page views (${Object.keys(sizes).length} sizes x 2 languages).`);
+console.log(`All screens fit: ${pages} page views (${Object.keys(sizes).length} sizes x 2 languages)., and pages re-fit when a phone or tablet turns (${turned.turns} turns) and pinch zooms.`);
