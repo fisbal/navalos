@@ -3683,7 +3683,7 @@ function hl40(term){if(!term)return;const nt=norm(term).replace(/\s+/g," ").trim
 
 
 /* ============ v4.1 : Android app (APK) — download link, in-app detection, shell update notice ============ */
-const APK_URL="https://github.com/fisbal/navalos/releases/latest/download/NavalOS.apk",APK_LATEST="1.1";
+const APK_URL="https://github.com/fisbal/fisbal.github.io/releases/download/navalos-updates/NavalOS.apk",APK_LATEST="1.1";
 const inApk41=()=>/NavalOSApp\//.test(navigator.userAgent||"");
 const apkVer41=()=>{const m=(navigator.userAgent||"").match(/NavalOSApp\/([\d.]+)/);return m?m[1]:null};
 const verLt41=(a,b)=>{const x=String(a).split(".").map(Number),y=String(b).split(".").map(Number);for(let i=0;i<Math.max(x.length,y.length);i++){const d=(x[i]||0)-(y[i]||0);if(d)return d<0}return false};
