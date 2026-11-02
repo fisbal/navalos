@@ -12,7 +12,10 @@
     "windows": [
       {
         "label": "main",
+        "create": false,
         "title": "NavalOS",
+        "decorations": false,
+        "shadow": true,
         "zoomHotkeysEnabled": true,
         "width": 1100,
         "height": 820,
